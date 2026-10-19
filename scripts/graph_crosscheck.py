@@ -21,6 +21,7 @@ MATRIX = ROOT / "docs/requirements/traceability.csv"
 REPORT = ROOT / "graph/mappings/crosscheck.md"
 
 # testes que exercitam o sistema por HTTP/MQTT/Docker: a analise estatica nao enxerga essa ligacao
+SOURCE_SUFFIXES = (".py", ".cs")  # o Graphify indexa Python e C#
 BLACK_BOX_PREFIXES = ("tests/integration/", "tests/e2e/", "tests/performance/")
 
 # arestas que representam dependencia real de execucao (nao 'rationale_for', que e documentacao)
@@ -119,8 +120,8 @@ def main(argv: list[str]) -> int:
     }
     with MATRIX.open(encoding="utf-8", newline="") as handle:
         for row in csv.DictReader(handle):
-            for test in (t for t in _cells(row["tests"]) if t.endswith(".py")):
-                for code in (c for c in _cells(row["code"]) if c.endswith(".py")):
+            for test in (t for t in _cells(row["tests"]) if t.endswith(SOURCE_SUFFIXES)):
+                for code in (c for c in _cells(row["code"]) if c.endswith(SOURCE_SUFFIXES)):
                     hops = "-"
                     if not nodes_of(nodes, test) or not nodes_of(nodes, code):
                         verdict = "NOT IN GRAPH"

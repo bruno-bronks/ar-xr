@@ -1,0 +1,28 @@
+{
+  "equipment_id": "EQ-002",
+  "status": "OFFLINE",
+  "evaluated_at": "2026-10-19T12:02:30Z",
+  "offline_after_seconds": 30,
+  "sensors": [
+    {
+      "sensor_type": "temperature",
+      "unit": "celsius",
+      "value": 500.0,
+      "observed_at": "2026-10-19T12:00:29Z",
+      "quality": "GOOD",
+      "warn": 70.0,
+      "crit": 90.0,
+      "valid": false
+    },
+    {
+      "sensor_type": "vibration",
+      "unit": "mm/s",
+      "value": 1.0,
+      "observed_at": "2026-10-19T12:00:29Z",
+      "quality": "GOOD",
+      "warn": 4.0,
+      "crit": 7.0,
+      "valid": false
+    }
+  ]
+}

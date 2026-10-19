@@ -1,0 +1,25 @@
+# Job 'csharp' da CI (GitHub Actions) - PR #2, commit 90d889d - 2026-10-19
+# Run 39326391535 - job 118313250358 - runner ubuntu-latest, .NET SDK 10.0.x
+# Por que na CI: o proxy corporativo do desenvolvedor bloqueia .nupkg (File Transfer Blocked).
+#
+# Build do nucleo como netstandard2.1 / C# 9, warnings como erro:
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+#
+# Resultado dos testes (xUnit):
+Total tests: 171
+     Passed: 171
+#
+# Testes aprovados por classe:
+     38 SpatialApiClientTests
+     32 QrPayloadTests
+     32 MarkerSessionTests
+     25 OverlayViewModelTests
+     17 QrRoundTripTests
+     17 ClientConfigTests
+     10 SessionDriverTests
+#
+# ZXing.Net 0.16.9 (pacote do nuget.org restaurado na CI):
+00254acaaea069262e6b103d23f1a934e953d503ea43afe2965272718388f32e  /home/runner/.nuget/packages/zxing.net/0.16.9/zxing.net.0.16.9.nupkg
+# lib/unity NAO existe no pacote; usa-se lib/netstandard2.1 (a variante testada).

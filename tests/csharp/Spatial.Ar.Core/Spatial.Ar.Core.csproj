@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Compila FORA do Unity as MESMAS fontes do package com.spatial.ar.core.
+       netstandard2.1 + C# 9 = o que o Unity 6 aceita; garante que o nucleo nao use recursos mais novos. -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>Spatial.Ar.Core</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\clients\ar-unity\Packages\com.spatial.ar.core\Runtime\**\*.cs" Link="Runtime\%(RecursiveDir)%(Filename)%(Extension)" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+</Project>

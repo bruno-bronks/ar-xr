@@ -23,7 +23,7 @@ def _backticked() -> set[str]:
 
 def test_state_declares_date_branch_and_phase() -> None:
     assert re.search(r"Atualizado: \d{4}-\d{2}-\d{2}", TEXT)
-    assert "feature/spatial-ai-foundation" in TEXT
+    assert re.search(r"`feature/[\w.-]+`", TEXT), "o estado deve citar a branch de trabalho"
     assert re.search(r"Fase \d", TEXT)
 
 

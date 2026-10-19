@@ -1,0 +1,13 @@
+{
+  "name": "Spatial.Ar.Unity.Editor",
+  "rootNamespace": "Spatial.Ar.Unity.Editor",
+  "references": [],
+  "includePlatforms": ["Editor"],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

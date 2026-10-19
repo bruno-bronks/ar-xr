@@ -1,57 +1,38 @@
-# CURRENT_STATE â€” memÃ³ria determinÃ­stica do projeto
+# CURRENT_STATE — memória determinística do projeto
 
-Atualizado: 2026-10-19 Â· Branch: `feature/spatial-ai-foundation` (local; **sem push/merge**) Â· **Fase 1 concluÃ­da â€” aguardando aprovaÃ§Ã£o para a Fase 2.**
+Atualizado: 2026-10-19 · `main` contém as Fases 0–1 (PR #1 mesclado). Fase 2 em **`feature/ar-android-phase2`** (PR #2 **em rascunho, NÃO mesclado**). **Fase 2 parcialmente concluída: o que dá para fazer sem aparelho está pronto; a validação em aparelho físico está BLOQUEADA por hardware.**
 
-> Este arquivo Ã© validado por `tests/unit/repo/test_agent_memory.py` (links, caminhos e REQs citados precisam existir).
-> Fases anteriores aprovadas pelo usuÃ¡rio: Fase 0 (decisÃµes D-001, D-003/D-004, ADR-0001, Z via CZT, Graphify/Dreaming "devem ser instalados e usados", inÃ­cio da Fase 1).
+> Validado por `tests/unit/repo/test_agent_memory.py` (links, caminhos e REQs citados precisam existir).
+> Aprovações do usuário: Fase 0, decisões D-001/D-003/D-004/D-006, ADR-0001, Z via CZT, Graphify instalado e usado, Fase 1, merge do PR #1, **Fase 2** (sem responder às decisões D-013…D-015 nem informar o aparelho → ver D-016).
 
-## O que existe (verificado por execuÃ§Ã£o)
-- **Fluxo ponta a ponta:** `equipment-simulator` â†’ Mosquitto â†’ `telemetry-worker` (valida, deduplica, persiste, ack manual) â†’ PostgreSQL â†’ `api` (FastAPI, Bearer **demo**) â†’ painel 2D em `/panel/`.
-- **ContÃªineres (Compose, 6 serviÃ§os):** `db`, `broker`, `migrate` (Alembic + seed dev), `api`, `worker`, `simulator`; portas sÃ³ em `127.0.0.1` (8088/55432/1883).
-- **DomÃ­nio puro:** `packages/domain/src/spatial_domain/status.py` (SPEC-002), `packages/domain/src/spatial_domain/markers.py` (SPEC-003), `packages/domain/src/spatial_domain/telemetry.py` (parser estrito = JSON Schema, teste diferencial).
-- **PersistÃªncia:** `packages/storage/` â€” modelos, migraÃ§Ã£o `0001_initial`, `PostgresRepository`, dublÃª em memÃ³ria, seed (EQ-001â€¦003 em org-a + sentinela EQ-B01 em org-b).
-- **API:** equipamentos, telemetria, twin, alertas derivados, markers (rate limit 30/min), auditoria, CSP no painel â€” contrato em `specs/contracts/openapi.yaml` (8 operaÃ§Ãµes `implemented`; sÃ³ o assistente de IA segue `planned`).
-- **Specs:** SPEC-001â€¦007; Z-002â€¦004 **typecheck no CZT** ([evidÃªncia](../evidence/phase-1/z-typecheck.txt)); ADR-0001/0002; threat model atualizado.
-- **Ferramentas instaladas e usadas:** Eclipse Temurin JDK 21 + CZT 1.6-SNAPSHOT (SHA-256 verificados) e Graphify 0.9.91 â€” ver [tool-evaluation](../decisions/tool-evaluation.md) e [graph/README.md](../../graph/README.md).
+## Fases 0–1 (mescladas em `main`, verificadas)
+Pilha completa simulador → Mosquitto → worker → PostgreSQL → API (Bearer **demo**) → painel 2D; 528 testes passaram com pilha real, PostgreSQL real e E2E (Edge); CI do GitHub verde nos 4 jobs originais. Evidências em `docs/evidence/phase-0/` e `docs/evidence/phase-1/` (latência publicar→API p95 0,276 s, n=100, 1 máquina). Specs Z passam no typecheck do CZT; **nenhum teorema provado**.
 
-## EvidÃªncias executadas (`docs/evidence/phase-1/`)
-| EvidÃªncia | Resultado |
-|---|---|
-| `docs/evidence/phase-1/01-full-suite.txt` | pytest completo com pilha real + PostgreSQL real + E2E (Edge): **528 passed, 0 failed, 0 errors, 0 skipped** (448 s) |
-| `docs/evidence/phase-1/02-compose-cold-start.txt` | `down -v` + `up --build --wait`: 5 serviÃ§os longos saudÃ¡veis + `migrate` concluÃ­do; build+up ≈ 214 s (imagens base em cache; inclui pip nas 3 imagens) |
-| `docs/evidence/phase-1/latency.json` | publicarâ†’visÃ­vel na API: p50 0.1159 s Â· p95 0.2761 s Â· mÃ¡x 0.37 s (n=100; 1 mÃ¡quina, loopback) â€” meta < 3 s: **atendida neste ambiente** |
-| `docs/evidence/phase-1/z-typecheck.txt` | 3 specs Z: `0 warnings and errors`; erro de tipo injetado Ã© rejeitado |
-| `docs/evidence/phase-1/panel-critical-alert.png` e outras `panel-*` | capturas reais do painel (alerta crÃ­tico, offline, erro, 360 px) |
-| `docs/evidence/phase-1/graph-report.md`, `docs/evidence/phase-1/graph-crosscheck.md` | Graphify: 1203 nós · 2752 arestas · 86% EXTRACTED; cruzamento: 57 confirmados, 24 caixa-preta, 3 sem caminho (explicados) |
-| `docs/evidence/phase-1/03-resilience-worker-logs.txt` | logs reais do worker: falha de infraestrutura â†’ sem ack â†’ reconexÃ£o |
+## Fase 2 — o que existe
+- **Spec/decisões:** [SPEC-008](../../specs/functional/SPEC-008-ar-client.md), [ADR-0003](../adr/0003-ar-client-architecture.md), REQ-AR-001…007, D-012…D-017 em [requirements.md](../requirements/requirements.md).
+- **Núcleo C# puro** `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/` (validação do QR, cliente da API, reducer `MarkerSession`, `OverlayViewModel`, `SessionDriver`, `ClientConfig`): **171 testes xUnit passaram na CI** (run 39326391535), build `netstandard2.1`/C# 9 com warnings como erro — ver `docs/evidence/phase-2/ci-csharp.txt`. Cobre JSON **real** da API (fixtures geradas por `tests/contract/test_ar_fixtures.py`) e decodificação ZXing.Net dos 8 QR de teste.
+- **QR de teste:** `scripts/generate_qr.py` → `docs/evidence/phase-2/qr/` (3 válidos, 1 de outra org, 1 desconhecido, 3 conteúdos inválidos); decodificados de forma independente pelo OpenCV (local) e pelo ZXing.Net (CI).
+- **Cola Unity** `clients/ar-unity/Assets/Scripts/` e `clients/ar-unity/Assets/Editor/ProjectSetup.cs`: escrita **sem Unity — nunca compilada nem executada**. Pacotes/versões do `clients/ar-unity/Packages/manifest.json` conferidos no registro oficial da Unity, não resolvidos por um editor.
+- **Checklist em aparelho** `docs/runbooks/ar-device-checklist.md`: pronto, **NÃO executado**.
+- **Ferramentas:** .NET SDK 10.0.402 em `~/.tools` (SHA-512 verificado) para compilar o núcleo localmente contra um stub; Graphify agora também indexa C# (cruzamento em `graph/mappings/crosscheck.md`).
+- **CI:** novo job `csharp` (e os demais) verdes no PR #2 no commit 90d889d.
 
-## Defeitos encontrados DURANTE a Fase 1 (e corrigidos)
-1. Spec: leitura GOOD *antiga* sustentava o estado de outro sensor vivo â†’ leitura vÃ¡lida = GOOD âˆ§ fresca; `NORMAL` exige cobertura total do perfil (D-003, D-006).
-2. Z escrito Ã  mÃ£o tinha erros de sintaxe/tipo â€” achados sÃ³ ao rodar o CZT (Fase 0 dizia "nÃ£o verificado").
-3. DublÃª em memÃ³ria vs PostgreSQL divergiam (`rowcount` do upsert) â€” achado pela suÃ­te de contrato; uso de `RETURNING`.
-4. `_find_panel_dir` quebrava na imagem Docker (poucos nÃ­veis de diretÃ³rio) â€” achado ao subir o contÃªiner; teste de regressÃ£o.
-5. Backoff de reconexÃ£o do worker nunca crescia â€” extraÃ­do e testado (`next_backoff`).
-6. **Painel:** resposta em voo da org A era desenhada apÃ³s trocar para a org B â€” achado pelo E2E; corrigido por *geraÃ§Ã£o*; teste detecta o defeito (verificado por mutaÃ§Ã£o).
-7. Cruzamento matrizÃ—grafo "confirmava" tudo via nÃ³s externos â€” corrigido e testado.
-8. Primeira mediÃ§Ã£o de latÃªncia incluÃ­a o handshake MQTT do teste (â‰ˆ1 s) â€” refeita com publicador persistente.
-9. Fixture de limpeza de testes vazava bancos `spatial_t_*` apÃ³s queda de banco â€” `pool_pre_ping`.
+## O que NÃO foi feito / não está verificado
+- **AR em aparelho físico: NADA validado** (REQ-AR-007 `planned`). Sem Android/ARCore, sem Unity instalado, sem câmera. Não há vídeo, latência QR→overlay, FPS nem estabilidade.
+- **Cola Unity nunca compilada:** erros de compilação na 1ª abertura são esperados. Em especial não verificadas: `XRCpuImage.Convert`, `ARAnchorManager.TryAddAnchorAsync`/`result.status.IsSuccess()` (API do AR Foundation 6), asmdefs e referências. `QrScanner.cs` não é tocado por nenhum teste.
+- **`scripts/fetch-zxing-unity.ps1` não foi executado:** o proxy corporativo bloqueia `.nupkg` ("File Transfer Blocked"); **não contornei**. Por isso `Assets/Plugins/ZXing/zxing.dll` não existe. Corrigi um erro meu: o pacote ZXing.Net 0.16.9 **não** tem `lib/unity` (achado na CI) — usa-se `netstandard2.1`.
+- Testes C# **não rodam na máquina do desenvolvedor** (mesmo bloqueio de NuGet); só compilação local contra stub. Rodam na CI.
+- **Decisões D-013…D-015 adotadas por default** (ZXing.Net, `adb reverse`, projeto no repositório) sem confirmação do usuário (D-016).
+- **Dreaming:** ainda **não** instalado/usado (serviço de nuvem pago, acesso sob solicitação) — decisão pendente do usuário (opções A/B/C da Fase 1).
+- Herdado: autenticação demo, Mosquitto anônimo, rate limit em memória, sem OIDC/RBAC, CI de segurança incompleta (Semgrep/Trivy/SBOM), Python 3.12 local não obtido.
 
-## O que NÃƒO foi feito / nÃ£o estÃ¡ verificado
-- **Nenhum teorema Z foi provado.** O CZT valida sintaxe e tipos; invariantes seguem validados por Hypothesis.
-- **Dreaming NÃƒO foi instalado/usado:** Ã© um serviÃ§o de nuvem (Managed Agents) em *research preview*, com acesso sob solicitaÃ§Ã£o, API key e cobranÃ§a por tokens â€” nada para instalar localmente. Aguarda sua decisÃ£o (ver relatÃ³rio / [tool-evaluation](../decisions/tool-evaluation.md)).
-- **CI nÃ£o executada** em runner GitHub (sem remoto). Gitleaks, Semgrep, Trivy, SBOM, Schemathesis: nÃ£o executados. `pip-audit` executado localmente nos 3 serviÃ§os.
-- **Unity/AR, cÃ¢mera, QR por cÃ¢mera, celular fÃ­sico:** nada validado (Fase 2). O painel foi testado no **Edge desktop** e em viewport emulado de 360 px.
-- **AutenticaÃ§Ã£o Ã© demo** (tokens pÃºblicos); OIDC e RBAC por papel nÃ£o existem. Mosquitto anÃ´nimo (dev). Rate limit/auditoria em memÃ³ria/log de processo Ãºnico.
-- Python 3.12 nÃ£o obtido localmente (proxy TLS): suÃ­te local roda em 3.13; as imagens Docker (3.12) passaram nos testes de pilha.
-- LatÃªncia: 1 mÃ¡quina, loopback, sem carga concorrente â€” **nÃ£o** representa produÃ§Ã£o. Sem teste de carga.
-- Sem histÃ³rico persistente de alertas (derivados na consulta); sem retenÃ§Ã£o/particionamento de telemetria.
-- EvidÃªncia "Red" (testes falhando antes do cÃ³digo) da Fase 1 **nÃ£o foi arquivada** como na Fase 0 (a ordem foi seguida, mas sÃ³ a Fase 0 tem o log).
-- Warning conhecido: `StarletteDeprecationWarning` (TestClient com `httpx`).
+## Defeitos encontrados na Fase 2 (corrigidos)
+1. Driver usava `ConfigureAwait(false)`: a próxima requisição `UnityWebRequest` rodaria fora da thread principal — removido (visto na revisão, antes da CI).
+2. Teste de relógio com `AddSeconds(4.6)` truncava um tick no .NET — instantes exatos em binário.
+3. Suposição minha de `lib/unity` no ZXing.Net — refutada pela CI.
+4. Teste que presumia rigor de tipo do Newtonsoft (número→string) — removido.
 
-## DecisÃµes pendentes de aprovaÃ§Ã£o
-D-007â€¦D-011 em [requirements.md](../requirements/requirements.md) (skew +5 min; sentinela EQ-B01; auth demo; alertas derivados; pacote `storage`) e as opÃ§Ãµes do **Dreaming** no relatÃ³rio.
-
-## PrÃ³ximo passo (somente apÃ³s aprovaÃ§Ã£o)
-Fase 2 â€” AR Android: projeto Unity, leitura de QR (`GET /api/v1/spatial/markers/{id}`), overlay ancorado, estados offline e checklist em aparelho fÃ­sico. **Depende de hardware:** Android com ARCore + cabo/depuraÃ§Ã£o USB + Unity LTS instalado.
-
-Gates locais (scripts/check.ps1, sem infraestrutura): ruff ✔ · format ✔ · mypy strict (76 arquivos) ✔ · 409 passed + 119 skipped (dependem de PostgreSQL/pilha) · pip-audit ×3 sem vulnerabilidades conhecidas — ver [04-local-gates.txt](../evidence/phase-1/04-local-gates.txt).
+## Próximo passo (depende de você)
+1. Fornecer **Android com ARCore + cabo USB** e instalar **Unity Hub/6.3 LTS** (licença Personal) numa rede **sem** bloqueio de `.nupkg` para obter o ZXing.
+2. Abrir `clients/ar-unity/`, corrigir erros de compilação da cola, executar o checklist e anexar vídeo/medidas em `docs/evidence/phase-2/`.
+3. Só então REQ-AR-001…005 podem virar `verified` e o PR #2 sair de rascunho. Fase 3 (IA assistiva) **não** foi iniciada.

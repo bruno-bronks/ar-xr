@@ -1,0 +1,68 @@
+{
+  "codes": [
+    {
+      "name": "valid-QR-EQ-001",
+      "content": "QR-EQ-001",
+      "kind": "valid",
+      "expected_app_behavior": "resolve para EQ-001 e exibe o overlay (org-a)",
+      "png": "valid-QR-EQ-001.png",
+      "pgm": "valid-QR-EQ-001.pgm"
+    },
+    {
+      "name": "valid-QR-EQ-002",
+      "content": "QR-EQ-002",
+      "kind": "valid",
+      "expected_app_behavior": "resolve para EQ-002 e exibe o overlay (org-a)",
+      "png": "valid-QR-EQ-002.png",
+      "pgm": "valid-QR-EQ-002.pgm"
+    },
+    {
+      "name": "valid-QR-EQ-003",
+      "content": "QR-EQ-003",
+      "kind": "valid",
+      "expected_app_behavior": "resolve para EQ-003 e exibe o overlay (org-a)",
+      "png": "valid-QR-EQ-003.png",
+      "pgm": "valid-QR-EQ-003.pgm"
+    },
+    {
+      "name": "foreign-QR-EQ-B01",
+      "content": "QR-EQ-B01",
+      "kind": "foreign_org",
+      "expected_app_behavior": "Marcador nao reconhecido (identico ao desconhecido; nenhum dado)",
+      "png": "foreign-QR-EQ-B01.png",
+      "pgm": "foreign-QR-EQ-B01.pgm"
+    },
+    {
+      "name": "unknown-QR-NAO-EXISTE",
+      "content": "QR-NAO-EXISTE",
+      "kind": "unknown",
+      "expected_app_behavior": "Marcador nao reconhecido (identico ao de outra organizacao)",
+      "png": "unknown-QR-NAO-EXISTE.png",
+      "pgm": "unknown-QR-NAO-EXISTE.pgm"
+    },
+    {
+      "name": "invalid-url",
+      "content": "https://example.com/QR-EQ-001",
+      "kind": "invalid_content",
+      "expected_app_behavior": "descartado localmente: NENHUMA requisicao ao servidor",
+      "png": "invalid-url.png",
+      "pgm": "invalid-url.pgm"
+    },
+    {
+      "name": "invalid-json",
+      "content": "{\"id\":\"EQ-001\"}",
+      "kind": "invalid_content",
+      "expected_app_behavior": "descartado localmente: NENHUMA requisicao ao servidor",
+      "png": "invalid-json.png",
+      "pgm": "invalid-json.pgm"
+    },
+    {
+      "name": "invalid-space",
+      "content": "QR EQ 001",
+      "kind": "invalid_content",
+      "expected_app_behavior": "descartado localmente: NENHUMA requisicao ao servidor",
+      "png": "invalid-space.png",
+      "pgm": "invalid-space.pgm"
+    }
+  ]
+}

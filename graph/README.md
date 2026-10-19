@@ -54,10 +54,12 @@ Vocabulário das arestas verificadas: `IMPLEMENTS` (código → REQ), `TESTED_BY
 1. **Defeito na minha primeira versão do cruzamento:** ela "confirmava" 100% dos testes, porque o caminho passava por nós
    externos (`pytest`, `collections_abc`). Ao proibir esse atalho, o resultado passou a discriminar (teste de regressão
    em `tests/unit/repo/test_trace_edges.py`).
-2. **Resultado atual** (ver `mappings/crosscheck.md`): 57 pares teste↔código confirmados (18 só com arestas extraídas,
-   39 com ao menos uma inferida), 24 caixa-preta (integração/E2E/performance, esperado) e **3 sem caminho no grafo**,
-   todos explicáveis e mantidos na matriz:
-   - `test_hygiene.py` ↔ `config.py` (REQ-SEC-001): o teste lê `.env.example`/`.gitignore`; o código é coberto por `test_config.py`.
-   - `test_trace_edges.py` ↔ `scripts/*.py` (REQ-ENG-008): o teste carrega os scripts por caminho (`importlib`), dependência dinâmica
-     que a análise estática não enxerga.
-3. As 39 confirmações "INFERRED" são **indício, não prova** — por isso a matriz continua a fonte oficial.
+2. **Resultado atual** (Fase 2; ver `mappings/crosscheck.md`; o Graphify indexa Python **e C#**): 121 pares teste↔código confirmados
+   (51 só com arestas extraídas, 70 com ao menos uma inferida), 24 caixa-preta (integração/E2E/performance, esperado) e
+   **15 sem caminho no grafo**, em três famílias, todas explicáveis e mantidas na matriz:
+   - **Acoplamento por dados, não por código** (10): `test_ar_fixtures.py` gera JSON que o núcleo C# lê; `QrRoundTripTests.cs`/`test_generate_qr.py` usam os QR
+     de `scripts/generate_qr.py`. Análise estática não enxerga arquivo trocado entre linguagens.
+   - **Dependência dinâmica / leitura de arquivo** (3): `test_trace_edges.py` carrega scripts por caminho (`importlib`); `test_hygiene.py` lê `.env.example`/`.gitignore`.
+   - **Lacuna REAL e declarada** (2): `Assets/Scripts/QrScanner.cs` (cola Unity) consta como código do REQ-AR-001, mas **nenhum teste o toca** — coerente com
+     "cola não compilada / AR não validada"; só o checklist em aparelho a cobrirá.
+3. As confirmações "INFERRED" são **indício, não prova** — por isso a matriz continua a fonte oficial.

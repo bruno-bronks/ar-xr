@@ -1,7 +1,7 @@
 {
   "generated_from": "docs/requirements/traceability.csv",
   "note": "Arestas VERIFICADAS (a matriz e testada por tests/unit/repo/test_traceability.py).",
-  "edge_count": 185,
+  "edge_count": 255,
   "edges": [
     {
       "source": ".github/workflows/ci.yml",
@@ -28,6 +28,370 @@
       "source": "REQ-AI-001",
       "relation": "SERVES",
       "target": "OUT-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-001",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-001",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0003-ar-client-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-001",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-003-marker-resolution.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-001",
+      "relation": "SERVES",
+      "target": "OUT-MNT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-001",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-008-ar-client.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-001",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-001",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/QrPayloadTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-001",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/QrRoundTripTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-001",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-001",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-002",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-002",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0003-ar-client-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-002",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-003-marker-resolution.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-002",
+      "relation": "SERVES",
+      "target": "OUT-MNT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-002",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-008-ar-client.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-002",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-002",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-002",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-003",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-003",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0003-ar-client-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-003",
+      "relation": "SERVES",
+      "target": "OUT-MNT-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-003",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-008-ar-client.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-003",
+      "relation": "TESTED_BY",
+      "target": "tests/contract/test_ar_fixtures.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-003",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-003",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-003",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-004",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-004",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0003-ar-client-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-004",
+      "relation": "SERVES",
+      "target": "OUT-MNT-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-004",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-008-ar-client.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-004",
+      "relation": "TESTED_BY",
+      "target": "tests/contract/test_ar_fixtures.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-004",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-004",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-004",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-004",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-005",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0003-ar-client-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-005",
+      "relation": "SERVES",
+      "target": "OUT-HACC-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-005",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-008-ar-client.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-005",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/ClientConfigTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-005",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-005",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/QrPayloadTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-005",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-006",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0003-ar-client-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-006",
+      "relation": "SERVES",
+      "target": "OUT-MNT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-006",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-008-ar-client.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-006",
+      "relation": "TESTED_BY",
+      "target": "tests/csharp/Spatial.Ar.Core.Tests/QrRoundTripTests.cs",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-006",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/repo/test_generate_qr.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-007",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-007",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0003-ar-client-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-007",
+      "relation": "SERVES",
+      "target": "OUT-MNT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-007",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-008-ar-client.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AR-007",
+      "relation": "TESTED_BY",
+      "target": "docs/runbooks/ar-device-checklist.md",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -991,6 +1355,125 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "clients/ar-unity/Assets/Scripts/QrScanner.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Assets/Scripts/SpatialArApp.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Assets/Scripts/SpatialArApp.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Assets/Scripts/UnityWebRequestTransport.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Packages/com.spatial.ar.core/Runtime/ClientConfig.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Packages/com.spatial.ar.core/Runtime/Dtos.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Packages/com.spatial.ar.core/Runtime/QrPayload.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "clients/web-fallback/app.js",
       "relation": "IMPLEMENTS",
       "target": "REQ-UX-001",
@@ -1113,6 +1596,13 @@
       "source": "platform/mosquitto/mosquitto.conf",
       "relation": "IMPLEMENTS",
       "target": "REQ-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "scripts/generate_qr.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AR-006",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },

@@ -1,0 +1,10 @@
+{
+  "name": "com.spatial.ar.core",
+  "version": "0.1.0",
+  "displayName": "Spatial AR Core",
+  "description": "Nucleo C# puro (sem UnityEngine) do cliente AR: validacao do QR, cliente da API, maquina de estados e modelo de apresentacao. Testado com dotnet test (tests/csharp).",
+  "unity": "6000.3",
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
+  }
+}

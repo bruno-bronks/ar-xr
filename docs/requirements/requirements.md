@@ -42,6 +42,18 @@ Legenda de **Fase**: quando o requisito é implementado. Requisitos de fases fut
 | REQ-SIM-001 | O simulador publica telemetria dos 3 equipamentos de forma determinística (semente fixa): um equipamento escala até alerta, um silencia (offline), um permanece normal; reenvia duplicatas configuráveis. | OUT-MNT-003 | 1 |
 | REQ-UX-001 | Painel web 2D (fallback sem AR) mostra, por equipamento, estado, leituras e alertas, atualiza automaticamente e exibe `OFFLINE`/`UNKNOWN` explicitamente (nunca "normal" por dado ausente). | OUT-MNT-002 | 1 |
 
+## Cliente AR (Fase 2)
+
+| ID | Requisito | Outcome | Fase |
+|---|---|---|---|
+| REQ-AR-001 | O app lê um QR cujo conteúdo é **somente** o marker opaco (regex `^[A-Za-z0-9._:-]{1,128}$`) e o resolve por `GET /api/v1/spatial/markers/{id}`; o QR nunca carrega dados do equipamento. Conteúdo fora do padrão é descartado **sem** requisição. | OUT-MNT-001 | núcleo: 2 · aparelho: 2 |
+| REQ-AR-002 | QR desconhecido, de outra organização ou rejeitado pelo servidor exibe a **mesma** mensagem genérica ("marcador não reconhecido") e nenhum dado; o app não distingue os casos. | OUT-MNT-001 | núcleo: 2 · aparelho: 2 |
+| REQ-AR-003 | O overlay mostra estado (texto **e** cor), leituras com idade, limites e alertas, atualizados a cada 2 s. O estado vem **somente** do servidor (twin); o cliente não recalcula status. `OFFLINE`/`UNKNOWN` são exibidos como tais, nunca como normal. | OUT-MNT-002 | núcleo: 2 · aparelho: 2 |
+| REQ-AR-004 | Falhas (rede, timeout, 401, 429, 5xx, resposta inválida) não derrubam o app: o último estado fica visível **marcado como desatualizado** com a idade; 429 respeita `Retry-After`; 401 pede reautenticação e remove dados. | OUT-MNT-002 | núcleo: 2 · aparelho: 2 |
+| REQ-AR-005 | Segurança do cliente: modo demo/HTTP puro somente em *build* de desenvolvimento; *build* de release **recusa** token demo e `http://`; nenhum token/URL/payload é registrado em log; troca de QR descarta o estado anterior (sem vazamento entre equipamentos). | OUT-HACC-001 | núcleo: 2 · aparelho: 2 |
+| REQ-AR-006 | Os 3 QR de teste (e os negativos) podem ser gerados para impressão por script reprodutível, e a decodificação com a **mesma biblioteca do app** (ZXing.Net) devolve exatamente o marker. | OUT-MNT-001 | 2 |
+| REQ-AR-007 | A AR só é declarada validada com **checklist executado em aparelho Android físico**, com vídeo e métricas (latência QR→overlay, estabilidade) por dispositivo. | OUT-MNT-001, OUT-MNT-002 | 2 (depende de hardware) |
+
 ## Planejados (fases futuras — sem implementação)
 
 | ID | Requisito | Outcome | Fase |
@@ -64,3 +76,9 @@ Legenda de **Fase**: quando o requisito é implementado. Requisitos de fases fut
 | D-009 | Autenticação demo: tokens Bearer fictícios fixos (`demo-operator-a`, `demo-operator-b`), válidos somente em `ENVIRONMENT` ≠ `production`. | Dev mock explícito exigido pelo plano; OIDC fica para fase posterior (aprovação de IdP). | Sim |
 | D-010 | Alertas são **derivados** do twin no momento da consulta (sem tabela de histórico de alertas); `OFFLINE` surge por passagem de tempo sem precisar de job. Histórico de alertas fica para fase posterior. | Evita scheduler/estado extra; atende "mudança de estado" via twin. | Sim |
 | D-011 | Pacote compartilhado `packages/storage` (modelos SQLAlchemy, repositórios, migrações) usado por API e worker; contexto de build Docker passa a ser a raiz do repo. | API e worker precisam do mesmo esquema; evita duplicação e serviço extra (ver ADR-0002). | Sim |
+| D-012 | Cliente AR: **Unity 6.3 LTS (6000.3)** com AR Foundation **6.3.5** e ARCore XR Plugin **6.3.5** (par que a Unity documenta para o 6000.3), Test Framework 1.4.6, Newtonsoft 3.2.1. Versões conferidas no registro oficial `packages.unity.com`; o patch exato do editor depende do que você instalar. | Evita escolher versões de memória. | Sim |
+| D-013 | Leitura de QR: **ZXing.Net** (Apache-2.0) sobre a imagem da câmera (CPU), não Augmented Images do ARCore. | O plano pede QR; Augmented Images reconhece imagens, não QR. | Sim |
+| D-014 | Rede do aparelho: `adb reverse tcp:8088 tcp:8088` (a API continua só em `127.0.0.1`); HTTP puro permitido apenas em build de desenvolvimento. | Não expõe a API na LAN. | Sim |
+| D-015 | Projeto Unity versionado neste repositório (`clients/ar-unity/`, `Library/` ignorada). | Rastreabilidade única. | Sim |
+| D-016 | **Você aprovou a Fase 2 sem responder às decisões 1–4 nem informar o modelo do aparelho**: adotei as recomendações (D-013…D-015) como defaults provisórios. | Reversíveis até existir código Unity validado. | Sim |
+| D-017 | O cliente **nunca** calcula status: usa o `status` do twin do servidor. Dado é "desatualizado" no cliente após 3 s sem atualização bem-sucedida (1,5× o intervalo de 2 s). | Fonte única da verdade (SPEC-002) e evita divergência. | Sim |
