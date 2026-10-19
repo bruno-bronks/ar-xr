@@ -2,7 +2,8 @@
 
 Plataforma de IA espacial com duas verticais: **AR Maintenance AI** (primeiro MVP) e **HACC Spatial** (segunda integração, somente dados simulados). Plano completo: [SPATIAL_AI_ANTIGRAVITY_MASTER_PLAN.md](SPATIAL_AI_ANTIGRAVITY_MASTER_PLAN.md).
 
-> **Estado: Fase 1 (vertical industrial, sem AR nativa) concluída, aguardando aprovação.** Fluxo real e testado:
+> **Estado: Fases 0–1 em `main`. Fase 2 (AR Android) PARCIAL no PR #2 (rascunho): núcleo C# testado na CI; cola Unity NÃO compilada; AR NÃO validada em aparelho (falta hardware).**
+> Fase 1 (vertical industrial, sem AR nativa): Fluxo real e testado:
 > simulador → Mosquitto → worker (valida, deduplica, persiste) → PostgreSQL → API autenticada → **painel web 2D**.
 > **Não existe ainda:** Unity/AR (Fase 2), assistente de IA (Fase 3), HACC (Fase 4), visão computacional/IoT real (Fase 5), cloud (Fase 6).
 > Autenticação é **demo** (tokens fictícios; a API recusa iniciar assim em produção). Detalhes, evidências e limitações: [docs/agent/CURRENT_STATE.md](docs/agent/CURRENT_STATE.md).
@@ -60,7 +61,7 @@ Sem `TEST_DATABASE_URL`/`BASE_URL` os testes que precisam de PostgreSQL/pilha ap
 | `docs/architecture/`, `docs/adr/` | C4 (Mermaid), threat model STRIDE, ADR-0001/0002 |
 | `docs/decisions/tool-evaluation.md` | Ferramentas (JDK, CZT, Graphify), Dreaming e limitações |
 | `docs/evidence/phase-0/`, `phase-1/` | Saídas reais de testes, Compose, latência, capturas do painel, typecheck Z |
-| `specs/functional/` | SPEC-001…007 |
+| `specs/functional/` | SPEC-001…008 |
 | `specs/formal-z/` | Z-002…004 (**typecheck CZT ok; teoremas não provados**) |
 | `specs/contracts/`, `packages/contracts/` | OpenAPI 3.1, AsyncAPI 3, JSON Schema |
 | `packages/domain/` | Domínio puro: avaliação de estado, marker, parser de telemetria |
@@ -68,6 +69,8 @@ Sem `TEST_DATABASE_URL`/`BASE_URL` os testes que precisam de PostgreSQL/pilha ap
 | `packages/common/` | Logging JSON com correlation ID |
 | `services/api/` · `telemetry-worker/` · `equipment-simulator/` | Os três deployables |
 | `clients/web-fallback/` | Painel web 2D (HTML/JS/CSS estáticos) |
+| `clients/ar-unity/` | Cliente AR (Fase 2): núcleo C# testado + cola Unity **não compilada** — ver o README da pasta |
+| `tests/csharp/` | xUnit do núcleo C# (rodam na **CI**; o proxy do dev bloqueia NuGet) e fixtures geradas pela API real |
 | `graph/` | Índice auxiliar (Graphify): arestas verificadas e cruzamento |
 | `tests/` | `unit`, `contract`, `integration`, `e2e`, `performance` |
 

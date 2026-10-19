@@ -68,7 +68,7 @@ jobs:
         run: |
           pkg="$HOME/.nuget/packages/zxing.net/0.16.9"
           ls "$pkg/lib"
-          sha256sum "$pkg"/*.nupkg "$pkg"/lib/unity/*.dll || true
+          sha256sum "$pkg"/*.nupkg "$pkg"/lib/netstandard2.1/zxing.dll
 
   formal-z:
     runs-on: ubuntu-latest

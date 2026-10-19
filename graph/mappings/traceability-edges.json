@@ -1,7 +1,7 @@
 {
   "generated_from": "docs/requirements/traceability.csv",
   "note": "Arestas VERIFICADAS (a matriz e testada por tests/unit/repo/test_traceability.py).",
-  "edge_count": 256,
+  "edge_count": 255,
   "edges": [
     {
       "source": ".github/workflows/ci.yml",
@@ -1596,13 +1596,6 @@
       "source": "platform/mosquitto/mosquitto.conf",
       "relation": "IMPLEMENTS",
       "target": "REQ-ENG-001",
-      "status": "VERIFIED",
-      "origin": "traceability.csv"
-    },
-    {
-      "source": "scripts/fetch-zxing-unity.ps1",
-      "relation": "IMPLEMENTS",
-      "target": "REQ-AR-006",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },

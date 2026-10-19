@@ -7,7 +7,7 @@
 Spec: [SPEC-008](../../specs/functional/SPEC-008-ar-client.md) · Decisão: [ADR-0003](../../docs/adr/0003-ar-client-architecture.md) · Requisitos REQ-AR-001…007.
 
 ## Versões (D-012, conferidas em `packages.unity.com`)
-Unity **6.3 LTS (6000.3)** · AR Foundation **6.3.5** · ARCore XR Plugin **6.3.5** · Test Framework 1.4.6 · Newtonsoft 3.2.1 · ZXing.Net 0.16.9 (`zxing.unity.dll`).
+Unity **6.3 LTS (6000.3)** · AR Foundation **6.3.5** · ARCore XR Plugin **6.3.5** · Test Framework 1.4.6 · Newtonsoft 3.2.1 · ZXing.Net 0.16.9 (`zxing.dll`, build netstandard2.1).
 
 ## Estrutura
 | Caminho | O que é | Estado |
@@ -19,8 +19,8 @@ Unity **6.3 LTS (6000.3)** · AR Foundation **6.3.5** · ARCore XR Plugin **6.3.
 
 ## Montagem (primeira vez, ~30 min) — no PC com Unity Hub
 1. **Instale** Unity Hub + **Unity 6.3 LTS** com *Android Build Support* (SDK, NDK, OpenJDK inclusos). (Licença Personal exige login — é com você.)
-2. **ZXing:** em uma rede sem bloqueio de `.nupkg`, rode `scripts/fetch-zxing-unity.ps1 -ExpectedSha256 <hash da CI>`
-   (copia `zxing.unity.dll` para `Assets/Plugins/ZXing/`, ignorado pelo Git). O hash é impresso pelo job `csharp` da CI.
+2. **ZXing:** em uma rede sem bloqueio de `.nupkg`, rode `scripts/fetch-zxing-unity.ps1`
+   (baixa o `.nupkg` oficial, confere o SHA-256 pinado e copia `lib/netstandard2.1/zxing.dll` para `Assets/Plugins/ZXing/`, ignorado pelo Git).
 3. Abra `clients/ar-unity/` no Unity Hub. **Corrija erros de compilação** da cola (esperados; registre quais no checklist).
 4. *Spatial › Configure Android player settings*; em *Project Settings › XR Plug-in Management › Android* marque **ARCore**.
 5. Crie a cena (*GameObject › XR › AR Session* e *XR Origin (Mobile AR)*). No XR Origin adicione **ARRaycastManager** e **ARAnchorManager**;

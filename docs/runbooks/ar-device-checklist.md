@@ -6,6 +6,7 @@
 ## 0. Preparação (uma vez)
 - [ ] Android com ARCore ([lista oficial](https://developers.google.com/ar/devices)), depuração USB ativa; modelo/Android/ARCore anotados abaixo.
 - [ ] Unity 6.3 LTS com módulo *Android Build Support* (SDK/NDK/JDK incluídos). Abrir `clients/ar-unity/`.
+- [ ] ZXing: `scripts/fetch-zxing-unity.ps1` (rede sem bloqueio de `.nupkg`).
 - [ ] Resolver erros de compilação da cola Unity (esperados na 1ª abertura; registrar quais).
 - [ ] `docker compose up --build --wait` no PC; `adb reverse tcp:8088 tcp:8088`; `adb devices` mostra o aparelho.
 - [ ] Imprimir os QR de `docs/evidence/phase-2/qr/` (gerados por `scripts/generate_qr.py`) em ~8 cm de lado.

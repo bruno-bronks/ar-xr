@@ -11,12 +11,22 @@ Regra (plano mestre, §0.6): identificar repositório, versão, licença, compat
 | **Graphify** | 0.9.91 (PyPI: 0.9.92) | Apache-2.0 | PyPI `graphifyy` · [docs.graphify.com](https://docs.graphify.com) · [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | já instalado via `uv tool` (não reinstalado) | índice auxiliar de código/docs; cruzamento com a matriz (`graph/`) |
 | Alembic 1.20 · SQLAlchemy 2.1 · psycopg 3.3 | pins em `services/*/requirements.txt` | MIT / MIT / **LGPL-3.0** | PyPI | `pip` | migrações e acesso a dados |
 | paho-mqtt 2.1 | idem | EPL-2.0 / EDL-1.0 | [eclipse/paho.mqtt.python](https://github.com/eclipse/paho.mqtt.python) | `pip` | worker e simulador |
+| **.NET SDK** | 10.0.402 (LTS) | MIT | [dotnet.microsoft.com](https://dotnet.microsoft.com) · `builds.dotnet.microsoft.com` | zip oficial em `%USERPROFILE%\.tools\dotnet`; **SHA-512 verificado** (`ae4fd528…898cd`) contra o `releases.json` oficial | compila o núcleo C# localmente (contra stub); testes xUnit rodam na CI |
+| **segno** 1.6.6 (QR) · **opencv-python-headless** 5.0.0 | — | BSD-3 · Apache-2.0 | PyPI | `pip` (funciona no proxy) | gerador dos QR de teste; decodificação independente nos testes |
+| xUnit 2.9.2 · Newtonsoft.Json 13.0.3 · ZXing.Net 0.16.9 | — | Apache-2.0 · MIT · Apache-2.0 | NuGet | **só na CI** (ver abaixo) | testes do núcleo C#; ZXing é a biblioteca de QR do app |
 | Playwright 1.64 (Python) | dev | Apache-2.0 | [playwright.dev](https://playwright.dev/python) | `pip`; usa o **Microsoft Edge já instalado** (`channel="msedge"`) — nenhum navegador foi baixado | E2E do painel |
 
 > Licenças dos pacotes Python acima vêm do conhecimento geral das bibliotecas e **não foram auditadas** pacote a pacote; `psycopg` é LGPL-3.0 (uso como biblioteca dinâmica é o caso comum — confirmar com jurídico antes de distribuir binários).
 
 ### Resultado real do CZT
 O typechecker **encontrou erros reais** nas specs Z escritas à mão na Fase 0 (comando `\max` inexistente, `[ ]` usado como agrupamento de predicado, conjecturas sem `⊢?`, `\\` dentro de predicado entre parênteses, nome de esquema antes de `⊢?`). Após a correção, os 3 arquivos (`z-002`, `z-003`, `z-004`) passam com `0 warnings and errors`; um erro de tipo injetado (`warn ≤ GOOD`) é rejeitado com `Type mismatch`. **O que isso NÃO é:** o CZT aqui valida **sintaxe e tipos**; nenhuma conjectura (`⊢?`) foi provada (isso exigiria Z/EVES ou outro provador). Os invariantes continuam validados por Hypothesis.
+
+## Rede corporativa: o que está bloqueado (e o que NÃO foi contornado)
+O proxy da rede do desenvolvedor responde **"File Transfer Blocked"** ao baixar `.nupkg` do NuGet (o índice do feed responde 200, o arquivo do pacote devolve 503). Isso é um controle de segurança da organização: **não foi contornado** (nenhum espelho alternativo, renomeação ou desativação de verificação). Consequências e soluções:
+- Testes C# (xUnit/Newtonsoft/ZXing) **não rodam localmente**; rodam no job `csharp` da CI do GitHub (sem esse bloqueio). Localmente só é possível **compilar** o núcleo contra um stub do Newtonsoft.
+- O `restore` falhava também na checagem de revogação de certificado (OCSP/CRL bloqueados): `NUGET_CERT_REVOCATION_MODE=offline` é o ajuste oficial do NuGet para isso (a cadeia do certificado continua validada).
+- `zxing.dll` (netstandard2.1, para o Unity) precisa ser obtido em rede sem o bloqueio: `scripts/fetch-zxing-unity.ps1` (SHA-256 do `.nupkg` pinado a partir da saída da CI: `00254aca…f32e`). **Correção:** eu havia assumido que o pacote traria `lib/unity`; a CI mostrou que não traz — usa-se `netstandard2.1`, a mesma variante testada.
+- Se TI liberar `.nupkg` (ou fornecer um feed interno), os testes C# passam a rodar localmente sem mudanças.
 
 ## Graphify — como foi usado (e limites)
 - `graphify update .` (AST local, **sem LLM e sem custo**): 1063 nós · 2523 arestas · 70 comunidades na Fase 1.

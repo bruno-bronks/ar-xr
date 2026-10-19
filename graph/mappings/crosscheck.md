@@ -29,10 +29,10 @@
 | REQ-SEC-003 | `tests/integration/test_stack_flow.py` | `services/api/app/auth.py` | NOT CONFIRMED (black-box) | - |
 | REQ-SEC-003 | `tests/integration/test_stack_flow.py` | `services/api/app/config.py` | NOT CONFIRMED (black-box) | - |
 | REQ-SEC-003 | `tests/integration/test_stack_flow.py` | `services/api/app/routes.py` | NOT CONFIRMED (black-box) | - |
-| REQ-SEC-004 | `tests/unit/api/test_equipment_api.py` | `services/api/app/audit.py` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-SEC-004 | `tests/unit/api/test_equipment_api.py` | `services/api/app/audit.py` | CONFIRMED (INFERRED) | 3 |
 | REQ-SEC-004 | `tests/unit/api/test_equipment_api.py` | `services/api/app/ratelimit.py` | CONFIRMED (INFERRED) | 3 |
 | REQ-MNT-001 | `tests/unit/domain/test_markers.py` | `packages/domain/src/spatial_domain/markers.py` | CONFIRMED (INFERRED) | 1 |
-| REQ-MNT-001 | `tests/unit/domain/test_markers.py` | `packages/storage/src/spatial_storage/postgres.py` | CONFIRMED (INFERRED) | 4 |
+| REQ-MNT-001 | `tests/unit/domain/test_markers.py` | `packages/storage/src/spatial_storage/postgres.py` | CONFIRMED (EXTRACTED) | 4 |
 | REQ-MNT-001 | `tests/unit/domain/test_markers.py` | `services/api/app/routes.py` | CONFIRMED (INFERRED) | 4 |
 | REQ-MNT-001 | `tests/unit/storage/test_repository_contract.py` | `packages/domain/src/spatial_domain/markers.py` | CONFIRMED (INFERRED) | 1 |
 | REQ-MNT-001 | `tests/unit/storage/test_repository_contract.py` | `packages/storage/src/spatial_storage/postgres.py` | CONFIRMED (INFERRED) | 1 |
@@ -67,8 +67,8 @@
 | REQ-MNT-004 | `tests/unit/worker/test_handler.py` | `services/telemetry-worker/worker/handler.py` | CONFIRMED (INFERRED) | 1 |
 | REQ-MNT-004 | `tests/integration/test_stack_resilience.py` | `packages/domain/src/spatial_domain/telemetry.py` | NOT CONFIRMED (black-box) | - |
 | REQ-MNT-004 | `tests/integration/test_stack_resilience.py` | `services/telemetry-worker/worker/handler.py` | NOT CONFIRMED (black-box) | - |
-| REQ-MNT-005 | `tests/unit/worker/test_consumer.py` | `services/telemetry-worker/worker/consumer.py` | CONFIRMED (INFERRED) | 1 |
-| REQ-MNT-005 | `tests/unit/worker/test_consumer.py` | `services/telemetry-worker/worker/main.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-MNT-005 | `tests/unit/worker/test_consumer.py` | `services/telemetry-worker/worker/consumer.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-MNT-005 | `tests/unit/worker/test_consumer.py` | `services/telemetry-worker/worker/main.py` | CONFIRMED (EXTRACTED) | 2 |
 | REQ-MNT-005 | `tests/integration/test_stack_resilience.py` | `services/telemetry-worker/worker/consumer.py` | NOT CONFIRMED (black-box) | - |
 | REQ-MNT-005 | `tests/integration/test_stack_resilience.py` | `services/telemetry-worker/worker/main.py` | NOT CONFIRMED (black-box) | - |
 | REQ-MNT-006 | `tests/unit/api/test_equipment_api.py` | `services/api/app/routes.py` | CONFIRMED (INFERRED) | 2 |
@@ -90,13 +90,89 @@
 | REQ-SIM-001 | `tests/unit/simulator/test_scenarios.py` | `services/equipment-simulator/simulator/main.py` | CONFIRMED (INFERRED) | 2 |
 | REQ-SIM-001 | `tests/integration/test_stack_flow.py` | `services/equipment-simulator/simulator/scenarios.py` | NOT CONFIRMED (black-box) | - |
 | REQ-SIM-001 | `tests/integration/test_stack_flow.py` | `services/equipment-simulator/simulator/main.py` | NOT CONFIRMED (black-box) | - |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/QrPayloadTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/QrPayload.cs` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/QrPayloadTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/QrPayloadTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/QrPayloadTests.cs` | `clients/ar-unity/Assets/Scripts/QrScanner.cs` | NOT CONFIRMED | - |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/QrPayload.cs` | CONFIRMED (INFERRED) | 2 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (INFERRED) | 1 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Assets/Scripts/QrScanner.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/QrPayload.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (INFERRED) | 1 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs` | `clients/ar-unity/Assets/Scripts/QrScanner.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/QrPayload.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (INFERRED) | 1 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Assets/Scripts/QrScanner.cs` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/QrRoundTripTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/QrPayload.cs` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/QrRoundTripTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/QrRoundTripTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/QrRoundTripTests.cs` | `clients/ar-unity/Assets/Scripts/QrScanner.cs` | NOT CONFIRMED | - |
+| REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (INFERRED) | 1 |
+| REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/Dtos.cs` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs` | `clients/ar-unity/Assets/Scripts/SpatialArApp.cs` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/Dtos.cs` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (INFERRED) | 1 |
+| REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs` | `clients/ar-unity/Assets/Scripts/SpatialArApp.cs` | CONFIRMED (INFERRED) | 2 |
+| REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/Dtos.cs` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (INFERRED) | 1 |
+| REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Assets/Scripts/SpatialArApp.cs` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | NOT CONFIRMED | - |
+| REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/Dtos.cs` | NOT CONFIRMED | - |
+| REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | NOT CONFIRMED | - |
+| REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Assets/Scripts/SpatialArApp.cs` | NOT CONFIRMED | - |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (INFERRED) | 1 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs` | CONFIRMED (INFERRED) | 2 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Assets/Scripts/UnityWebRequestTransport.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs` | CONFIRMED (INFERRED) | 2 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs` | `clients/ar-unity/Assets/Scripts/UnityWebRequestTransport.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs` | CONFIRMED (INFERRED) | 2 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (INFERRED) | 1 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/SpatialApiClientTests.cs` | `clients/ar-unity/Assets/Scripts/UnityWebRequestTransport.cs` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (INFERRED) | 1 |
+| REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Assets/Scripts/UnityWebRequestTransport.cs` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AR-004 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | NOT CONFIRMED | - |
+| REQ-AR-004 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs` | NOT CONFIRMED | - |
+| REQ-AR-004 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | NOT CONFIRMED | - |
+| REQ-AR-004 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Assets/Scripts/UnityWebRequestTransport.cs` | NOT CONFIRMED | - |
+| REQ-AR-005 | `tests/csharp/Spatial.Ar.Core.Tests/QrPayloadTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/ClientConfig.cs` | CONFIRMED (INFERRED) | 4 |
+| REQ-AR-005 | `tests/csharp/Spatial.Ar.Core.Tests/QrPayloadTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-005 | `tests/csharp/Spatial.Ar.Core.Tests/QrPayloadTests.cs` | `clients/ar-unity/Assets/Scripts/SpatialArApp.cs` | CONFIRMED (INFERRED) | 4 |
+| REQ-AR-005 | `tests/csharp/Spatial.Ar.Core.Tests/ClientConfigTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/ClientConfig.cs` | CONFIRMED (INFERRED) | 1 |
+| REQ-AR-005 | `tests/csharp/Spatial.Ar.Core.Tests/ClientConfigTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-005 | `tests/csharp/Spatial.Ar.Core.Tests/ClientConfigTests.cs` | `clients/ar-unity/Assets/Scripts/SpatialArApp.cs` | CONFIRMED (INFERRED) | 2 |
+| REQ-AR-005 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/ClientConfig.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-005 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs` | CONFIRMED (INFERRED) | 2 |
+| REQ-AR-005 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Assets/Scripts/SpatialArApp.cs` | CONFIRMED (INFERRED) | 2 |
+| REQ-AR-005 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/ClientConfig.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-005 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AR-005 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Assets/Scripts/SpatialArApp.cs` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AR-006 | `tests/unit/repo/test_generate_qr.py` | `scripts/generate_qr.py` | NOT CONFIRMED | - |
+| REQ-AR-006 | `tests/csharp/Spatial.Ar.Core.Tests/QrRoundTripTests.cs` | `scripts/generate_qr.py` | NOT CONFIRMED | - |
 
 ## Resumo
 
-- CONFIRMED (EXTRACTED): **18**
-- CONFIRMED (INFERRED): **39**
+- CONFIRMED (EXTRACTED): **51**
+- CONFIRMED (INFERRED): **70**
 - NOT CONFIRMED (black-box): **24**
-- NOT CONFIRMED: **3**
+- NOT CONFIRMED: **15**
 - NOT IN GRAPH: **0**
 
 - `NOT CONFIRMED (black-box)`: teste de integracao/E2E/performance; exercita o codigo por HTTP/MQTT/Docker,
