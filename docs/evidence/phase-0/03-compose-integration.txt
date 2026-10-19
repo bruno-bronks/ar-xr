@@ -1,0 +1,106 @@
+# Compose do zero (down -v) + testes de integracao — scripts/smoke.ps1 (2026-10-19 12:16)
+# exit=0 ; tempo total build+up+testes=22s (imagens base ja em cache local)
+
+## docker compose ps
+SERVICE   IMAGE                      STATUS                    PORTS
+api       spatial-ai-api             Up 8 seconds (healthy)    127.0.0.1:8088->8000/tcp
+broker    eclipse-mosquitto:2.0.18   Up 14 seconds (healthy)   127.0.0.1:1883->1883/tcp
+db        postgres:16.4-alpine       Up 14 seconds (healthy)   127.0.0.1:55432->5432/tcp
+
+## GET /health/ready
+HTTP/1.1 200 OK
+date: Mon, 19 Oct 2026 15:16:35 GMT
+server: uvicorn
+content-length: 59
+content-type: application/json
+x-correlation-id: evidence-1
+
+{"status":"ready","checks":{"database":"ok","broker":"ok"}}
+
+
+## saida do smoke
+ Image spatial-ai-api Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 581B 0.1s done
+#1 DONE 0.1s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 463B 0.0s done
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/python:3.12-slim
+#3 DONE 1.5s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 112B 0.0s done
+#4 DONE 0.0s
+
+#5 [1/6] FROM docker.io/library/python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1
+#5 resolve docker.io/library/python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 665B 0.0s done
+#6 DONE 0.0s
+
+#7 [2/6] WORKDIR /srv
+#7 CACHED
+
+#8 [3/6] COPY requirements.txt .
+#8 CACHED
+
+#9 [4/6] RUN pip install -r requirements.txt
+#9 CACHED
+
+#10 [5/6] COPY app ./app
+#10 CACHED
+
+#11 [6/6] RUN useradd --system --uid 10001 --no-create-home appuser
+#11 CACHED
+
+#12 exporting to image
+#12 exporting layers done
+#12 exporting manifest sha256:d9dd5f0b9e2c4b801040e20cedbe73858ddf9f39113e197b48d11a3ff2a41650 done
+#12 exporting config sha256:8840823f476ca24f7982f76f3b8a8aa4947dadce00c7baaaf1e0a6f8d663aadd done
+#12 exporting attestation manifest sha256:23187cb8b253a70f5cd66793caa3881e55c4d90aa1c44af3a2063e0ffdcf1a47 0.0s done
+#12 exporting manifest list sha256:f4154f5b30fae54d552ce3fcc928d02757cd8875562a656f266f001758cf9e8b
+#12 exporting manifest list sha256:f4154f5b30fae54d552ce3fcc928d02757cd8875562a656f266f001758cf9e8b 0.0s done
+#12 naming to docker.io/library/spatial-ai-api:latest done
+#12 unpacking to docker.io/library/spatial-ai-api:latest 0.0s done
+#12 DONE 0.2s
+
+#13 resolving provenance for metadata file
+#13 DONE 0.1s
+ Image spatial-ai-api Built 
+ Network spatial-ai_default Creating 
+ Volume spatial-ai_db-data Creating 
+ Network spatial-ai_default Creating 
+ Volume spatial-ai_db-data Creating 
+ Volume spatial-ai_db-data Created 
+ Volume spatial-ai_db-data Created 
+ Network spatial-ai_default Created 
+ Network spatial-ai_default Created 
+ Container spatial-ai-db-1 Creating 
+ Container spatial-ai-broker-1 Creating 
+ Container spatial-ai-broker-1 Created 
+ Container spatial-ai-db-1 Created 
+ Container spatial-ai-api-1 Creating 
+ Container spatial-ai-api-1 Created 
+ Container spatial-ai-broker-1 Starting 
+ Container spatial-ai-db-1 Starting 
+ Container spatial-ai-broker-1 Started 
+ Container spatial-ai-db-1 Started 
+ Container spatial-ai-db-1 Waiting 
+ Container spatial-ai-broker-1 Waiting 
+ Container spatial-ai-broker-1 Healthy 
+ Container spatial-ai-db-1 Healthy 
+ Container spatial-ai-api-1 Starting 
+ Container spatial-ai-api-1 Started 
+ Container spatial-ai-api-1 Waiting 
+ Container spatial-ai-db-1 Waiting 
+ Container spatial-ai-broker-1 Waiting 
+ Container spatial-ai-db-1 Healthy 
+ Container spatial-ai-broker-1 Healthy 
+ Container spatial-ai-api-1 Healthy 
+....                                                                     [100%]
+4 passed in 1.03s

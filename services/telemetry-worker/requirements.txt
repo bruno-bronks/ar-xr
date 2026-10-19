@@ -1,0 +1,13 @@
+# Gerado: instalar services/telemetry-worker/requirements.in em venv limpo + pip freeze. Auditar com pip-audit.
+annotated-types==0.8.0
+paho-mqtt==2.1.0
+psycopg==3.3.6
+psycopg-binary==3.3.6
+pydantic==2.14.1
+pydantic-settings==2.16.0
+pydantic_core==2.50.1
+python-dotenv==1.2.4
+SQLAlchemy==2.1.5
+typing-inspection==0.4.4
+typing_extensions==4.16.0
+tzdata==2026.5

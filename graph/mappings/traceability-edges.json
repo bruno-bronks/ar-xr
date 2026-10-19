@@ -1,0 +1,1302 @@
+{
+  "generated_from": "docs/requirements/traceability.csv",
+  "note": "Arestas VERIFICADAS (a matriz e testada por tests/unit/repo/test_traceability.py).",
+  "edge_count": 185,
+  "edges": [
+    {
+      "source": ".github/workflows/ci.yml",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": ".gitignore",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-SEC-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-001",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-001",
+      "relation": "SERVES",
+      "target": "OUT-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-001",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-001",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0001-modular-first.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-001",
+      "relation": "SERVES",
+      "target": "OUT-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-001",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-001-foundation.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-001",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_compose_smoke.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-002",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-002",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0001-modular-first.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-002",
+      "relation": "SERVES",
+      "target": "OUT-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-002",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-001-foundation.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-002",
+      "relation": "TESTED_BY",
+      "target": "tests/contract/test_openapi_contract.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-002",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_health.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-003",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-003",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0001-modular-first.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-003",
+      "relation": "SERVES",
+      "target": "OUT-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-003",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-001-foundation.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-003",
+      "relation": "TESTED_BY",
+      "target": "tests/contract/test_openapi_contract.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-003",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_compose_smoke.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-003",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_stack_resilience.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_health.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-004",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-004",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0001-modular-first.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-004",
+      "relation": "SERVES",
+      "target": "OUT-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-004",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-001-foundation.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-004",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_compose_smoke.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-004",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_correlation.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-005",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0001-modular-first.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-005",
+      "relation": "SERVES",
+      "target": "OUT-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-005",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-001-foundation.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-005",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/repo/test_hygiene.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-006",
+      "relation": "CONTRACTED_BY",
+      "target": "docs/requirements/traceability.csv",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-006",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0001-modular-first.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-006",
+      "relation": "SERVES",
+      "target": "OUT-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-006",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-001-foundation.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-006",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/repo/test_traceability.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-007",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0002-shared-storage-package-and-demo-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-007",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-002-status-evaluation.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-007",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-003-marker-resolution.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-007",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-004-telemetry-ingestion.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-007",
+      "relation": "SERVES",
+      "target": "OUT-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-007",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-002-status-evaluation.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-007",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/repo/test_formal_z.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-008",
+      "relation": "CONTRACTED_BY",
+      "target": "graph/mappings/traceability-edges.json",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-008",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0002-shared-storage-package-and-demo-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-008",
+      "relation": "SERVES",
+      "target": "OUT-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-008",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-005-ingestion-and-persistence.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-ENG-008",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/repo/test_trace_edges.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-001",
+      "relation": "SERVES",
+      "target": "OUT-HACC-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-001",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-001",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0002-shared-storage-package-and-demo-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-001",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-003-marker-resolution.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-001",
+      "relation": "SERVES",
+      "target": "OUT-MNT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-001",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-003-marker-resolution.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-001",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_stack_flow.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_equipment_api.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/domain/test_markers.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/storage/test_repository_contract.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-002",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-002",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0002-shared-storage-package-and-demo-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-002",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-002-status-evaluation.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-002",
+      "relation": "SERVES",
+      "target": "OUT-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-002",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-002-status-evaluation.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-002",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_stack_resilience.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-002",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_equipment_api.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-002",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/domain/test_status.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-003",
+      "relation": "CONTRACTED_BY",
+      "target": "packages/contracts/telemetry-event.v1.schema.json",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-003",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/asyncapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-003",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0002-shared-storage-package-and-demo-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-003",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-004-telemetry-ingestion.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-003",
+      "relation": "SERVES",
+      "target": "OUT-MNT-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-003",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-004-telemetry-contract.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-003",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-005-ingestion-and-persistence.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-003",
+      "relation": "TESTED_BY",
+      "target": "tests/contract/test_telemetry_schema.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-003",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_stack_resilience.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/domain/test_telemetry.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/storage/test_repository_contract.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-004",
+      "relation": "CONTRACTED_BY",
+      "target": "packages/contracts/telemetry-event.v1.schema.json",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-004",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0002-shared-storage-package-and-demo-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-004",
+      "relation": "SERVES",
+      "target": "OUT-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-004",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-005-ingestion-and-persistence.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-004",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_stack_resilience.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-004",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/domain/test_telemetry.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-004",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/worker/test_handler.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-005",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/asyncapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-005",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0002-shared-storage-package-and-demo-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-005",
+      "relation": "SERVES",
+      "target": "OUT-MNT-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-005",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-005-ingestion-and-persistence.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-005",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_stack_resilience.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-005",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/worker/test_consumer.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-006",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-006",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0002-shared-storage-package-and-demo-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-006",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-002-status-evaluation.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-006",
+      "relation": "SERVES",
+      "target": "OUT-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-006",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-006-equipment-api-and-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-006",
+      "relation": "TESTED_BY",
+      "target": "tests/contract/test_openapi_contract.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-006",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_stack_flow.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-006",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_equipment_api.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-007",
+      "relation": "CONTRACTED_BY",
+      "target": "packages/storage/src/spatial_storage/migrations/versions/0001_initial.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-007",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0002-shared-storage-package-and-demo-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-007",
+      "relation": "SERVES",
+      "target": "OUT-MNT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-007",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-005-ingestion-and-persistence.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-007",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_migrations.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-MNT-007",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/storage/test_repository_contract.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-001",
+      "relation": "CONTRACTED_BY",
+      "target": ".env.example",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-001",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0001-modular-first.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-001",
+      "relation": "SERVES",
+      "target": "OUT-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-001",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-001-foundation.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_config.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/repo/test_hygiene.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-002",
+      "relation": "CONTRACTED_BY",
+      "target": "compose.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-002",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0001-modular-first.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-002",
+      "relation": "SERVES",
+      "target": "OUT-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-002",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-001-foundation.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-002",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/repo/test_hygiene.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-003",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-003",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0002-shared-storage-package-and-demo-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-003",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-003-marker-resolution.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-003",
+      "relation": "SERVES",
+      "target": "OUT-HACC-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-003",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-006-equipment-api-and-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-003",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_stack_flow.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_auth_config.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_equipment_api.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-004",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-004",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0002-shared-storage-package-and-demo-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-004",
+      "relation": "SERVES",
+      "target": "OUT-MNT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-004",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-006-equipment-api-and-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SEC-004",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_equipment_api.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SIM-001",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/asyncapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SIM-001",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0001-modular-first.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SIM-001",
+      "relation": "SERVES",
+      "target": "OUT-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SIM-001",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-007-simulator-and-panel.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SIM-001",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_stack_flow.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-SIM-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/simulator/test_scenarios.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-001",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-001",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0002-shared-storage-package-and-demo-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-001",
+      "relation": "SERVES",
+      "target": "OUT-MNT-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-001",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-007-simulator-and-panel.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-001",
+      "relation": "TESTED_BY",
+      "target": "tests/e2e/test_panel.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/web-fallback/app.js",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/web-fallback/index.html",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/web-fallback/style.css",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "compose.yaml",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "compose.yaml",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-SEC-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "docs/requirements/traceability.csv",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-006",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "graph/README.md",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-008",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/common/src/spatial_common/logging_json.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/domain/src/spatial_domain/markers.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/domain/src/spatial_domain/status.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/domain/src/spatial_domain/telemetry.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/domain/src/spatial_domain/telemetry.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/storage/src/spatial_storage/migrate.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-007",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/storage/src/spatial_storage/postgres.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/storage/src/spatial_storage/postgres.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/storage/src/spatial_storage/postgres.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-007",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/storage/src/spatial_storage/seed_data.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-007",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "platform/mosquitto/mosquitto.conf",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "scripts/graph_crosscheck.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-008",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "scripts/trace_edges.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-008",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "scripts/verify-z.ps1",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-007",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/Dockerfile",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/audit.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-SEC-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/auth.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-SEC-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/config.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-SEC-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/config.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-SEC-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/health.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/health.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/middleware.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/ratelimit.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-SEC-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/routes.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/routes.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-006",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/routes.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-SEC-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/schemas.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-006",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/twin.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/twin.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-006",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/equipment-simulator/Dockerfile",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/equipment-simulator/simulator/main.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-SIM-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/equipment-simulator/simulator/scenarios.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-SIM-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/telemetry-worker/Dockerfile",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/telemetry-worker/worker/consumer.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/telemetry-worker/worker/handler.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/telemetry-worker/worker/handler.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/telemetry-worker/worker/main.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-MNT-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+asyncapi: 3.0.0
+info:
+  title: Spatial AI Platform — Telemetry events
+  version: 1.0.0
+  description: |
+    Contrato de eventos MQTT (SPEC-004). Apenas o CONTRATO existe na Fase 0;
+    publicador (simulador) e consumidor (worker) são da Fase 1.
+    O tópico MQTT NÃO é controle de autorização.
+servers:
+  local:
+    host: 127.0.0.1:1883
+    protocol: mqtt
+    description: Mosquitto de desenvolvimento (anônimo, apenas loopback). Fora de dev exige autenticação e TLS.
+channels:
+  equipmentTelemetry:
+    address: spatial/v1/equipment/{equipment_id}/telemetry
+    parameters:
+      equipment_id:
+        description: Identificador do equipamento (deve coincidir com o campo equipment_id do payload)
+    messages:
+      telemetryEvent:
+        name: TelemetryEvent
+        contentType: application/json
+        payload:
+          $ref: ../../packages/contracts/telemetry-event.v1.schema.json
+operations:
+  publishTelemetry:
+    action: send
+    channel: { $ref: "#/channels/equipmentTelemetry" }
+    summary: Simulador/gateway publica leitura
+    bindings:
+      mqtt:
+        qos: 1
+        retain: false
+        bindingVersion: 0.2.0
+  consumeTelemetry:
+    action: receive
+    channel: { $ref: "#/channels/equipmentTelemetry" }
+    summary: Worker consome, deduplica por (source, event_id) e persiste
+    bindings:
+      mqtt:
+        qos: 1
+        retain: false
+        bindingVersion: 0.2.0
+x-delivery-policy:
+  qos: 1
+  retain: false
+  deduplication: "(source, event_id)"
+  ordering: "última leitura avança somente se observed_at >= atual"
+  reconnect: "backoff exponencial, sessão persistente (clean_session=false) — Fase 1"
+  versioning: "versão no tópico (v1) e em schema_version"

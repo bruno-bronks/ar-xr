@@ -1,0 +1,112 @@
+# CI. Gates criticos bloqueiam o merge (configurar "required checks" na branch protegida).
+# STATUS: escrita mas NAO executada em runner GitHub (sem remoto configurado); os mesmos comandos
+# foram executados localmente - ver docs/evidence/phase-0/ e phase-1/.
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16.4-alpine
+        env:
+          POSTGRES_USER: spatial
+          POSTGRES_PASSWORD: spatial-ci-only
+          POSTGRES_DB: spatial
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U spatial" --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgresql+psycopg://spatial:spatial-ci-only@127.0.0.1:5432/spatial
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r services/api/requirements.txt -r services/telemetry-worker/requirements.txt \
+            -r services/equipment-simulator/requirements.txt
+          pip install --group dev
+      - name: Lint
+        run: ruff check .
+      - name: Format
+        run: ruff format --check .
+      - name: Types
+        run: mypy
+      - name: Tests (unit + contract + property-based + PostgreSQL real)
+        run: pytest -q
+      - name: Traceability edges are up to date
+        run: python scripts/trace_edges.py --check
+      - name: Dependency audit
+        run: |
+          for f in services/*/requirements.txt; do pip-audit -r "$f"; done
+
+  formal-z:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download CZT (Community Z Tools, GPL-2.0) and verify checksum
+        run: |
+          mkdir -p "$HOME/.tools/czt"
+          curl -fsSL -o "$HOME/.tools/czt/czt.jar" \
+            "https://sourceforge.net/projects/czt/files/czt/nightly/201509120020/czt.jar/download"
+          echo "5065a9203614927b24237ee1e1f8b2d6cdba90abdaefdc1e35b0f2897c452d22  $HOME/.tools/czt/czt.jar" | sha256sum -c -
+      - name: Typecheck Z specs (parse + types; theorems are NOT proved)
+        run: |
+          pip install -r services/api/requirements.txt pytest  # conftest.py importa sqlalchemy
+          JAVA_EXE="$(command -v java)" CZT_JAR="$HOME/.tools/czt/czt.jar" pytest -q tests/unit/repo/test_formal_z.py
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  compose-stack:
+    runs-on: ubuntu-latest
+    needs: quality
+    env:
+      BASE_URL: http://127.0.0.1:8088
+      TEST_DATABASE_URL: postgresql+psycopg://spatial:spatial-dev-only@127.0.0.1:55432/spatial
+      E2E_BROWSER_CHANNEL: chrome
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Start stack (db, broker, migrate, api, worker, simulator)
+        run: docker compose up --build --wait --wait-timeout 180
+      - name: Install test tooling
+        run: |
+          pip install -r services/api/requirements.txt -r services/telemetry-worker/requirements.txt
+          pip install --group dev
+      - name: Stack tests (smoke, flow, resilience, latency, panel E2E)
+        run: pytest -q tests/integration tests/performance tests/e2e
+      - name: Logs on failure
+        if: failure()
+        run: docker compose logs --no-color
+      - name: Stop stack
+        if: always()
+        run: docker compose down -v

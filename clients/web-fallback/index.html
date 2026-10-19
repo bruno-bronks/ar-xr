@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel de equipamentos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Painel de equipamentos</h1>
+      <p class="subtitle">Fallback web 2D · dados <strong>simulados</strong> · somente leitura</p>
+    </div>
+    <div class="controls">
+      <label for="org">Organização (demo)</label>
+      <select id="org">
+        <option value="demo-operator-a">Organização A (demo)</option>
+        <option value="demo-operator-b">Organização B (demo)</option>
+        <option value="invalid-token">Token inválido (teste de erro)</option>
+      </select>
+      <span id="freshness" class="freshness" role="status">Aguardando dados…</span>
+    </div>
+  </header>
+
+  <div id="error-banner" class="banner banner-error" role="alert" hidden></div>
+
+  <section aria-labelledby="alerts-title" class="alerts">
+    <h2 id="alerts-title">Alertas ativos <span id="alert-count" class="count">0</span></h2>
+    <ul id="alerts" aria-live="polite"></ul>
+    <p id="no-alerts" class="muted">Nenhum alerta ativo no momento.</p>
+  </section>
+
+  <main>
+    <h2 class="sr-only">Equipamentos</h2>
+    <div id="cards" class="grid"></div>
+  </main>
+
+  <footer class="muted">
+    Alertas são regras determinísticas sobre limiares configurados; não são recomendações clínicas nem
+    comandos para máquinas. Ausência de dados é exibida como <em>Offline</em> ou <em>Desconhecido</em>, nunca como normal.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

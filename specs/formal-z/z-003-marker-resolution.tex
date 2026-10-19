@@ -1,0 +1,59 @@
+% Z-003 — Resolução de marker/QR (SPEC-003, REQ-MNT-001)
+%
+% VERIFICAÇÃO: parse + typecheck com CZT via scripts/verify-z.ps1. NÃO prova teoremas;
+% as conjecturas (\vdash?) são validadas por Hypothesis em tests/unit/domain/test_markers.py.
+\documentclass{article}
+\begin{document}
+
+\section*{Z-003: Marker resolution}
+
+\begin{zed}
+  [MARKER, EQUIPMENT, ORG]
+\end{zed}
+
+\begin{zed}
+  RESULT ::= found \ldata EQUIPMENT \rdata | notFound
+\end{zed}
+
+\begin{schema}{Registry}
+  markerOf : MARKER \pinj EQUIPMENT \\
+  owner : EQUIPMENT \pfun ORG
+\where
+  \ran markerOf \subseteq \dom owner
+\end{schema}
+
+\begin{schema}{ResolveMarker}
+  \Xi Registry \\
+  marker? : MARKER \\
+  caller? : ORG \\
+  result! : RESULT
+\where
+  ((marker? \in \dom markerOf \land owner(markerOf~marker?) = caller?
+     \land result! = found(markerOf~marker?))
+  \lor
+  (\lnot (marker? \in \dom markerOf \land owner(markerOf~marker?) = caller?)
+     \land result! = notFound))
+\end{schema}
+
+\subsection*{Conjecturas}
+
+M1: um resultado \emph{found} sempre pertence à organização do chamador.
+
+\begin{zed}
+  \vdash? \forall ResolveMarker; e : EQUIPMENT @
+    result! = found~e \implies owner~e = caller?
+\end{zed}
+
+M2 (não-divulgação): marker desconhecido ou de outra organização $\Rightarrow$ \emph{notFound},
+sem distinção entre os dois casos.
+
+\begin{zed}
+  \vdash? \forall ResolveMarker @
+    (marker? \notin \dom markerOf \lor owner(markerOf~marker?) \neq caller?)
+    \implies result! = notFound
+\end{zed}
+
+% M3 (pureza) é garantido pelo próprio esquema (\Xi Registry).
+% M4 (3 QR de teste) é um teste concreto sobre o seed (Fase 1).
+
+\end{document}

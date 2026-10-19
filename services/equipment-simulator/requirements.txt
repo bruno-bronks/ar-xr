@@ -1,0 +1,9 @@
+# Gerado: instalar services/equipment-simulator/requirements.in em venv limpo + pip freeze. Auditar com pip-audit.
+annotated-types==0.8.0
+paho-mqtt==2.1.0
+pydantic==2.14.1
+pydantic-settings==2.16.0
+pydantic_core==2.50.1
+python-dotenv==1.2.4
+typing-inspection==0.4.4
+typing_extensions==4.16.0

@@ -1,0 +1,23 @@
+# Typecheck das specs Z com CZT — 2026-10-19 14:03
+# JDK:
+openjdk version "21.0.12.1" 2026-08-18 LTS
+OpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)
+OpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)
+# czt.jar sha256: 5065a9203614927b24237ee1e1f8b2d6cdba90abdaefdc1e35b0f2897c452d22 (publicado pelo SourceForge: 5065a9203614927b24237ee1e1f8b2d6cdba90abdaefdc1e35b0f2897c452d22)
+# ATENCAO: valida SINTAXE e TIPOS. Nenhuma conjectura (vdash?) foi PROVADA.
+
+## scripts/verify-z.ps1 (3 specs)
+OK (parse+typecheck, 0 warnings and errors): z-002-status-evaluation.tex
+OK (parse+typecheck, 0 warnings and errors): z-003-marker-resolution.tex
+OK (parse+typecheck, 0 warnings and errors): z-004-telemetry-ingestion.tex
+
+## Teste negativo 1: erro de TIPO injetado (warn \leq GOOD) — deve FALHAR
+FALHOU: z-neg.tex
+ERROR "C:\Users\BRUNO~1.ANT\AppData\Local\Temp\z-neg.tex", line 28, column 2: Type mismatch in argument 2 of relation
+	Predicate: warn \leq GOOD
+	Argument type: QUALITY
+	Expected type: \arithmos
+
+## pytest tests/unit/repo/test_formal_z.py
+......                                                                   [100%]
+6 passed in 18.76s

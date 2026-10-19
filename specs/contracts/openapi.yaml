@@ -1,0 +1,325 @@
+openapi: 3.1.0
+info:
+  title: Spatial AI Platform API
+  version: 0.2.0
+  summary: Contrato HTTP do MVP. Operações marcadas x-implementation=planned ainda NÃO existem.
+  description: |
+    Fonte da verdade do contrato (spec-first). `tests/contract/test_openapi_contract.py`
+    garante que as operações `implemented` existem na API, que nenhuma rota da API fica fora
+    deste documento e que as respostas reais obedecem aos schemas. Operações `planned`
+    pertencem a fases futuras (assistente de IA: Fase 3).
+
+    Autenticação: `Authorization: Bearer <token>`. Fase 1 = modo demo (tokens fictícios,
+    recusado em produção). Recurso de outra organização e recurso inexistente retornam o mesmo 404.
+servers:
+  - url: http://127.0.0.1:8088
+    description: Ambiente local (Docker Compose)
+tags:
+  - name: health
+  - name: equipment
+  - name: assistant
+  - name: spatial
+
+paths:
+  /health/live:
+    get:
+      tags: [health]
+      operationId: getLive
+      summary: Liveness (não consulta dependências)
+      x-implementation: implemented
+      security: []
+      responses:
+        "200":
+          description: Processo ativo
+          headers:
+            X-Correlation-ID: { $ref: "#/components/headers/CorrelationId" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Live" }
+              example: { status: alive }
+  /health/ready:
+    get:
+      tags: [health]
+      operationId: getReady
+      summary: Readiness (banco e broker)
+      x-implementation: implemented
+      security: []
+      responses:
+        "200":
+          description: Dependências OK
+          headers:
+            X-Correlation-ID: { $ref: "#/components/headers/CorrelationId" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Ready" }
+              example: { status: ready, checks: { database: ok, broker: ok } }
+        "503":
+          description: Alguma dependência falhou (sem detalhes sensíveis)
+          headers:
+            X-Correlation-ID: { $ref: "#/components/headers/CorrelationId" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Ready" }
+              example: { status: not_ready, checks: { database: fail, broker: ok } }
+
+  /api/v1/equipment:
+    get:
+      tags: [equipment]
+      operationId: listEquipment
+      summary: Lista equipamentos da organização do chamador (com estado SPEC-002)
+      x-implementation: implemented
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Equipment" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+  /api/v1/equipment/{equipment_id}:
+    get:
+      tags: [equipment]
+      operationId: getEquipment
+      x-implementation: implemented
+      parameters: [{ $ref: "#/components/parameters/EquipmentId" }]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Equipment" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /api/v1/equipment/{equipment_id}/telemetry/latest:
+    get:
+      tags: [equipment]
+      operationId: getLatestTelemetry
+      x-implementation: implemented
+      parameters: [{ $ref: "#/components/parameters/EquipmentId" }]
+      responses:
+        "200":
+          description: Última leitura por sensor (lista vazia se ainda não há dados)
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/TelemetryReading" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /api/v1/equipment/{equipment_id}/twin:
+    get:
+      tags: [equipment]
+      operationId: getTwin
+      x-implementation: implemented
+      parameters: [{ $ref: "#/components/parameters/EquipmentId" }]
+      responses:
+        "200":
+          description: Estado derivado (SPEC-002), avaliado com o relógio do servidor
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Twin" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /api/v1/equipment/{equipment_id}/alerts:
+    get:
+      tags: [equipment]
+      operationId: getAlerts
+      x-implementation: implemented
+      parameters: [{ $ref: "#/components/parameters/EquipmentId" }]
+      responses:
+        "200":
+          description: Alertas determinísticos por regra, derivados do twin (não são hipóteses de IA)
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Alert" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /api/v1/assistant/questions:
+    post:
+      tags: [assistant]
+      operationId: askAssistant
+      summary: Pergunta ao assistente (Fase 3). Apenas assistivo, com fontes e incerteza.
+      x-implementation: planned
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [equipment_id, question]
+              additionalProperties: false
+              properties:
+                equipment_id: { type: string }
+                question: { type: string, minLength: 1, maxLength: 2000 }
+      responses:
+        "200":
+          description: Resposta com referências
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AssistantAnswer" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+  /api/v1/spatial/markers/{marker_id}:
+    get:
+      tags: [spatial]
+      operationId: resolveMarker
+      summary: Resolve marker/QR (SPEC-003). Desconhecido e de outra organização retornam 404 idêntico; 30/min por principal.
+      x-implementation: implemented
+      parameters:
+        - name: marker_id
+          in: path
+          required: true
+          schema: { type: string, minLength: 1, maxLength: 128, pattern: "^[A-Za-z0-9._:-]+$" }
+      responses:
+        "200":
+          description: Equipamento associado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Equipment" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429":
+          description: Limite de resoluções excedido
+          headers:
+            Retry-After: { schema: { type: integer, minimum: 1 } }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Fase 1 - tokens demo fictícios (recusados em produção). OIDC em fase futura.
+  headers:
+    CorrelationId:
+      description: Eco (ou geração) do X-Correlation-ID (REQ-ENG-004)
+      schema: { type: string, pattern: "^[A-Za-z0-9._-]{1,64}$" }
+  parameters:
+    EquipmentId:
+      name: equipment_id
+      in: path
+      required: true
+      schema: { type: string, minLength: 1, maxLength: 64 }
+  responses:
+    Unauthorized:
+      description: Não autenticado
+      headers:
+        WWW-Authenticate: { schema: { type: string, const: Bearer } }
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    NotFound:
+      description: Inexistente ou fora da organização do chamador (indistinguíveis)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+  schemas:
+    Live:
+      type: object
+      required: [status]
+      additionalProperties: false
+      properties:
+        status: { type: string, const: alive }
+    Ready:
+      type: object
+      required: [status, checks]
+      additionalProperties: false
+      properties:
+        status: { type: string, enum: [ready, not_ready] }
+        checks:
+          type: object
+          required: [database, broker]
+          additionalProperties: false
+          properties:
+            database: { type: string, enum: ["ok", "fail"] }
+            broker: { type: string, enum: ["ok", "fail"] }
+    Error:
+      type: object
+      required: [detail]
+      properties:
+        detail: { type: string }
+    Status:
+      type: string
+      enum: [NORMAL, WARNING, CRITICAL, OFFLINE, UNKNOWN]
+    Quality:
+      type: string
+      enum: [GOOD, BAD]
+    Equipment:
+      type: object
+      required: [id, name, type, location, last_seen_at, status]
+      additionalProperties: false
+      properties:
+        id: { type: string }
+        name: { type: string }
+        type: { type: string }
+        location: { type: string }
+        last_seen_at: { type: [string, "null"], format: date-time }
+        status: { $ref: "#/components/schemas/Status" }
+    TelemetryReading:
+      type: object
+      required: [equipment_id, sensor_type, value, unit, observed_at, received_at, quality, event_id]
+      additionalProperties: false
+      properties:
+        equipment_id: { type: string }
+        sensor_type: { type: string }
+        value: { type: number }
+        unit: { type: string }
+        observed_at: { type: string, format: date-time }
+        received_at: { type: string, format: date-time }
+        quality: { $ref: "#/components/schemas/Quality" }
+        event_id: { type: string }
+    Sensor:
+      type: object
+      required: [sensor_type, unit, value, observed_at, quality, warn, crit, valid]
+      additionalProperties: false
+      properties:
+        sensor_type: { type: string }
+        unit: { type: string }
+        value: { type: [number, "null"] }
+        observed_at: { type: [string, "null"], format: date-time }
+        quality: { oneOf: [{ $ref: "#/components/schemas/Quality" }, { type: "null" }] }
+        warn: { type: number }
+        crit: { type: number }
+        valid: { type: boolean, description: "GOOD e fresca (idade <= offline_after)" }
+    Twin:
+      type: object
+      required: [equipment_id, status, evaluated_at, offline_after_seconds, sensors]
+      additionalProperties: false
+      properties:
+        equipment_id: { type: string }
+        status: { $ref: "#/components/schemas/Status" }
+        evaluated_at: { type: string, format: date-time }
+        offline_after_seconds: { type: integer, minimum: 1 }
+        sensors:
+          type: array
+          items: { $ref: "#/components/schemas/Sensor" }
+    Alert:
+      type: object
+      required: [equipment_id, severity, rule, raised_at]
+      additionalProperties: false
+      properties:
+        equipment_id: { type: string }
+        severity: { type: string, enum: [WARNING, CRITICAL, OFFLINE] }
+        rule: { type: string, examples: ["temperature>crit", "offline"] }
+        raised_at: { type: string, format: date-time }
+        sensor_type: { type: string }
+        value: { type: number }
+        limit: { type: number }
+    AssistantAnswer:
+      type: object
+      required: [answer, confidence, sources, human_review_required]
+      properties:
+        answer: { type: string }
+        confidence: { type: string, enum: [low, medium, high] }
+        sources:
+          type: array
+          minItems: 1
+          items: { type: object, required: [document_id, excerpt], properties: { document_id: { type: string }, excerpt: { type: string } } }
+        human_review_required: { type: boolean }

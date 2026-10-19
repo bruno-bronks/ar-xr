@@ -1,0 +1,98 @@
+% Z-002 — Avaliação de estado do equipamento (SPEC-002, REQ-MNT-002)
+%
+% VERIFICAÇÃO: parse + typecheck com CZT (Community Z Tools 1.6-SNAPSHOT) via
+% scripts/verify-z.ps1 (evidência em docs/evidence/phase-1/). O typecheck valida
+% SINTAXE e TIPOS, NÃO prova teoremas. As conjecturas (\vdash?) são validadas
+% por property-based tests (Hypothesis) sobre packages/domain/.../status.py.
+%
+% Abstração: Z usa inteiros (\num); o modelo Python usa float finito.
+\documentclass{article}
+\begin{document}
+
+\section*{Z-002: Equipment status evaluation}
+
+\begin{zed}
+  [SENSOR]
+\end{zed}
+
+\begin{zed}
+  STATUS ::= NORMAL | WARNING | CRITICAL | OFFLINE | UNKNOWN
+\end{zed}
+
+\begin{zed}
+  QUALITY ::= GOOD | BAD
+\end{zed}
+
+\begin{schema}{Threshold}
+  warn, crit : \num
+\where
+  warn \leq crit
+\end{schema}
+
+\begin{schema}{Reading}
+  value : \num \\
+  observed : \nat \\
+  quality : QUALITY
+\end{schema}
+
+\begin{schema}{EquipmentSnapshot}
+  profile : SENSOR \pfun Threshold \\
+  latest : SENSOR \pfun Reading \\
+  now, offlineAfter, lastSeen : \nat
+\where
+  \dom latest \subseteq \dom profile \\
+  \dom latest \neq \emptyset \implies
+    ((\exists s : \dom latest @ (latest~s).observed = lastSeen)
+    \land (\forall s : \dom latest @ (latest~s).observed \leq lastSeen)
+    \land lastSeen \leq now)
+\end{schema}
+
+\begin{schema}{Evaluate}
+  \Xi EquipmentSnapshot \\
+  valid, overWarn, overCrit : \power SENSOR \\
+  status! : STATUS
+\where
+  valid = \{ s : \dom latest |
+       (latest~s).quality = GOOD \land now - (latest~s).observed \leq offlineAfter \} \\
+  overWarn = \{ s : valid | (latest~s).value > (profile~s).warn \} \\
+  overCrit = \{ s : valid | (latest~s).value > (profile~s).crit \} \\
+  ((\dom latest = \emptyset \land status! = UNKNOWN)
+  \lor (\dom latest \neq \emptyset \land now - lastSeen > offlineAfter
+        \land status! = OFFLINE)
+  \lor (\dom latest \neq \emptyset \land now - lastSeen \leq offlineAfter
+        \land overCrit \neq \emptyset \land status! = CRITICAL)
+  \lor (\dom latest \neq \emptyset \land now - lastSeen \leq offlineAfter
+        \land overCrit = \emptyset \land overWarn \neq \emptyset
+        \land status! = WARNING)
+  \lor (\dom latest \neq \emptyset \land now - lastSeen \leq offlineAfter
+        \land overWarn = \emptyset \land valid = \dom profile
+        \land status! = NORMAL)
+  \lor (\dom latest \neq \emptyset \land now - lastSeen \leq offlineAfter
+        \land overWarn = \emptyset \land valid \neq \dom profile
+        \land status! = UNKNOWN))
+\end{schema}
+
+\subsection*{Conjecturas (invariantes)}
+
+\begin{zed}
+  \vdash? \forall Evaluate @ status! = NORMAL \implies
+    (now - lastSeen \leq offlineAfter \land valid = \dom profile
+     \land overWarn = \emptyset)
+\end{zed}
+
+\begin{zed}
+  \vdash? \forall Evaluate @ status! = CRITICAL \implies
+    (now - lastSeen \leq offlineAfter \land overCrit \neq \emptyset)
+\end{zed}
+
+\begin{zed}
+  \vdash? \forall Evaluate @ (\dom latest \neq \emptyset \land now - lastSeen > offlineAfter)
+    \implies status! = OFFLINE
+\end{zed}
+
+\begin{zed}
+  \vdash? \forall Evaluate @ (\forall s : valid @ (latest~s).value \leq (profile~s).warn)
+    \implies overWarn = \emptyset
+\end{zed}
+
+\end{document}
