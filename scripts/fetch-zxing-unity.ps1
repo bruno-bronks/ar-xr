@@ -24,7 +24,10 @@ $hash = (Get-FileHash $NupkgPath -Algorithm SHA256).Hash.ToLower()
 if ($hash -ne $ExpectedSha256.ToLower()) { throw "SHA-256 diferente do pinado ($hash). Abortado." }
 
 $extract = Join-Path $tmp "x"
-Expand-Archive $NupkgPath -DestinationPath $extract -Force
+# .nupkg e um zip, mas o Expand-Archive recusa a extensao: usa System.IO.Compression direto
+if (Test-Path $extract) { Remove-Item -Recurse -Force $extract }
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+[System.IO.Compression.ZipFile]::ExtractToDirectory($NupkgPath, $extract)
 $dll = Join-Path $extract "lib\netstandard2.1\zxing.dll"
 if (-not (Test-Path $dll)) { throw "lib/netstandard2.1/zxing.dll ausente no pacote" }
 

@@ -12,3 +12,5 @@ htmlcov/
 sbom/
 node_modules/
 graphify-out/
+bin/
+obj/
