@@ -1,0 +1,10 @@
+# Configuracao do gitleaks. Estende as regras padrao e libera SOMENTE os tokens DEMO fictícios e publicos
+# (docs/specs: AUTH_MODE=demo, recusado em producao - ver services/api/app/auth.py e SPEC-006).
+title = "spatial-ai-platform"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Tokens demo ficticios usados nos exemplos de curl da documentacao"
+regexes = ['''demo-operator-[ab]\b''']

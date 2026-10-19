@@ -70,7 +70,7 @@ jobs:
           echo "5065a9203614927b24237ee1e1f8b2d6cdba90abdaefdc1e35b0f2897c452d22  $HOME/.tools/czt/czt.jar" | sha256sum -c -
       - name: Typecheck Z specs (parse + types; theorems are NOT proved)
         run: |
-          pip install pytest
+          pip install -r services/api/requirements.txt pytest  # conftest.py importa sqlalchemy
           JAVA_EXE="$(command -v java)" CZT_JAR="$HOME/.tools/czt/czt.jar" pytest -q tests/unit/repo/test_formal_z.py
 
   secrets:
