@@ -197,13 +197,13 @@ namespace Spatial.Ar.Core.Tests
         {
             var s = LiveSession(0);                       // 1o poll ja emitido em t=0
             Assert.Empty(s.Tick(At(1)));
-            Assert.Empty(s.Tick(At(2.5)));                // ainda em voo: nao emite outro
+            Assert.Empty(s.Tick(At(2.25)));                // ainda em voo: nao emite outro (instantes exatos em binario: AddSeconds trunca ticks)
 
-            s.OnPolled("EQ-001", Ok(Live()), At(2.6));
-            Assert.Empty(s.Tick(At(2.7)));                // proximo so 2 s depois do poll anterior
-            var next = Assert.IsType<PollCommand>(Assert.Single(s.Tick(At(4.6))));
+            s.OnPolled("EQ-001", Ok(Live()), At(2.5));
+            Assert.Empty(s.Tick(At(2.75)));                // proximo so 2 s depois do poll anterior
+            var next = Assert.IsType<PollCommand>(Assert.Single(s.Tick(At(4.5))));
             Assert.Equal("EQ-001", next.EquipmentId);
-            Assert.Empty(s.Tick(At(4.7)));                // novo poll em voo
+            Assert.Empty(s.Tick(At(4.75)));                // novo poll em voo
         }
 
         [Fact]
