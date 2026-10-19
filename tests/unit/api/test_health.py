@@ -6,14 +6,15 @@ from collections.abc import Callable, Mapping
 
 import pytest
 from app.health import check_broker, check_database
-from app.main import create_app
 from fastapi.testclient import TestClient
+
+from tests.unit.api._app import make_app
 
 Check = Callable[[], bool]
 
 
 def _client(checks: Mapping[str, Check]) -> TestClient:
-    return TestClient(create_app(checks=checks), raise_server_exceptions=False)
+    return TestClient(make_app(checks=checks), raise_server_exceptions=False)
 
 
 def _ok() -> bool:

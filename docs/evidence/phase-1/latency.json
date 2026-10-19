@@ -1,0 +1,28 @@
+{
+  "measured_at": "2026-10-19T17:21:23.406241+00:00",
+  "samples": 100,
+  "poll_interval_s": 0.05,
+  "latency_s": {
+    "min": 0.0276,
+    "mean": 0.1343,
+    "p50": 0.1159,
+    "p95": 0.2761,
+    "p99": 0.37,
+    "max": 0.37
+  },
+  "panel_poll_interval_s": 2.0,
+  "panel_perceived_p95_upper_bound_s": 2.2761,
+  "budget_s": 3.0,
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.13",
+    "docker_compose": "5.5.1",
+    "topology": "loopback; db+broker+api+worker em containers (Docker Desktop); cliente de teste no host"
+  },
+  "caveats": [
+    "uma maquina, um usuario, sem carga concorrente; nao representa producao",
+    "latencia de pipeline medida por polling de 50 ms (resolucao do metodo)",
+    "o painel web atualiza a cada 2 s: a latencia percebida no painel e ate 'pipeline + 2 s'"
+  ],
+  "result": "PASS"
+}

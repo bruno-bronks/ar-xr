@@ -1,6 +1,6 @@
 """Contrato HTTP (spec-first): specs/contracts/openapi.yaml <-> API real.
 
-Requisitos: REQ-ENG-002, REQ-ENG-003.
+Requisitos: REQ-ENG-002, REQ-ENG-003, REQ-MNT-006.
 """
 
 from pathlib import Path
@@ -8,11 +8,15 @@ from typing import Any
 
 import pytest
 import yaml
-from app.main import create_app
+from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from fastapi.testclient import TestClient
-from jsonschema import Draft202012Validator
+from jsonschema import Draft202012Validator, FormatChecker
 from openapi_spec_validator import validate
+from spatial_storage.memory import InMemoryRepository
+from spatial_storage.seed_data import SEED
+
+from tests.unit.api._app import auth, feed, make_app, reading
 
 ROOT = Path(__file__).resolve().parents[2]
 SPEC: dict[str, Any] = yaml.safe_load((ROOT / "specs/contracts/openapi.yaml").read_text("utf-8"))
@@ -28,8 +32,14 @@ def _operations(status: str) -> set[tuple[str, str]]:
     }
 
 
-def _app(db: bool = True) -> Any:
-    return create_app(checks={"database": lambda: db, "broker": lambda: True})
+def _app(db: bool = True) -> FastAPI:
+    return make_app(checks={"database": lambda: db, "broker": lambda: True})
+
+
+def _validator(schema: dict[str, Any]) -> Draft202012Validator:
+    return Draft202012Validator(
+        {**schema, "components": SPEC["components"]}, format_checker=FormatChecker()
+    )
 
 
 def test_spec_is_valid_openapi_3_1() -> None:
@@ -61,6 +71,10 @@ def test_mvp_contract_endpoints_are_all_declared() -> None:
     }
 
 
+def test_only_the_assistant_remains_planned() -> None:
+    assert _operations("planned") == {("/api/v1/assistant/questions", "post")}
+
+
 def test_implemented_operations_exist_in_the_api() -> None:
     api = {
         (path, method)
@@ -83,6 +97,16 @@ def test_api_has_no_route_outside_the_contract() -> None:
     assert routes <= _operations("implemented")
 
 
+def test_every_documented_status_code_is_a_declared_response() -> None:
+    """O FastAPI declara respostas; todas precisam existir no contrato (e vice-versa p/ 401/404)."""
+    api = _app().openapi()["paths"]
+    for path, item in SPEC["paths"].items():
+        for method, op in item.items():
+            if method in HTTP_METHODS and op["x-implementation"] == "implemented":
+                declared_by_app = set(api[path][method]["responses"]) - {"422", "default"}
+                assert declared_by_app <= set(op["responses"]), (path, method)
+
+
 @pytest.mark.parametrize(
     ("path", "db_ok", "status", "schema"),
     [
@@ -91,17 +115,99 @@ def test_api_has_no_route_outside_the_contract() -> None:
         ("/health/ready", False, "503", "Ready"),
     ],
 )
-def test_responses_conform_to_contract_schemas(
+def test_health_responses_conform_to_contract_schemas(
     path: str, db_ok: bool, status: str, schema: str
 ) -> None:
     response = TestClient(_app(db_ok)).get(path)
 
     assert str(response.status_code) == status
     assert status in SPEC["paths"][path]["get"]["responses"]
-    validator = Draft202012Validator(
-        {"$ref": f"#/components/schemas/{schema}", "components": SPEC["components"]}
+    _validator({"$ref": f"#/components/schemas/{schema}"}).validate(response.json())
+
+
+@pytest.fixture
+def populated() -> TestClient:
+    repo = InMemoryRepository(SEED)
+    feed(
+        repo,
+        reading("EQ-001", "temperature", 101.0),
+        reading("EQ-001", "vibration", 1.0),
+        reading("EQ-002", "temperature", 75.0),  # sensor faltando em EQ-002 => dados parciais
     )
-    validator.validate(response.json())
+    return TestClient(make_app(repo=repo), raise_server_exceptions=False)
+
+
+def _schema_for(path: str, code: str) -> dict[str, Any]:
+    op = SPEC["paths"][path]["get"]
+    response = op["responses"][code]
+    if "$ref" in response:
+        name = response["$ref"].rsplit("/", 1)[1]
+        response = SPEC["components"]["responses"][name]
+    schema: dict[str, Any] = response["content"]["application/json"]["schema"]
+    return schema
+
+
+@pytest.mark.parametrize(
+    ("template", "concrete", "code"),
+    [
+        ("/api/v1/equipment", "/api/v1/equipment", "200"),
+        ("/api/v1/equipment/{equipment_id}", "/api/v1/equipment/EQ-001", "200"),
+        ("/api/v1/equipment/{equipment_id}", "/api/v1/equipment/EQ-B01", "404"),
+        (
+            "/api/v1/equipment/{equipment_id}/telemetry/latest",
+            "/api/v1/equipment/EQ-001/telemetry/latest",
+            "200",
+        ),
+        (
+            "/api/v1/equipment/{equipment_id}/telemetry/latest",
+            "/api/v1/equipment/EQ-003/telemetry/latest",
+            "200",
+        ),
+        ("/api/v1/equipment/{equipment_id}/twin", "/api/v1/equipment/EQ-001/twin", "200"),
+        (
+            "/api/v1/equipment/{equipment_id}/twin",
+            "/api/v1/equipment/EQ-002/twin",
+            "200",
+        ),  # parcial
+        (
+            "/api/v1/equipment/{equipment_id}/twin",
+            "/api/v1/equipment/EQ-003/twin",
+            "200",
+        ),  # sem dados
+        ("/api/v1/equipment/{equipment_id}/alerts", "/api/v1/equipment/EQ-001/alerts", "200"),
+        ("/api/v1/equipment/{equipment_id}/alerts", "/api/v1/equipment/EQ-003/alerts", "200"),
+        ("/api/v1/spatial/markers/{marker_id}", "/api/v1/spatial/markers/QR-EQ-001", "200"),
+        ("/api/v1/spatial/markers/{marker_id}", "/api/v1/spatial/markers/QR-NOPE", "404"),
+    ],
+)
+def test_authenticated_responses_conform_to_contract_schemas(
+    populated: TestClient, template: str, concrete: str, code: str
+) -> None:
+    response = populated.get(concrete, headers=auth())
+
+    assert str(response.status_code) == code
+    assert code in SPEC["paths"][template]["get"]["responses"]
+    _validator(_schema_for(template, code)).validate(response.json())
+
+
+def test_unauthenticated_response_conforms_to_contract(populated: TestClient) -> None:
+    response = populated.get("/api/v1/equipment")
+
+    assert response.status_code == 401
+    _validator(_schema_for("/api/v1/equipment", "401")).validate(response.json())
+    assert response.headers["www-authenticate"] == "Bearer"
+
+
+def test_rate_limited_response_conforms_to_contract() -> None:
+    client = TestClient(make_app(marker_rate_limit=1))
+    client.get("/api/v1/spatial/markers/QR-EQ-001", headers=auth())
+
+    response = client.get("/api/v1/spatial/markers/QR-EQ-001", headers=auth())
+
+    assert response.status_code == 429
+    assert "429" in SPEC["paths"]["/api/v1/spatial/markers/{marker_id}"]["get"]["responses"]
+    _validator(SPEC["components"]["schemas"]["Error"]).validate(response.json())
+    assert int(response.headers["retry-after"]) >= 1
 
 
 def test_contract_documents_correlation_header_on_every_health_response() -> None:

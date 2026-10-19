@@ -1,16 +1,17 @@
 % Z-003 — Resolução de marker/QR (SPEC-003, REQ-MNT-001)
 %
-% STATUS DE VERIFICAÇÃO: escrito à mão (fuzz/ISO Z), NÃO typecheckado nem
-% provado — ferramentas indisponíveis neste ambiente. Invariantes validados
-% por Hypothesis em tests/unit/domain/test_markers.py.
+% VERIFICAÇÃO: parse + typecheck com CZT via scripts/verify-z.ps1. NÃO prova teoremas;
+% as conjecturas (\vdash?) são validadas por Hypothesis em tests/unit/domain/test_markers.py.
 \documentclass{article}
-\usepackage{fuzz}
 \begin{document}
 
 \section*{Z-003: Marker resolution}
 
 \begin{zed}
-  [MARKER, EQUIPMENT, ORG] \\
+  [MARKER, EQUIPMENT, ORG]
+\end{zed}
+
+\begin{zed}
   RESULT ::= found \ldata EQUIPMENT \rdata | notFound
 \end{zed}
 
@@ -27,26 +28,32 @@
   caller? : ORG \\
   result! : RESULT
 \where
-  (marker? \in \dom markerOf \land owner(markerOf~marker?) = caller?
-     \land result! = found(markerOf~marker?)) \\
-  \lor \\
+  ((marker? \in \dom markerOf \land owner(markerOf~marker?) = caller?
+     \land result! = found(markerOf~marker?))
+  \lor
   (\lnot (marker? \in \dom markerOf \land owner(markerOf~marker?) = caller?)
-     \land result! = notFound)
+     \land result! = notFound))
 \end{schema}
 
-\begin{theorem}{M1\_FoundIsOwned}
-  ResolveMarker \vdash \forall e : EQUIPMENT @
-    result! = found~e \implies owner~e = caller?
-\end{theorem}
+\subsection*{Conjecturas}
 
-\begin{theorem}{M2\_NonDisclosure}
-  % Marcador desconhecido e marcador de outra organização são indistinguíveis.
-  ResolveMarker \vdash
+M1: um resultado \emph{found} sempre pertence à organização do chamador.
+
+\begin{zed}
+  \vdash? \forall ResolveMarker; e : EQUIPMENT @
+    result! = found~e \implies owner~e = caller?
+\end{zed}
+
+M2 (não-divulgação): marker desconhecido ou de outra organização $\Rightarrow$ \emph{notFound},
+sem distinção entre os dois casos.
+
+\begin{zed}
+  \vdash? \forall ResolveMarker @
     (marker? \notin \dom markerOf \lor owner(markerOf~marker?) \neq caller?)
     \implies result! = notFound
-\end{theorem}
+\end{zed}
 
-% M3 (pureza, \Xi Registry) é garantido pelo próprio esquema.
-% M4 (3 QR de teste) é um teste concreto sobre o seed da Fase 1.
+% M3 (pureza) é garantido pelo próprio esquema (\Xi Registry).
+% M4 (3 QR de teste) é um teste concreto sobre o seed (Fase 1).
 
 \end{document}

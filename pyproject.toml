@@ -19,14 +19,18 @@ dev = [
   "types-PyYAML",
   "types-jsonschema",
   "pip-audit>=2.7",
+  "alembic>=1.13",
+  "paho-mqtt>=2.1",
+  "playwright>=1.45",
 ]
 
 [tool.pytest.ini_options]
-pythonpath = ["packages/domain/src", "services/api"]
+pythonpath = ["packages/domain/src", "packages/storage/src", "packages/common/src", "services/api", "services/telemetry-worker", "services/equipment-simulator"]
 testpaths = ["tests"]
 addopts = "-ra --strict-markers"
 markers = [
-  "integration: exige o ambiente Docker Compose em execução (BASE_URL)",
+  "integration: exige o ambiente Docker Compose em execução (BASE_URL) e/ou PostgreSQL (TEST_DATABASE_URL)",
+  "e2e: navegador real (Playwright + Edge) contra o Compose em execução",
 ]
 
 [tool.ruff]
@@ -36,6 +40,8 @@ extend-exclude = [".venv"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "S", "C4", "PT", "RUF"]
+# E501 desligada: `ruff format` mantem o codigo em 100 colunas; so prosa/strings longas passam disso.
+ignore = ["E501"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S101", "S105", "S106"]
@@ -43,7 +49,7 @@ select = ["E", "F", "I", "UP", "B", "SIM", "S", "C4", "PT", "RUF"]
 [tool.mypy]
 python_version = "3.12"
 strict = true
-mypy_path = "packages/domain/src:services/api"
+mypy_path = "packages/domain/src:packages/storage/src:packages/common/src:services/api:services/telemetry-worker:services/equipment-simulator"
 explicit_package_bases = true
-files = ["packages/domain/src", "services/api/app", "tests"]
+files = ["packages/domain/src", "packages/storage/src", "packages/common/src", "services/api/app", "services/telemetry-worker/worker", "services/equipment-simulator/simulator", "tests"]
 plugins = ["pydantic.mypy"]

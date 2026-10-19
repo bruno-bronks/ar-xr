@@ -1,0 +1,18 @@
+# Gates locais — scripts/check.ps1 (sem TEST_DATABASE_URL/BASE_URL) — 2026-10-19 14:28
+# 119 testes dependem de PostgreSQL/pilha e aparecem como SKIPPED aqui; rodaram (sem skip) em 01-full-suite.txt
+
+==> ruff check
+All checks passed!
+==> ruff format
+104 files already formatted
+==> mypy (strict)
+Success: no issues found in 76 source files
+==> pytest
+409 passed, 119 skipped, 1 warning in 43.48s
+==> pip-audit (api)
+No known vulnerabilities found
+==> pip-audit (telemetry-worker)
+No known vulnerabilities found
+==> pip-audit (equipment-simulator)
+No known vulnerabilities found
+Todos os gates locais passaram.

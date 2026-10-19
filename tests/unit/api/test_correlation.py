@@ -7,15 +7,16 @@ import uuid
 
 import pytest
 from app.logging_config import JsonFormatter
-from app.main import create_app
 from app.middleware import CORRELATION_HEADER, normalize_correlation_id
 from fastapi.testclient import TestClient
+
+from tests.unit.api._app import make_app
 
 VALID = re.compile(r"^[A-Za-z0-9._-]{1,64}$")
 
 
 def _client() -> TestClient:
-    return TestClient(create_app(checks={"database": lambda: True, "broker": lambda: True}))
+    return TestClient(make_app(checks={"database": lambda: True, "broker": lambda: True}))
 
 
 def test_header_name_is_x_correlation_id() -> None:
@@ -54,7 +55,7 @@ def test_replaces_invalid_incoming_id(hostile: str) -> None:
 
 
 def test_id_present_on_503_response_too() -> None:
-    client = TestClient(create_app(checks={"database": lambda: False, "broker": lambda: True}))
+    client = TestClient(make_app(checks={"database": lambda: False, "broker": lambda: True}))
 
     response = client.get("/health/ready", headers={CORRELATION_HEADER: "abc"})
 

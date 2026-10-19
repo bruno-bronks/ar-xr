@@ -22,6 +22,38 @@ def normalize_correlation_id(raw: str | None) -> str:
     return str(uuid.uuid4())
 
 
+_PANEL_CSP = (
+    "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
+    "connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+)
+
+
+class SecurityHeadersMiddleware:
+    """`nosniff` em tudo, `no-store` em API/health e CSP estrita no painel (SPEC-006/007)."""
+
+    def __init__(self, app: ASGIApp) -> None:
+        self.app = app
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+        path: str = scope["path"]
+
+        async def send_with_headers(message: Message) -> None:
+            if message["type"] == "http.response.start":
+                headers = list(message.get("headers", []))
+                headers.append((b"x-content-type-options", b"nosniff"))
+                if path.startswith(("/api/", "/health")):
+                    headers.append((b"cache-control", b"no-store"))
+                if path.startswith("/panel"):
+                    headers.append((b"content-security-policy", _PANEL_CSP.encode()))
+                message["headers"] = headers
+            await send(message)
+
+        await self.app(scope, receive, send_with_headers)
+
+
 class RequestContextMiddleware:
     def __init__(self, app: ASGIApp) -> None:
         self.app = app

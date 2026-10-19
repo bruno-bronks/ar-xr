@@ -62,7 +62,7 @@ def test_no_env_file_is_tracked_by_git() -> None:
 
 
 def test_compose_has_expected_services() -> None:
-    assert set(_compose()["services"]) == {"db", "broker", "api"}
+    assert set(_compose()["services"]) == {"db", "broker", "migrate", "api", "worker", "simulator"}
 
 
 def test_compose_published_ports_bind_loopback_only() -> None:
@@ -83,15 +83,19 @@ def test_compose_images_are_pinned_and_not_privileged() -> None:
 def test_compose_services_have_healthchecks_and_api_waits_for_dependencies() -> None:
     services = _compose()["services"]
 
-    for name in ("db", "broker", "api"):
+    for name in ("db", "broker", "api", "worker"):
         assert "healthcheck" in services[name], name
-    depends = services["api"]["depends_on"]
-    assert depends["db"]["condition"] == "service_healthy"
-    assert depends["broker"]["condition"] == "service_healthy"
+    for name in ("api", "worker"):
+        depends = services[name]["depends_on"]
+        assert depends["db"]["condition"] == "service_healthy", name
+        assert depends["broker"]["condition"] == "service_healthy", name
+        assert depends["migrate"]["condition"] == "service_completed_successfully", name
+    assert services["simulator"]["depends_on"]["worker"]["condition"] == "service_healthy"
 
 
-def test_api_dockerfile_runs_as_non_root() -> None:
-    dockerfile = (ROOT / "services/api/Dockerfile").read_text("utf-8")
+@pytest.mark.parametrize("service", ["api", "telemetry-worker", "equipment-simulator"])
+def test_service_dockerfiles_run_as_non_root(service: str) -> None:
+    dockerfile = (ROOT / f"services/{service}/Dockerfile").read_text("utf-8")
     users = re.findall(r"^USER\s+(\S+)", dockerfile, flags=re.MULTILINE)
 
     assert users

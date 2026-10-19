@@ -17,5 +17,7 @@ Run "ruff check"        @("ruff", "check", ".")
 Run "ruff format"       @("ruff", "format", "--check", ".")
 Run "mypy (strict)"     @("mypy")
 Run "pytest"            @("pytest", "-q")
-Run "pip-audit"         @("pip_audit", "-r", "services/api/requirements.txt", "--no-deps", "--disable-pip")
+foreach ($svc in "api", "telemetry-worker", "equipment-simulator") {
+  Run "pip-audit ($svc)" @("pip_audit", "-r", "services/$svc/requirements.txt", "--no-deps", "--disable-pip")
+}
 Write-Host "Todos os gates locais passaram."

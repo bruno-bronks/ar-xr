@@ -25,8 +25,10 @@ Plano mestre: [SPATIAL_AI_ANTIGRAVITY_MASTER_PLAN.md](SPATIAL_AI_ANTIGRAVITY_MAS
 | Ação | PowerShell | Shell |
 |---|---|---|
 | Setup | `.\scripts\dev-setup.ps1` | `./scripts/dev-setup.sh` |
-| Gates locais (ruff, mypy strict, pytest, pip-audit) | `.\scripts\check.ps1` | `./scripts/check.sh` |
-| Stack + integração | `.\scripts\smoke.ps1` | `./scripts/smoke.sh` |
+| Gates locais (ruff, mypy strict, pytest sem Docker, pip-audit x3) | `.\scripts\check.ps1` | `./scripts/check.sh` |
+| Pilha real: integração + latência + E2E (`-Quick`/`--quick` = só smoke) | `.\scripts\smoke.ps1` | `./scripts/smoke.sh` |
+| Typecheck das specs Z (CZT) | `.\scripts\verify-z.ps1` | `./scripts/verify-z.sh` |
+| Regenerar arestas verificadas / cruzar com o grafo | `python scripts/trace_edges.py` · `graphify update .` · `python scripts/graph_crosscheck.py` | idem |
 
 ## Convenções
 - Identificadores de código/APIs em **inglês**; documentos de negócio em **português**.
@@ -34,9 +36,13 @@ Plano mestre: [SPATIAL_AI_ANTIGRAVITY_MASTER_PLAN.md](SPATIAL_AI_ANTIGRAVITY_MAS
 - Sem abstrações prematuras: Strategy/Repository/Adapter só quando houver segunda implementação real ou persistência real (ver `docs/architecture/components.md`).
 - Valide entradas externas (QR, MQTT, HTTP) como não confiáveis; mensagens de erro não vazam detalhes internos.
 - Ruff (`E,F,I,UP,B,SIM,S,C4,PT,RUF`, linha 100) e mypy `strict` precisam passar.
-- Verificação formal: **as specs Z não foram typecheckadas** (sem fuzz/CZT). Não alegar prova formal; os invariantes são checados por Hypothesis.
+- Verificação formal: as specs Z **passam parse+typecheck no CZT** (`verify-z`), mas **nenhum teorema foi provado**. Nunca escrever "provado"; os invariantes são checados por Hypothesis.
+- Testes que mexem na pilha (`tests/integration`, `e2e`, `performance`) **param/reiniciam** simulator/db/broker do Compose; rodar um por vez.
+- Gráfico de conhecimento: Graphify é **índice auxiliar**; a matriz `traceability.csv` e o Git são a fonte oficial. `graphify-out/` não é versionado.
+- Memória de agentes: `docs/agent/CURRENT_STATE.md` (validada por `test_agent_memory.py`). **Dreaming ainda não adotado** (serviço de nuvem pago/restrito); saída de qualquer mecanismo de memória entra só por PR.
 
 ## Ambiente conhecido (Windows)
 - Portas do host: API `8088`, PostgreSQL `55432`, MQTT `1883` (5432/8000 já ocupadas por outros projetos).
+- Auth da API é **demo** (tokens fictícios em `app/auth.py`); `ENVIRONMENT=production` + demo = a API não inicia.
 - TLS corporativo interceptado: `uv` não baixa pacotes; use `pip` (usa o repositório de certificados do sistema). **Não desabilite verificação de certificado.**
 - Heredocs bash com `\` e aspas aninhadas são frágeis; prefira editar arquivos com as ferramentas de edição.

@@ -1,18 +1,23 @@
 % Z-004 — Ingestão idempotente e ordenação de telemetria (SPEC-004, REQ-MNT-003)
 %
-% STATUS DE VERIFICAÇÃO: escrito à mão (fuzz/ISO Z), NÃO typecheckado nem
-% provado. Apenas especificação na Fase 0: o worker e os testes contra
-% PostgreSQL pertencem à Fase 1 (nada aqui está implementado).
+% VERIFICAÇÃO: parse + typecheck com CZT via scripts/verify-z.ps1. NÃO prova teoremas.
+% As conjecturas (T1, T2) são validadas por testes contra o repositório real na Fase 1
+% (tests/unit/ingestion e integração PostgreSQL).
 \documentclass{article}
-\usepackage{fuzz}
 \begin{document}
 
 \section*{Z-004: Idempotent telemetry ingestion}
 
 \begin{zed}
-  [SOURCE, EVENT\_ID, EQUIPMENT, SENSOR] \\
-  OUTCOME ::= accepted | duplicate \\
-  EventKey == SOURCE \cross EVENT\_ID
+  [SOURCE, EVENTID, EQUIPMENT, SENSOR]
+\end{zed}
+
+\begin{zed}
+  OUTCOME ::= accepted | duplicate
+\end{zed}
+
+\begin{zed}
+  EventKey == SOURCE \cross EVENTID
 \end{zed}
 
 \begin{schema}{Event}
@@ -33,35 +38,63 @@
        e.observed \leq (latest~k).observed)
 \end{schema}
 
-\begin{schema}{Ingest}
+\begin{schema}{IngestNewBase}
   \Delta IngestState \\
   ev? : Event \\
   outcome! : OUTCOME
 \where
-  (ev?.key \notin seen \land outcome! = accepted \\
-    \land history' = history \cup \{ ev? \} \\
-    \land seen' = seen \cup \{ ev?.key \} \\
-    \land (((ev?.equipment, ev?.sensor) \notin \dom latest
-       \lor ev?.observed \geq (latest(ev?.equipment, ev?.sensor)).observed)
-       \implies latest' = latest \oplus
-          \{ (ev?.equipment, ev?.sensor) \mapsto ev? \}) \\
-    \land (\lnot ((ev?.equipment, ev?.sensor) \notin \dom latest
-       \lor ev?.observed \geq (latest(ev?.equipment, ev?.sensor)).observed)
-       \implies latest' = latest)) \\
-  \lor \\
-  (ev?.key \in seen \land outcome! = duplicate \\
-    \land history' = history \land seen' = seen \land latest' = latest)
+  ev?.key \notin seen \\
+  outcome! = accepted \\
+  history' = history \cup \{ ev? \} \\
+  seen' = seen \cup \{ ev?.key \}
 \end{schema}
 
-\begin{theorem}{T1\_Idempotent}
-  % Reaplicar o mesmo evento não muda o estado.
-  Ingest \land (ev?.key \in seen) \vdash \theta IngestState' = \theta IngestState
-\end{theorem}
+\begin{schema}{IngestAdvance}
+  IngestNewBase
+\where
+  (ev?.equipment, ev?.sensor) \notin \dom latest \lor
+    ev?.observed \geq (latest(ev?.equipment, ev?.sensor)).observed \\
+  latest' = latest \oplus \{ (ev?.equipment, ev?.sensor) \mapsto ev? \}
+\end{schema}
 
-\begin{theorem}{T2\_LatestNeverRegresses}
-  % Um evento mais antigo nunca substitui a última leitura.
-  Ingest \vdash \forall k : \dom latest @
-    (latest'~k).observed \geq (latest~k).observed
-\end{theorem}
+\begin{schema}{IngestStale}
+  IngestNewBase
+\where
+  (ev?.equipment, ev?.sensor) \in \dom latest \\
+  ev?.observed < (latest(ev?.equipment, ev?.sensor)).observed \\
+  latest' = latest
+\end{schema}
+
+\begin{zed}
+  IngestNew == IngestAdvance \lor IngestStale
+\end{zed}
+
+\begin{schema}{IngestDuplicate}
+  \Xi IngestState \\
+  ev? : Event \\
+  outcome! : OUTCOME
+\where
+  ev?.key \in seen \\
+  outcome! = duplicate
+\end{schema}
+
+\begin{zed}
+  Ingest == IngestNew \lor IngestDuplicate
+\end{zed}
+
+\subsection*{Conjecturas}
+
+T1 (idempotência): reaplicar um evento já visto não muda o estado.
+
+\begin{zed}
+  \vdash? \forall IngestDuplicate @ \theta IngestState~' = \theta IngestState
+\end{zed}
+
+T2 (a última leitura nunca regride): um evento mais antigo não substitui a leitura atual.
+
+\begin{zed}
+  \vdash? \forall IngestNew @ \forall k : \dom latest @
+    ((latest')~k).observed \geq (latest~k).observed
+\end{zed}
 
 \end{document}

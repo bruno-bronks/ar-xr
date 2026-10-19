@@ -1,6 +1,5 @@
 """SPEC-004 · REQ-MNT-003: contrato do evento de telemetria (JSON Schema + AsyncAPI)."""
 
-import copy
 import json
 from pathlib import Path
 from typing import Any
@@ -9,34 +8,12 @@ import pytest
 import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
+from tests.contract.telemetry_cases import INVALID_EVENTS, VALID, VALID_EVENTS
+
 ROOT = Path(__file__).resolve().parents[2]
 SCHEMA_PATH = ROOT / "packages/contracts/telemetry-event.v1.schema.json"
 SCHEMA: dict[str, Any] = json.loads(SCHEMA_PATH.read_text("utf-8"))
 VALIDATOR = Draft202012Validator(SCHEMA, format_checker=FormatChecker())
-
-VALID: dict[str, Any] = {
-    "schema_version": 1,
-    "event_id": "sim-0001",
-    "source": "equipment-simulator",
-    "equipment_id": "EQ-001",
-    "sensor_type": "temperature",
-    "value": 72.4,
-    "unit": "celsius",
-    "observed_at": "2026-10-19T12:00:00Z",
-    "quality": "GOOD",
-}
-
-
-def _with(**changes: Any) -> dict[str, Any]:
-    event = copy.deepcopy(VALID)
-    event.update(changes)
-    return event
-
-
-def _without(field: str) -> dict[str, Any]:
-    event = copy.deepcopy(VALID)
-    del event[field]
-    return event
 
 
 def test_schema_itself_is_valid_draft_2020_12() -> None:
@@ -48,40 +25,12 @@ def test_schema_examples_are_valid() -> None:
         VALIDATOR.validate(example)
 
 
-@pytest.mark.parametrize(
-    "event",
-    [
-        VALID,
-        _with(observed_at="2026-10-19T09:00:00-03:00"),
-        _with(sensor_type="vibration", unit="mm/s", value=0),
-        _with(quality="BAD", value=-5.5),
-    ],
-)
+@pytest.mark.parametrize("event", VALID_EVENTS)
 def test_valid_events_pass(event: dict[str, Any]) -> None:
     VALIDATOR.validate(event)
 
 
-@pytest.mark.parametrize(
-    "event",
-    [
-        *[_without(field) for field in VALID],
-        _with(schema_version=2),
-        _with(quality="MAYBE"),
-        _with(sensor_type="pressure"),
-        _with(observed_at="2026-10-19T12:00:00"),  # sem offset => ambiguo
-        _with(observed_at="ontem"),
-        _with(value="72.4"),
-        _with(value=None),
-        _with(event_id=""),
-        _with(event_id="a b"),
-        _with(event_id="x" * 129),
-        _with(equipment_id="EQ/001"),  # separador de topico MQTT nao permitido
-        _with(equipment_id="EQ-#"),  # wildcard MQTT nao permitido
-        _with(unit=""),
-        {**VALID, "received_at": "2026-10-19T12:00:01Z"},  # received_at e do worker
-        {**VALID, "extra": 1},
-    ],
-)
+@pytest.mark.parametrize("event", INVALID_EVENTS)
 def test_invalid_events_are_rejected(event: dict[str, Any]) -> None:
     assert not VALIDATOR.is_valid(event)
 

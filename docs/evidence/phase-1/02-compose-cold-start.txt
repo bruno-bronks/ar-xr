@@ -1,0 +1,16 @@
+# Pilha do ZERO (down -v + up --build --wait) — 2026-10-19 14:14
+# tempo build+up (imagens base em cache local): 214 s
+
+## docker compose ps
+SERVICE     IMAGE                      STATUS                        PORTS
+api         spatial-ai-api             Up 40 seconds (healthy)       127.0.0.1:8088->8000/tcp
+broker      eclipse-mosquitto:2.0.18   Up About a minute (healthy)   127.0.0.1:1883->1883/tcp
+db          postgres:16.4-alpine       Up About a minute (healthy)   127.0.0.1:55432->5432/tcp
+simulator   spatial-ai-simulator       Up 10 seconds                 
+worker      spatial-ai-worker          Up 38 seconds (healthy)       
+
+## GET /health/ready
+{"status":"ready","checks":{"database":"ok","broker":"ok"}}
+
+## GET /api/v1/equipment (org-a, 15 s apos subir)
+[{"id":"EQ-001","name":"Compressor de ar 01","type":"Compressor de ar","location":"Galpao A - Linha 1","last_seen_at":"2026-10-19T17:14:32.644280Z","status":"NORMAL"},{"id":"EQ-002","name":"Bomba centrifuga 02","type":"Bomba centrifuga","location":"Galpao A - Utilidades","last_seen_at":"2026-10-19T17:14:32.644280Z","status":"NORMAL"},{"id":"EQ-003","name":"Motor eletrico 03","type":"Motor eletrico","location":"Galpao B - Linha 2","last_seen_at":"2026-10-19T17:14:30.647778Z","status":"NORMAL"}]
