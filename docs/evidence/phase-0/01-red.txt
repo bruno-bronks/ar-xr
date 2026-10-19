@@ -1,0 +1,74 @@
+﻿# RED — testes escritos antes da implementacao (2026-10-19 12:04)
+# Comando: .venv\Scripts\python.exe -m pytest -q --tb=line
+
+=================================== ERRORS ====================================
+__________ ERROR collecting tests/contract/test_openapi_contract.py ___________
+ImportError while importing test module 'C:\Users\bruno.antunes\Documents\Projetos\AR_XR\tests\contract\test_openapi_contract.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\contract\test_openapi_contract.py:8: in <module>
+    from app.main import create_app
+E   ModuleNotFoundError: No module named 'app'
+_______________ ERROR collecting tests/unit/api/test_config.py ________________
+ImportError while importing test module 'C:\Users\bruno.antunes\Documents\Projetos\AR_XR\tests\unit\api\test_config.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\api\test_config.py:4: in <module>
+    from app.config import Settings
+E   ModuleNotFoundError: No module named 'app'
+_____________ ERROR collecting tests/unit/api/test_correlation.py _____________
+ImportError while importing test module 'C:\Users\bruno.antunes\Documents\Projetos\AR_XR\tests\unit\api\test_correlation.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\api\test_correlation.py:9: in <module>
+    from app.logging_config import JsonFormatter
+E   ModuleNotFoundError: No module named 'app'
+_______________ ERROR collecting tests/unit/api/test_health.py ________________
+ImportError while importing test module 'C:\Users\bruno.antunes\Documents\Projetos\AR_XR\tests\unit\api\test_health.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\api\test_health.py:8: in <module>
+    from app.health import check_broker, check_database
+E   ModuleNotFoundError: No module named 'app'
+_____________ ERROR collecting tests/unit/domain/test_markers.py ______________
+ImportError while importing test module 'C:\Users\bruno.antunes\Documents\Projetos\AR_XR\tests\unit\domain\test_markers.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\domain\test_markers.py:6: in <module>
+    from spatial_domain.markers import NOT_FOUND, Found, NotFound, Registry
+E   ModuleNotFoundError: No module named 'spatial_domain'
+______________ ERROR collecting tests/unit/domain/test_status.py ______________
+ImportError while importing test module 'C:\Users\bruno.antunes\Documents\Projetos\AR_XR\tests\unit\domain\test_status.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\domain\test_status.py:14: in <module>
+    from spatial_domain.status import Quality, Reading, Status, Threshold, evaluate_status
+E   ModuleNotFoundError: No module named 'spatial_domain'
+=========================== short test summary info ===========================
+ERROR tests/contract/test_openapi_contract.py
+ERROR tests/unit/api/test_config.py
+ERROR tests/unit/api/test_correlation.py
+ERROR tests/unit/api/test_health.py
+ERROR tests/unit/domain/test_markers.py
+ERROR tests/unit/domain/test_status.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 6 errors during collection !!!!!!!!!!!!!!!!!!!
+6 errors in 1.63s
+

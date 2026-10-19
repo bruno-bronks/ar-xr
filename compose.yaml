@@ -1,0 +1,60 @@
+# Ambiente LOCAL de desenvolvimento. Nao e configuracao de producao.
+# Portas publicadas somente em 127.0.0.1 (REQ-SEC-002). Valores padrao fictícios e "dev-only".
+name: spatial-ai
+
+services:
+  db:
+    image: postgres:16.4-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-spatial}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-spatial-dev-only}
+      POSTGRES_DB: ${POSTGRES_DB:-spatial}
+    ports:
+      - "127.0.0.1:${DB_PORT:-55432}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  broker:
+    image: eclipse-mosquitto:2.0.18
+    ports:
+      - "127.0.0.1:${MQTT_PORT:-1883}:1883"
+    volumes:
+      - ./platform/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_sub -h 127.0.0.1 -t '$$SYS/broker/uptime' -C 1 -W 3 >/dev/null"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 3s
+
+  api:
+    build:
+      context: ./services/api
+    environment:
+      ENVIRONMENT: development
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-spatial}:${POSTGRES_PASSWORD:-spatial-dev-only}@db:5432/${POSTGRES_DB:-spatial}
+      MQTT_HOST: broker
+      MQTT_PORT: "1883"
+    ports:
+      - "127.0.0.1:${API_PORT:-8088}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      broker:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health/live', timeout=3).status == 200 else 1)"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+volumes:
+  db-data:

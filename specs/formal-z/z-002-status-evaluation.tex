@@ -1,0 +1,98 @@
+% Z-002 — Avaliação de estado do equipamento (SPEC-002, REQ-MNT-002)
+%
+% STATUS DE VERIFICAÇÃO: ESCRITO À MÃO NA SINTAXE fuzz/ISO Z. NÃO FOI
+% TYPECHECKADO nem provado: não há Java (CZT/Z-EVES) nem LaTeX/fuzz neste
+% ambiente. Os invariantes são validados por property-based tests (Hypothesis)
+% sobre o modelo executável packages/domain/src/spatial_domain/status.py.
+% Ver docs/decisions/tool-evaluation.md.
+%
+% Abstração: Z usa inteiros (\num); o modelo Python usa float finito.
+\documentclass{article}
+\usepackage{fuzz}
+\begin{document}
+
+\section*{Z-002: Equipment status evaluation}
+
+\begin{zed}
+  [SENSOR] \\
+  STATUS ::= NORMAL | WARNING | CRITICAL | OFFLINE | UNKNOWN \\
+  QUALITY ::= GOOD | BAD
+\end{zed}
+
+\begin{schema}{Threshold}
+  warn, crit : \num
+\where
+  warn \leq crit
+\end{schema}
+
+\begin{schema}{Reading}
+  value : \num \\
+  observed : \nat \\
+  quality : QUALITY
+\end{schema}
+
+\begin{schema}{EquipmentSnapshot}
+  profile : SENSOR \pfun Threshold \\
+  latest : SENSOR \pfun Reading \\
+  now, offlineAfter, lastSeen : \nat
+\where
+  \dom latest \subseteq \dom profile \\
+  latest \neq \emptyset \implies
+    lastSeen = \max \{ s : \dom latest @ (latest~s).observed \} \\
+  latest \neq \emptyset \implies lastSeen \leq now
+\end{schema}
+
+\begin{schema}{Evaluate}
+  \Xi EquipmentSnapshot \\
+  valid, overWarn, overCrit : \power SENSOR \\
+  status! : STATUS
+\where
+  valid = \{ s : \dom latest | (latest~s).quality = GOOD
+       \land now - (latest~s).observed \leq offlineAfter \} \\
+  overWarn = \{ s : valid | (latest~s).value > (profile~s).warn \} \\
+  overCrit = \{ s : valid | (latest~s).value > (profile~s).crit \} \\
+  ( [ latest = \emptyset \land status! = UNKNOWN ] \\
+  \lor [ latest \neq \emptyset \land now - lastSeen > offlineAfter
+        \land status! = OFFLINE ] \\
+  \lor [ latest \neq \emptyset \land now - lastSeen \leq offlineAfter
+        \land overCrit \neq \emptyset \land status! = CRITICAL ] \\
+  \lor [ latest \neq \emptyset \land now - lastSeen \leq offlineAfter
+        \land overCrit = \emptyset \land overWarn \neq \emptyset
+        \land status! = WARNING ] \\
+  \lor [ latest \neq \emptyset \land now - lastSeen \leq offlineAfter
+        \land overWarn = \emptyset \land valid = \dom profile
+        \land status! = NORMAL ] \\
+  \lor [ latest \neq \emptyset \land now - lastSeen \leq offlineAfter
+        \land overWarn = \emptyset \land valid \neq \dom profile
+        \land status! = UNKNOWN ] )
+\end{schema}
+
+\subsection*{Invariantes (a provar / validar por PBT)}
+
+\begin{theorem}{I1\_NormalNeedsFullValidCoverage}
+  Evaluate \vdash status! = NORMAL \implies
+    now - lastSeen \leq offlineAfter \land valid = \dom profile
+    \land overWarn = \emptyset
+\end{theorem}
+
+\begin{theorem}{I2\_CriticalNeedsEvidence}
+  Evaluate \vdash status! = CRITICAL \implies
+    now - lastSeen \leq offlineAfter \land overCrit \neq \emptyset
+\end{theorem}
+
+\begin{theorem}{I3\_StaleIsOffline}
+  Evaluate \vdash (latest \neq \emptyset \land now - lastSeen > offlineAfter)
+    \implies status! = OFFLINE
+\end{theorem}
+
+\begin{theorem}{I6\_ExactLimitDoesNotAlarm}
+  Evaluate \vdash (\forall s : valid @ (latest~s).value \leq (profile~s).warn)
+    \implies overWarn = \emptyset
+\end{theorem}
+
+% I4 (totalidade/determinismo: os seis casos são mutuamente exclusivos e
+% exaustivos), I5 (monotonicidade) e I7 (leituras BAD não alteram o
+% resultado) são propriedades de refinamento/meta-nível validadas por
+% Hypothesis; ver SPEC-002.
+
+\end{document}

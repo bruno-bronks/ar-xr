@@ -1,0 +1,29 @@
+# Gates locais — scripts/check.ps1 (2026-10-19 12:16) — exit=0
+# Ambiente: Windows 11, Python 3.13 (.venv), ruff/mypy/pytest/hypothesis conforme pyproject
+==> ruff check
+All checks passed!
+==> ruff format
+40 files already formatted
+==> mypy (strict)
+Success: no issues found in 26 source files
+==> pytest
+..........................................ssss.......................... [ 45%]
+........................................................................ [ 90%]
+................                                                         [100%]
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\bruno.antunes\Documents\Projetos\AR_XR\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+SKIPPED [1] tests\integration\test_compose_smoke.py:38: BASE_URL nao definido (Compose nao informado)
+SKIPPED [1] tests\integration\test_compose_smoke.py:45: BASE_URL nao definido (Compose nao informado)
+SKIPPED [1] tests\integration\test_compose_smoke.py:52: BASE_URL nao definido (Compose nao informado)
+SKIPPED [1] tests\integration\test_compose_smoke.py:58: BASE_URL nao definido (Compose nao informado)
+156 passed, 4 skipped, 1 warning in 10.53s
+==> pip-audit
+WARNING:pip_audit._cli:--no-deps is supported, but users are encouraged to fully hash their pinned dependencies
+WARNING:pip_audit._cli:Consider using a tool like `pip-compile`: https://pip-tools.readthedocs.io/en/latest/#using-hashes
+No known vulnerabilities found
+Todos os gates locais passaram.

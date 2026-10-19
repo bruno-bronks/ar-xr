@@ -1,0 +1,67 @@
+% Z-004 — Ingestão idempotente e ordenação de telemetria (SPEC-004, REQ-MNT-003)
+%
+% STATUS DE VERIFICAÇÃO: escrito à mão (fuzz/ISO Z), NÃO typecheckado nem
+% provado. Apenas especificação na Fase 0: o worker e os testes contra
+% PostgreSQL pertencem à Fase 1 (nada aqui está implementado).
+\documentclass{article}
+\usepackage{fuzz}
+\begin{document}
+
+\section*{Z-004: Idempotent telemetry ingestion}
+
+\begin{zed}
+  [SOURCE, EVENT\_ID, EQUIPMENT, SENSOR] \\
+  OUTCOME ::= accepted | duplicate \\
+  EventKey == SOURCE \cross EVENT\_ID
+\end{zed}
+
+\begin{schema}{Event}
+  key : EventKey \\
+  equipment : EQUIPMENT \\
+  sensor : SENSOR \\
+  observed : \nat
+\end{schema}
+
+\begin{schema}{IngestState}
+  seen : \power EventKey \\
+  history : \power Event \\
+  latest : (EQUIPMENT \cross SENSOR) \pfun Event
+\where
+  \{ e : history @ e.key \} = seen \\
+  \forall k : \dom latest @ latest~k \in history \land
+    (\forall e : history | (e.equipment, e.sensor) = k @
+       e.observed \leq (latest~k).observed)
+\end{schema}
+
+\begin{schema}{Ingest}
+  \Delta IngestState \\
+  ev? : Event \\
+  outcome! : OUTCOME
+\where
+  (ev?.key \notin seen \land outcome! = accepted \\
+    \land history' = history \cup \{ ev? \} \\
+    \land seen' = seen \cup \{ ev?.key \} \\
+    \land (((ev?.equipment, ev?.sensor) \notin \dom latest
+       \lor ev?.observed \geq (latest(ev?.equipment, ev?.sensor)).observed)
+       \implies latest' = latest \oplus
+          \{ (ev?.equipment, ev?.sensor) \mapsto ev? \}) \\
+    \land (\lnot ((ev?.equipment, ev?.sensor) \notin \dom latest
+       \lor ev?.observed \geq (latest(ev?.equipment, ev?.sensor)).observed)
+       \implies latest' = latest)) \\
+  \lor \\
+  (ev?.key \in seen \land outcome! = duplicate \\
+    \land history' = history \land seen' = seen \land latest' = latest)
+\end{schema}
+
+\begin{theorem}{T1\_Idempotent}
+  % Reaplicar o mesmo evento não muda o estado.
+  Ingest \land (ev?.key \in seen) \vdash \theta IngestState' = \theta IngestState
+\end{theorem}
+
+\begin{theorem}{T2\_LatestNeverRegresses}
+  % Um evento mais antigo nunca substitui a última leitura.
+  Ingest \vdash \forall k : \dom latest @
+    (latest'~k).observed \geq (latest~k).observed
+\end{theorem}
+
+\end{document}

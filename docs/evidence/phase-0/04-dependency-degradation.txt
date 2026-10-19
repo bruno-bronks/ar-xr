@@ -1,0 +1,16 @@
+# Degradacao real de dependencias (REQ-ENG-002/003, D-02 do threat model) — 2026-10-19 12:17
+# Procedimento: docker compose stop|start broker|db; GET /health/live e /health/ready em cada passo.
+
+baseline           -> live=200 ready={"status":"ready","checks":{"database":"ok","broker":"ok"}} [HTTP 200]
+broker parado      -> live=200 ready={"status":"not_ready","checks":{"database":"ok","broker":"fail"}} [HTTP 503]
+broker restaurado  -> live=200 ready={"status":"ready","checks":{"database":"ok","broker":"ok"}} [HTTP 200]
+db parado          -> live=200 ready={"status":"not_ready","checks":{"database":"fail","broker":"ok"}} [HTTP 503]
+db restaurado      -> live=200 ready={"status":"ready","checks":{"database":"ok","broker":"ok"}} [HTTP 200]
+
+## Logs WARNING da API (amostra)
+api-1  | {"timestamp": "2026-10-19T15:16:50.867314+00:00", "level": "WARNING", "logger": "app.health", "message": "broker check failed", "correlation_id": "1f6dd1f0-79f0-4afc-82b5-910d8643a1c4", "error_type": "gaierror"}
+api-1  | {"timestamp": "2026-10-19T15:16:50.867508+00:00", "level": "WARNING", "logger": "app.health", "message": "readiness degraded: {'database': 'ok', 'broker': 'fail'}", "correlation_id": "1f6dd1f0-79f0-4afc-82b5-910d8643a1c4"}
+api-1  | {"timestamp": "2026-10-19T15:17:04.811196+00:00", "level": "WARNING", "logger": "app.health", "message": "database check failed", "correlation_id": "def00e12-b04a-44f0-94ce-2c50e2a45af7", "error_type": "OperationalError"}
+api-1  | {"timestamp": "2026-10-19T15:17:04.815337+00:00", "level": "WARNING", "logger": "app.health", "message": "readiness degraded: {'database': 'fail', 'broker': 'ok'}", "correlation_id": "def00e12-b04a-44f0-94ce-2c50e2a45af7"}
+
+## Ocorrencias da senha de dev nos logs da API: 0

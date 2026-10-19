@@ -1,0 +1,52 @@
+% Z-003 — Resolução de marker/QR (SPEC-003, REQ-MNT-001)
+%
+% STATUS DE VERIFICAÇÃO: escrito à mão (fuzz/ISO Z), NÃO typecheckado nem
+% provado — ferramentas indisponíveis neste ambiente. Invariantes validados
+% por Hypothesis em tests/unit/domain/test_markers.py.
+\documentclass{article}
+\usepackage{fuzz}
+\begin{document}
+
+\section*{Z-003: Marker resolution}
+
+\begin{zed}
+  [MARKER, EQUIPMENT, ORG] \\
+  RESULT ::= found \ldata EQUIPMENT \rdata | notFound
+\end{zed}
+
+\begin{schema}{Registry}
+  markerOf : MARKER \pinj EQUIPMENT \\
+  owner : EQUIPMENT \pfun ORG
+\where
+  \ran markerOf \subseteq \dom owner
+\end{schema}
+
+\begin{schema}{ResolveMarker}
+  \Xi Registry \\
+  marker? : MARKER \\
+  caller? : ORG \\
+  result! : RESULT
+\where
+  (marker? \in \dom markerOf \land owner(markerOf~marker?) = caller?
+     \land result! = found(markerOf~marker?)) \\
+  \lor \\
+  (\lnot (marker? \in \dom markerOf \land owner(markerOf~marker?) = caller?)
+     \land result! = notFound)
+\end{schema}
+
+\begin{theorem}{M1\_FoundIsOwned}
+  ResolveMarker \vdash \forall e : EQUIPMENT @
+    result! = found~e \implies owner~e = caller?
+\end{theorem}
+
+\begin{theorem}{M2\_NonDisclosure}
+  % Marcador desconhecido e marcador de outra organização são indistinguíveis.
+  ResolveMarker \vdash
+    (marker? \notin \dom markerOf \lor owner(markerOf~marker?) \neq caller?)
+    \implies result! = notFound
+\end{theorem}
+
+% M3 (pureza, \Xi Registry) é garantido pelo próprio esquema.
+% M4 (3 QR de teste) é um teste concreto sobre o seed da Fase 1.
+
+\end{document}

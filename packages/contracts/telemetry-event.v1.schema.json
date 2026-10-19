@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spatial-ai.example/schemas/telemetry-event.v1.schema.json",
+  "title": "TelemetryEvent v1",
+  "description": "Evento publicado em spatial/v1/equipment/{equipment_id}/telemetry. received_at e atribuido pelo worker, nunca pelo publicador.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event_id", "source", "equipment_id", "sensor_type", "value", "unit", "observed_at", "quality"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "event_id": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,128}$" },
+    "source": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,64}$" },
+    "equipment_id": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,64}$" },
+    "sensor_type": { "enum": ["temperature", "vibration"] },
+    "value": { "type": "number" },
+    "unit": { "type": "string", "minLength": 1, "maxLength": 16 },
+    "observed_at": { "type": "string", "format": "date-time" },
+    "quality": { "enum": ["GOOD", "BAD"] }
+  },
+  "examples": [
+    {
+      "schema_version": 1,
+      "event_id": "sim-0001",
+      "source": "equipment-simulator",
+      "equipment_id": "EQ-001",
+      "sensor_type": "temperature",
+      "value": 72.4,
+      "unit": "celsius",
+      "observed_at": "2026-10-19T12:00:00Z",
+      "quality": "GOOD"
+    }
+  ]
+}
