@@ -1,0 +1,102 @@
+{
+  "version": 4,
+  "targets": {
+    "netstandard2.1": {}
+  },
+  "libraries": {},
+  "projectFileDependencyGroups": {
+    "netstandard2.1": [
+      "Newtonsoft.Json >= 13.0.3"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\bruno.antunes\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\bruno.antunes\\Documents\\Projetos\\AR_XR\\tests\\csharp\\Spatial.Ar.Core\\Spatial.Ar.Core.csproj",
+      "projectName": "Spatial.Ar.Core",
+      "projectPath": "C:\\Users\\bruno.antunes\\Documents\\Projetos\\AR_XR\\tests\\csharp\\Spatial.Ar.Core\\Spatial.Ar.Core.csproj",
+      "packagesPath": "C:\\Users\\bruno.antunes\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\bruno.antunes\\Documents\\Projetos\\AR_XR\\tests\\csharp\\Spatial.Ar.Core\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\bruno.antunes\\Documents\\Projetos\\AR_XR\\tests\\csharp\\NuGet.Config",
+        "C:\\Users\\bruno.antunes\\AppData\\Roaming\\NuGet\\NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "netstandard2.1"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "framework": "netstandard2.1",
+          "targetAlias": "netstandard2.1",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "allWarningsAsErrors": true,
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "10.0.400"
+    },
+    "frameworks": {
+      "netstandard2.1": {
+        "framework": "netstandard2.1",
+        "targetAlias": "netstandard2.1",
+        "dependencies": {
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[13.0.3, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "NETStandard.Library.Ref",
+            "version": "[2.1.0, 2.1.0]"
+          }
+        ],
+        "frameworkReferences": {
+          "NETStandard.Library": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Users\\bruno.antunes\\.tools\\dotnet\\sdk\\10.0.402\\RuntimeIdentifierGraph.json"
+      }
+    }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Falha ao baixar o pacote 'Newtonsoft.Json.13.0.3' de 'https://api.nuget.org/v3-flatcontainer/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg'.\r\nResponse status code does not indicate success: 503 (Service Unavailable)."
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "O feed 'nuget.org [https://api.nuget.org/v3/index.json]' lista o pacote 'Newtonsoft.Json.13.0.3', mas várias tentativas de baixar o nupkg falharam. O feed é inválido ou os pacotes necessários foram removidos enquanto a operação atual estava em andamento. Verifique se o pacote existe no feed e tente novamente."
+    }
+  ]
+}

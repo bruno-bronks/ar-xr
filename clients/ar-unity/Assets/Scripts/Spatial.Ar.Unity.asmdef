@@ -1,0 +1,19 @@
+{
+  "name": "Spatial.Ar.Unity",
+  "rootNamespace": "Spatial.Ar.Unity",
+  "references": [
+    "Spatial.Ar.Core",
+    "Unity.XR.ARFoundation",
+    "Unity.XR.ARSubsystems",
+    "Unity.Collections"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": ["Newtonsoft.Json.dll", "zxing.unity.dll"],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

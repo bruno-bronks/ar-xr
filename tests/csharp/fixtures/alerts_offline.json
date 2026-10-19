@@ -1,0 +1,8 @@
+[
+  {
+    "equipment_id": "EQ-002",
+    "severity": "OFFLINE",
+    "rule": "offline",
+    "raised_at": "2026-10-19T12:00:59Z"
+  }
+]

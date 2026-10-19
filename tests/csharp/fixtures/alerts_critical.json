@@ -1,0 +1,11 @@
+[
+  {
+    "equipment_id": "EQ-001",
+    "severity": "CRITICAL",
+    "rule": "temperature>crit",
+    "raised_at": "2026-10-19T12:00:29Z",
+    "sensor_type": "temperature",
+    "value": 101.0,
+    "limit": 100.0
+  }
+]

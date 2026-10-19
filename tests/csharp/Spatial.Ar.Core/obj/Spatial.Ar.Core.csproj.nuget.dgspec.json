@@ -1,0 +1,83 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\bruno.antunes\\Documents\\Projetos\\AR_XR\\tests\\csharp\\Spatial.Ar.Core\\Spatial.Ar.Core.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\bruno.antunes\\Documents\\Projetos\\AR_XR\\tests\\csharp\\Spatial.Ar.Core\\Spatial.Ar.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\bruno.antunes\\Documents\\Projetos\\AR_XR\\tests\\csharp\\Spatial.Ar.Core\\Spatial.Ar.Core.csproj",
+        "projectName": "Spatial.Ar.Core",
+        "projectPath": "C:\\Users\\bruno.antunes\\Documents\\Projetos\\AR_XR\\tests\\csharp\\Spatial.Ar.Core\\Spatial.Ar.Core.csproj",
+        "packagesPath": "C:\\Users\\bruno.antunes\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\bruno.antunes\\Documents\\Projetos\\AR_XR\\tests\\csharp\\Spatial.Ar.Core\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\bruno.antunes\\Documents\\Projetos\\AR_XR\\tests\\csharp\\NuGet.Config",
+          "C:\\Users\\bruno.antunes\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "framework": "netstandard2.1",
+            "targetAlias": "netstandard2.1",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true,
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.400"
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "framework": "netstandard2.1",
+          "targetAlias": "netstandard2.1",
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "NETStandard.Library.Ref",
+              "version": "[2.1.0, 2.1.0]"
+            }
+          ],
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Users\\bruno.antunes\\.tools\\dotnet\\sdk\\10.0.402\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

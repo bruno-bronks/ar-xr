@@ -51,6 +51,25 @@ jobs:
         run: |
           for f in services/*/requirements.txt; do pip-audit -r "$f"; done
 
+  csharp:
+    # Nucleo C# do cliente AR (SPEC-008). A rede corporativa do desenvolvedor bloqueia .nupkg, entao
+    # estes testes SO rodam aqui (o nucleo tambem e compilado localmente contra um stub, sem executar).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Build core as netstandard2.1 / C# 9 (warnings are errors)
+        run: dotnet build tests/csharp/Spatial.Ar.Core -c Release
+      - name: Test core (xUnit) incl. real-API fixtures and ZXing round trip
+        run: dotnet test tests/csharp/Spatial.Ar.Core.Tests -c Release --logger "console;verbosity=normal"
+      - name: ZXing.Net package facts (to pin the Unity DLL)
+        run: |
+          pkg="$HOME/.nuget/packages/zxing.net/0.16.9"
+          ls "$pkg/lib"
+          sha256sum "$pkg"/*.nupkg "$pkg"/lib/unity/*.dll || true
+
   formal-z:
     runs-on: ubuntu-latest
     steps:
