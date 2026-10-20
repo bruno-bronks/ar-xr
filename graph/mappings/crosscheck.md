@@ -23,14 +23,14 @@
 | REQ-SEC-003 | `tests/unit/api/test_auth_config.py` | `services/api/app/auth.py` | CONFIRMED (INFERRED) | 1 |
 | REQ-SEC-003 | `tests/unit/api/test_auth_config.py` | `services/api/app/config.py` | CONFIRMED (INFERRED) | 1 |
 | REQ-SEC-003 | `tests/unit/api/test_auth_config.py` | `services/api/app/routes.py` | CONFIRMED (INFERRED) | 2 |
-| REQ-SEC-003 | `tests/unit/api/test_equipment_api.py` | `services/api/app/auth.py` | CONFIRMED (EXTRACTED) | 3 |
-| REQ-SEC-003 | `tests/unit/api/test_equipment_api.py` | `services/api/app/config.py` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-SEC-003 | `tests/unit/api/test_equipment_api.py` | `services/api/app/auth.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-SEC-003 | `tests/unit/api/test_equipment_api.py` | `services/api/app/config.py` | CONFIRMED (INFERRED) | 3 |
 | REQ-SEC-003 | `tests/unit/api/test_equipment_api.py` | `services/api/app/routes.py` | CONFIRMED (INFERRED) | 2 |
 | REQ-SEC-003 | `tests/integration/test_stack_flow.py` | `services/api/app/auth.py` | NOT CONFIRMED (black-box) | - |
 | REQ-SEC-003 | `tests/integration/test_stack_flow.py` | `services/api/app/config.py` | NOT CONFIRMED (black-box) | - |
 | REQ-SEC-003 | `tests/integration/test_stack_flow.py` | `services/api/app/routes.py` | NOT CONFIRMED (black-box) | - |
 | REQ-SEC-004 | `tests/unit/api/test_equipment_api.py` | `services/api/app/audit.py` | CONFIRMED (INFERRED) | 3 |
-| REQ-SEC-004 | `tests/unit/api/test_equipment_api.py` | `services/api/app/ratelimit.py` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-SEC-004 | `tests/unit/api/test_equipment_api.py` | `services/api/app/ratelimit.py` | CONFIRMED (INFERRED) | 3 |
 | REQ-MNT-001 | `tests/unit/domain/test_markers.py` | `packages/domain/src/spatial_domain/markers.py` | CONFIRMED (INFERRED) | 1 |
 | REQ-MNT-001 | `tests/unit/domain/test_markers.py` | `packages/storage/src/spatial_storage/postgres.py` | CONFIRMED (EXTRACTED) | 4 |
 | REQ-MNT-001 | `tests/unit/domain/test_markers.py` | `services/api/app/routes.py` | CONFIRMED (INFERRED) | 4 |
@@ -76,7 +76,7 @@
 | REQ-MNT-006 | `tests/unit/api/test_equipment_api.py` | `services/api/app/schemas.py` | CONFIRMED (EXTRACTED) | 3 |
 | REQ-MNT-006 | `tests/contract/test_openapi_contract.py` | `services/api/app/routes.py` | CONFIRMED (INFERRED) | 3 |
 | REQ-MNT-006 | `tests/contract/test_openapi_contract.py` | `services/api/app/twin.py` | CONFIRMED (INFERRED) | 3 |
-| REQ-MNT-006 | `tests/contract/test_openapi_contract.py` | `services/api/app/schemas.py` | CONFIRMED (INFERRED) | 4 |
+| REQ-MNT-006 | `tests/contract/test_openapi_contract.py` | `services/api/app/schemas.py` | CONFIRMED (INFERRED) | 3 |
 | REQ-MNT-006 | `tests/integration/test_stack_flow.py` | `services/api/app/routes.py` | NOT CONFIRMED (black-box) | - |
 | REQ-MNT-006 | `tests/integration/test_stack_flow.py` | `services/api/app/twin.py` | NOT CONFIRMED (black-box) | - |
 | REQ-MNT-006 | `tests/integration/test_stack_flow.py` | `services/api/app/schemas.py` | NOT CONFIRMED (black-box) | - |
@@ -111,7 +111,7 @@
 | REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/QrRoundTripTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (EXTRACTED) | 2 |
 | REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/QrRoundTripTests.cs` | `clients/ar-unity/Assets/Scripts/QrScanner.cs` | NOT CONFIRMED | - |
 | REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (INFERRED) | 1 |
-| REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | CONFIRMED (EXTRACTED) | 3 |
 | REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (EXTRACTED) | 1 |
 | REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | CONFIRMED (EXTRACTED) | 1 |
 | REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (EXTRACTED) | 1 |
@@ -247,7 +247,7 @@
 | REQ-AI-006 | `tests/unit/api/test_assistant_api.py` | `services/api/app/main.py` | CONFIRMED (EXTRACTED) | 2 |
 | REQ-AI-006 | `tests/unit/api/test_assistant_api.py` | `services/api/app/ratelimit.py` | CONFIRMED (INFERRED) | 3 |
 | REQ-AI-006 | `tests/contract/test_openapi_contract.py` | `services/api/app/assistant_routes.py` | CONFIRMED (EXTRACTED) | 3 |
-| REQ-AI-006 | `tests/contract/test_openapi_contract.py` | `services/api/app/schemas.py` | CONFIRMED (INFERRED) | 4 |
+| REQ-AI-006 | `tests/contract/test_openapi_contract.py` | `services/api/app/schemas.py` | CONFIRMED (INFERRED) | 3 |
 | REQ-AI-006 | `tests/contract/test_openapi_contract.py` | `services/api/app/main.py` | CONFIRMED (EXTRACTED) | 2 |
 | REQ-AI-006 | `tests/contract/test_openapi_contract.py` | `services/api/app/ratelimit.py` | CONFIRMED (EXTRACTED) | 3 |
 | REQ-AI-006 | `tests/integration/test_assistant_stack.py` | `services/api/app/assistant_routes.py` | NOT CONFIRMED (black-box) | - |
@@ -256,12 +256,50 @@
 | REQ-AI-006 | `tests/integration/test_assistant_stack.py` | `services/api/app/ratelimit.py` | NOT CONFIRMED (black-box) | - |
 | REQ-AI-007 | `tests/unit/assistant/test_evaluation.py` | `packages/assistant/src/spatial_assistant/evaluation.py` | CONFIRMED (EXTRACTED) | 1 |
 | REQ-AI-007 | `tests/unit/assistant/test_evaluation.py` | `scripts/eval_assistant.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-HACC-001 | `tests/unit/api/test_hacc_api.py` | `packages/hacc/src/spatial_hacc/simulated.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-HACC-001 | `tests/unit/api/test_hacc_api.py` | `services/api/app/hacc_routes.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-001 | `tests/unit/api/test_hacc_api.py` | `services/api/app/main.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-001 | `tests/unit/hacc/test_models_simulated.py` | `packages/hacc/src/spatial_hacc/simulated.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-HACC-001 | `tests/unit/hacc/test_models_simulated.py` | `services/api/app/hacc_routes.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-001 | `tests/unit/hacc/test_models_simulated.py` | `services/api/app/main.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-001 | `tests/integration/test_hacc_stack.py` | `packages/hacc/src/spatial_hacc/simulated.py` | NOT CONFIRMED (black-box) | - |
+| REQ-HACC-001 | `tests/integration/test_hacc_stack.py` | `services/api/app/hacc_routes.py` | NOT CONFIRMED (black-box) | - |
+| REQ-HACC-001 | `tests/integration/test_hacc_stack.py` | `services/api/app/main.py` | NOT CONFIRMED (black-box) | - |
+| REQ-HACC-002 | `tests/unit/hacc/test_http_source.py` | `packages/hacc/src/spatial_hacc/source.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-HACC-002 | `tests/unit/hacc/test_http_source.py` | `packages/hacc/src/spatial_hacc/http.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-HACC-002 | `tests/unit/hacc/test_http_source.py` | `services/api/app/hacc_routes.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-002 | `tests/unit/api/test_hacc_api.py` | `packages/hacc/src/spatial_hacc/source.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-HACC-002 | `tests/unit/api/test_hacc_api.py` | `packages/hacc/src/spatial_hacc/http.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-002 | `tests/unit/api/test_hacc_api.py` | `services/api/app/hacc_routes.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-002 | `tests/contract/test_openapi_contract.py` | `packages/hacc/src/spatial_hacc/source.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-HACC-002 | `tests/contract/test_openapi_contract.py` | `packages/hacc/src/spatial_hacc/http.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-002 | `tests/contract/test_openapi_contract.py` | `services/api/app/hacc_routes.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-003 | `tests/unit/hacc/test_models_simulated.py` | `packages/hacc/src/spatial_hacc/models.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-HACC-003 | `tests/unit/hacc/test_models_simulated.py` | `packages/hacc/src/spatial_hacc/simulated.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-HACC-003 | `tests/unit/hacc/test_http_source.py` | `packages/hacc/src/spatial_hacc/models.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-003 | `tests/unit/hacc/test_http_source.py` | `packages/hacc/src/spatial_hacc/simulated.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-HACC-003 | `tests/integration/test_hacc_stack.py` | `packages/hacc/src/spatial_hacc/models.py` | NOT CONFIRMED (black-box) | - |
+| REQ-HACC-003 | `tests/integration/test_hacc_stack.py` | `packages/hacc/src/spatial_hacc/simulated.py` | NOT CONFIRMED (black-box) | - |
+| REQ-HACC-004 | `tests/unit/api/test_hacc_api.py` | `services/api/app/auth.py` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-HACC-004 | `tests/unit/api/test_hacc_api.py` | `services/api/app/hacc_routes.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-004 | `tests/contract/test_openapi_contract.py` | `services/api/app/auth.py` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-HACC-004 | `tests/contract/test_openapi_contract.py` | `services/api/app/hacc_routes.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-004 | `tests/integration/test_hacc_stack.py` | `services/api/app/auth.py` | NOT CONFIRMED (black-box) | - |
+| REQ-HACC-004 | `tests/integration/test_hacc_stack.py` | `services/api/app/hacc_routes.py` | NOT CONFIRMED (black-box) | - |
+| REQ-HACC-005 | `tests/unit/domain/test_beds.py` | `packages/domain/src/spatial_domain/beds.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-HACC-005 | `tests/unit/domain/test_beds.py` | `services/api/app/hacc_routes.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-005 | `tests/unit/api/test_hacc_api.py` | `packages/domain/src/spatial_domain/beds.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-HACC-005 | `tests/unit/api/test_hacc_api.py` | `services/api/app/hacc_routes.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-005 | `tests/contract/test_openapi_contract.py` | `packages/domain/src/spatial_domain/beds.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-HACC-005 | `tests/contract/test_openapi_contract.py` | `services/api/app/hacc_routes.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-HACC-005 | `tests/integration/test_hacc_stack.py` | `packages/domain/src/spatial_domain/beds.py` | NOT CONFIRMED (black-box) | - |
+| REQ-HACC-005 | `tests/integration/test_hacc_stack.py` | `services/api/app/hacc_routes.py` | NOT CONFIRMED (black-box) | - |
 
 ## Resumo
 
 - CONFIRMED (EXTRACTED): **89**
-- CONFIRMED (INFERRED): **116**
-- NOT CONFIRMED (black-box): **35**
+- CONFIRMED (INFERRED): **145**
+- NOT CONFIRMED (black-box): **44**
 - NOT CONFIRMED: **10**
 - NOT IN GRAPH: **0**
 

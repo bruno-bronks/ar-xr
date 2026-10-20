@@ -1,7 +1,7 @@
 {
   "generated_from": "docs/requirements/traceability.csv",
   "note": "Arestas VERIFICADAS (a matriz e testada por tests/unit/repo/test_traceability.py).",
-  "edge_count": 343,
+  "edge_count": 407,
   "edges": [
     {
       "source": ".github/workflows/ci.yml",
@@ -1118,8 +1118,351 @@
     },
     {
       "source": "REQ-HACC-001",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/hacc-readonly.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-001",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-001",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0005-hacc-adapter-and-scopes.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-001",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-006-bed-status.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-001",
       "relation": "SERVES",
       "target": "OUT-HACC-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-001",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-010-hacc-spatial.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-001",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_hacc_stack.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_hacc_api.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/hacc/test_models_simulated.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-002",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/hacc-readonly.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-002",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-002",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0005-hacc-adapter-and-scopes.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-002",
+      "relation": "SERVES",
+      "target": "OUT-HACC-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-002",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-010-hacc-spatial.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-002",
+      "relation": "TESTED_BY",
+      "target": "tests/contract/test_openapi_contract.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-002",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_hacc_api.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-002",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/hacc/test_http_source.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-003",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/hacc-readonly.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-003",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-003",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0005-hacc-adapter-and-scopes.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-003",
+      "relation": "SERVES",
+      "target": "OUT-HACC-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-003",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-010-hacc-spatial.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-003",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_hacc_stack.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/hacc/test_http_source.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/hacc/test_models_simulated.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-004",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/hacc-readonly.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-004",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-004",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0005-hacc-adapter-and-scopes.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-004",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-006-bed-status.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-004",
+      "relation": "SERVES",
+      "target": "OUT-HACC-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-004",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-010-hacc-spatial.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-004",
+      "relation": "TESTED_BY",
+      "target": "tests/contract/test_openapi_contract.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-004",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_hacc_stack.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-004",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_hacc_api.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-005",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/hacc-readonly.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-005",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-005",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0005-hacc-adapter-and-scopes.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-005",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-006-bed-status.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-005",
+      "relation": "SERVES",
+      "target": "OUT-HACC-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-005",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-010-hacc-spatial.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-005",
+      "relation": "TESTED_BY",
+      "target": "tests/contract/test_openapi_contract.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-005",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_hacc_stack.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-005",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_hacc_api.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-005",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/domain/test_beds.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-006",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/hacc-readonly.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-006",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-006",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0005-hacc-adapter-and-scopes.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-006",
+      "relation": "SERVES",
+      "target": "OUT-HACC-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-006",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-010-hacc-spatial.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-HACC-006",
+      "relation": "TESTED_BY",
+      "target": "tests/e2e/test_panel.py",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -1910,6 +2253,13 @@
     {
       "source": "clients/web-fallback/app.js",
       "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-006",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/web-fallback/app.js",
+      "relation": "IMPLEMENTS",
       "target": "REQ-UX-001",
       "status": "VERIFIED",
       "origin": "traceability.csv"
@@ -1924,6 +2274,13 @@
     {
       "source": "clients/web-fallback/index.html",
       "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-006",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/web-fallback/index.html",
+      "relation": "IMPLEMENTS",
       "target": "REQ-UX-001",
       "status": "VERIFIED",
       "origin": "traceability.csv"
@@ -1932,6 +2289,13 @@
       "source": "clients/web-fallback/index.html",
       "relation": "IMPLEMENTS",
       "target": "REQ-UX-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/web-fallback/style.css",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-006",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -2090,6 +2454,13 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "packages/domain/src/spatial_domain/beds.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "packages/domain/src/spatial_domain/markers.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-MNT-001",
@@ -2114,6 +2485,41 @@
       "source": "packages/domain/src/spatial_domain/telemetry.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-MNT-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/hacc/src/spatial_hacc/http.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/hacc/src/spatial_hacc/models.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/hacc/src/spatial_hacc/simulated.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/hacc/src/spatial_hacc/simulated.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/hacc/src/spatial_hacc/source.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-002",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -2225,6 +2631,13 @@
     {
       "source": "services/api/app/auth.py",
       "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/auth.py",
+      "relation": "IMPLEMENTS",
       "target": "REQ-SEC-003",
       "status": "VERIFIED",
       "origin": "traceability.csv"
@@ -2247,6 +2660,34 @@
       "source": "services/api/app/config.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-SEC-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/hacc_routes.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/hacc_routes.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/hacc_routes.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/hacc_routes.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-005",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -2275,6 +2716,13 @@
       "source": "services/api/app/main.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-AI-006",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/main.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-HACC-001",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },

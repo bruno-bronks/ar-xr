@@ -17,6 +17,8 @@
       <select id="org">
         <option value="demo-operator-a">Organização A (demo)</option>
         <option value="demo-operator-b">Organização B (demo)</option>
+        <option value="demo-nurse-a">Enfermagem A (demo · leitos)</option>
+        <option value="demo-nurse-b">Enfermagem B (demo · leitos)</option>
         <option value="invalid-token">Token inválido (teste de erro)</option>
       </select>
       <span id="freshness" class="freshness" role="status">Aguardando dados…</span>
@@ -47,6 +49,21 @@
     </form>
     <p id="assistant-error" class="banner banner-error" role="alert" data-testid="assistant-error" hidden></p>
     <div id="assistant-result" class="assistant-result" data-testid="assistant-result" aria-live="polite" hidden></div>
+  </section>
+
+  <section id="hacc-section" aria-labelledby="hacc-title" class="hacc">
+    <h2 id="hacc-title">Leitos (HACC Spatial · dados <strong>simulados</strong>)</h2>
+    <p class="muted">
+      Estado <strong>operacional</strong> por regra (alarmes, chamada, limpeza); sem dados de pessoas e sem
+      recomendação clínica. Exige o escopo <code>hacc:read</code>; dado ausente aparece como Desconhecido ou Offline.
+    </p>
+    <p id="hacc-msg" class="banner banner-error" role="status" data-testid="hacc-msg" hidden></p>
+    <div id="hacc-controls" class="hacc-controls" hidden>
+      <label for="hacc-ward">Ala</label>
+      <select id="hacc-ward"></select>
+      <span id="hacc-summary" class="muted" data-testid="hacc-summary"></span>
+    </div>
+    <div id="hacc-plan" class="plan" data-testid="hacc-plan" data-stale="false" hidden></div>
   </section>
 
   <main>

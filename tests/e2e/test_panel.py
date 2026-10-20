@@ -303,3 +303,135 @@ def test_assistant_form_fits_a_360px_phone(browser: Browser) -> None:
     context.close()
 
     assert overflow <= 0
+
+
+# --- HACC Spatial: planta 2D de leitos (SPEC-010, REQ-HACC-006) ---------------------------------
+
+EVIDENCE_P4 = Path(__file__).resolve().parents[2] / "docs/evidence/phase-4"
+
+
+def _nurse(page: Page, token: str = "demo-nurse-a") -> None:  # noqa: S107 - token demo publico
+    page.select_option("#org", token)
+
+
+def test_nurse_sees_the_ward_floor_plan_with_status_text_and_icon(page: Page) -> None:
+    _nurse(page)
+
+    plan = page.get_by_test_id("hacc-plan")
+    expect(page.get_by_test_id("bed-A1-05")).to_be_visible(timeout=15_000)
+    expect(page.locator("#hacc-ward option")).to_have_text(
+        ["WARD-A1 · Ala A - Clínica (demo)", "WARD-UTI · UTI (demo)"]
+    )
+    expect(page.locator("[data-testid^='bed-']")).to_have_count(6)
+    expect(page.get_by_test_id("bed-A1-05")).to_have_attribute("data-status", "NORMAL")
+    expect(page.get_by_test_id("bed-A1-05")).to_contain_text("Normal")
+    unknown = page.get_by_test_id("bed-A1-06")  # leito sem nenhuma leitura
+    expect(unknown).to_have_attribute("data-status", "UNKNOWN")
+    expect(unknown).to_contain_text("Desconhecido")
+    expect(unknown).to_contain_text("sem leitura")
+    expect(unknown).not_to_contain_text("Normal")
+    expect(page.get_by_test_id("hacc-msg")).to_be_hidden()
+    expect(plan).to_have_attribute("data-stale", "false")
+    EVIDENCE_P4.mkdir(parents=True, exist_ok=True)
+    page.screenshot(path=str(EVIDENCE_P4 / "panel-hacc-ward.png"), full_page=True)
+
+
+def test_silent_bed_is_offline_in_the_icu_ward(page: Page) -> None:
+    _nurse(page)
+    expect(page.get_by_test_id("bed-A1-05")).to_be_visible(timeout=15_000)
+
+    page.select_option("#hacc-ward", "WARD-UTI")
+
+    silent = page.get_by_test_id("bed-U-03")
+    expect(silent).to_have_attribute("data-status", "OFFLINE", timeout=10_000)
+    expect(silent).to_contain_text("Offline")
+    expect(silent).to_contain_text("Sem dados recentes")
+    expect(page.locator("[data-testid^='bed-']")).to_have_count(4)
+
+
+def test_user_without_hacc_scope_sees_a_notice_and_no_beds(page: Page) -> None:
+    expect(page.get_by_test_id("card-EQ-001")).to_be_visible(timeout=10_000)  # operador A (padrao)
+
+    notice = page.get_by_test_id("hacc-msg")
+    expect(notice).to_be_visible(timeout=10_000)
+    expect(notice).to_contain_text("Sem permissão")
+    expect(page.locator("[data-testid^='bed-']")).to_have_count(0)
+    expect(page.locator("#hacc-ward option")).to_have_count(0)
+
+
+def test_org_b_nurse_only_sees_its_own_ward_and_switching_clears_the_plan(page: Page) -> None:
+    _nurse(page, "demo-nurse-a")
+    expect(page.get_by_test_id("bed-A1-05")).to_be_visible(timeout=15_000)
+
+    _nurse(page, "demo-nurse-b")
+
+    expect(page.get_by_test_id("bed-B-01")).to_be_visible(timeout=15_000)
+    expect(page.locator("#hacc-ward option")).to_have_text(["WARD-B1 · Ala B1 sentinela (demo)"])
+    expect(page.get_by_test_id("bed-A1-05")).to_have_count(0)
+    expect(page.locator("[data-testid^='bed-']")).to_have_count(2)
+
+
+def test_hacc_text_is_rendered_as_text_never_as_html(page: Page) -> None:
+    dialogs: list[str] = []
+    page.on("dialog", lambda d: dialogs.append(d.message))
+    ward = (
+        '[{"ward_id":"W","name":"<img src=x onerror=alert(1)>","bed_count":1,'
+        '"status":"ALERT","alert_count":1}]'
+    )
+    beds = (
+        '{"ward":{"ward_id":"W","name":"<img src=x onerror=alert(2)>","width":1,"height":1},'
+        '"evaluated_at":"2026-10-20T12:00:00Z","status":"ALERT","beds":[{"bed_id":"B",'
+        '"label":"<script>alert(3)</script>","x":1,"y":1,"occupied":true,"status":"ALERT",'
+        '"observed_at":"2026-10-20T12:00:00Z","alerts":[{"severity":"ALERT","rule":"<b>x</b>"}]}]}'
+    )
+    page.route(
+        "**/api/v1/hacc/wards",
+        lambda r: r.fulfill(status=200, content_type="application/json", body=ward),
+    )
+    page.route(
+        "**/api/v1/hacc/wards/W/beds",
+        lambda r: r.fulfill(status=200, content_type="application/json", body=beds),
+    )
+    _nurse(page)
+
+    plan = page.get_by_test_id("hacc-plan")
+    expect(plan).to_contain_text("<script>alert(3)</script>", timeout=15_000)
+    expect(page.locator("#hacc-section img, #hacc-section script, #hacc-section b")).to_have_count(
+        0
+    )
+    assert dialogs == []
+
+
+def test_hacc_unavailable_is_visible_and_keeps_the_last_plan_marked_stale(page: Page) -> None:
+    _nurse(page)
+    expect(page.get_by_test_id("bed-A1-05")).to_be_visible(timeout=15_000)
+
+    page.route(
+        "**/api/v1/hacc/**",
+        lambda r: r.fulfill(
+            status=503, content_type="application/json", body='{"detail":"hacc source unavailable"}'
+        ),
+    )
+
+    expect(page.get_by_test_id("hacc-msg")).to_contain_text("indisponível", timeout=15_000)
+    expect(page.get_by_test_id("bed-A1-05")).to_be_visible()
+    expect(page.get_by_test_id("hacc-plan")).to_have_attribute("data-stale", "true")
+
+
+def test_hacc_plan_has_no_csp_violations_and_fits_a_360px_phone(browser: Browser) -> None:
+    assert BASE_URL is not None
+    context = browser.new_context(viewport={"width": 360, "height": 740})
+    page = context.new_page()
+    messages: list[str] = []
+    page.on("console", lambda m: messages.append(m.text))
+    page.goto(BASE_URL + "/panel/")
+    _nurse(page)
+    expect(page.get_by_test_id("bed-A1-05")).to_be_visible(timeout=15_000)
+
+    overflow = page.evaluate(
+        "document.documentElement.scrollWidth - document.documentElement.clientWidth"
+    )
+    context.close()
+
+    assert overflow <= 0
+    assert [m for m in messages if "Content Security Policy" in m] == []

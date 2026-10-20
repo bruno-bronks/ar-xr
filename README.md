@@ -6,7 +6,8 @@ Plataforma de IA espacial com duas verticais: **AR Maintenance AI** (primeiro MV
 > Fase 1 (vertical industrial, sem AR nativa): Fluxo real e testado:
 > simulador → Mosquitto → worker (valida, deduplica, persiste) → PostgreSQL → API autenticada → **painel web 2D**.
 > **Fase 3 (IA assistiva):** `POST /api/v1/assistant/questions` responde com **trechos literais de documentos aprovados**, fontes, confiança e revisão humana; recusa pedidos de ação física/contorno de segurança; funciona **offline** (LLM é opcional e desligado). A base de conhecimento é **fictícia**. Limites medidos: [docs/evidence/phase-3/eval-report.md](docs/evidence/phase-3/eval-report.md).
-> **Não existe ainda:** HACC (Fase 4), visão computacional/IoT real (Fase 5), cloud (Fase 6). A AR (Fase 2) não foi validada em aparelho.
+> **Fase 4 (HACC Spatial, dados SIMULADOS):** `GET /api/v1/hacc/wards` e `/wards/{id}/beds` (escopo `hacc:read`, segregação por organização, somente leitura) e planta 2D de leitos no painel. O contrato do HACC é **assumido**: nenhuma integração com o HACC real foi feita. Runbook: [docs/runbooks/hacc-spatial.md](docs/runbooks/hacc-spatial.md).
+> **Não existe ainda:** visão computacional/IoT real (Fase 5), cloud (Fase 6). A AR (Fase 2) não foi validada em aparelho e não foi estendida aos leitos.
 > Autenticação é **demo** (tokens fictícios; a API recusa iniciar assim em produção). Detalhes, evidências e limitações: [docs/agent/CURRENT_STATE.md](docs/agent/CURRENT_STATE.md).
 
 ## Pré-requisitos
@@ -42,6 +43,8 @@ Assistente (extrativo, sem custo):
 $body = '{"equipment_id":"EQ-001","question":"Por que a temperatura do compressor está alta?"}'
 curl.exe -s -X POST -H "Authorization: Bearer demo-operator-a" -H "Content-Type: application/json" -d $body http://127.0.0.1:8088/api/v1/assistant/questions
 ```
+
+Leitos simulados: `curl.exe -s -H "Authorization: Bearer demo-nurse-a" http://127.0.0.1:8088/api/v1/hacc/wards` (`demo-nurse-a/b` têm `hacc:read`; os operadores não).
 
 Tokens demo: `demo-operator-a` (org-a: EQ-001…003) e `demo-operator-b` (org-b: EQ-B01, sentinela de isolamento). QR de teste: `QR-EQ-001/002/003` via `GET /api/v1/spatial/markers/{id}`.
 

@@ -109,3 +109,44 @@ class AssistantAnswerOut(_Out):
     fallback_used: bool
     refusal_reason: Literal["physical_action", "safety_bypass", "prompt_injection"] | None
     live_state: AssistantLiveStateOut
+
+
+BedStatusLit = Literal["NORMAL", "ATTENTION", "ALERT", "OFFLINE", "UNKNOWN"]
+
+
+class HaccAlertOut(_Out):
+    severity: Literal["ALERT", "ATTENTION", "OFFLINE"]
+    rule: str
+
+
+class HaccWardSummaryOut(_Out):
+    ward_id: str
+    name: str
+    bed_count: int
+    status: BedStatusLit
+    alert_count: int
+
+
+class HaccBedOut(_Out):
+    bed_id: str
+    label: str
+    x: int
+    y: int
+    occupied: bool
+    status: BedStatusLit
+    observed_at: datetime | None
+    alerts: list[HaccAlertOut]
+
+
+class HaccWardInfoOut(_Out):
+    ward_id: str
+    name: str
+    width: int
+    height: int
+
+
+class HaccWardBedsOut(_Out):
+    ward: HaccWardInfoOut
+    evaluated_at: datetime
+    status: BedStatusLit
+    beds: list[HaccBedOut]

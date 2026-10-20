@@ -12,6 +12,7 @@ def _env(monkeypatch: pytest.MonkeyPatch, **values: str) -> None:
     for key in (
         "DATABASE_URL", "MQTT_HOST", "MQTT_PORT", "ENVIRONMENT", "LOG_LEVEL",
         "ASSISTANT_PROVIDER", "ANTHROPIC_API_KEY", "ASSISTANT_MODEL", "ASSISTANT_RATE_LIMIT",
+        "HACC_SOURCE", "HACC_BASE_URL", "HACC_ALLOWED_HOSTS",
     ):  # fmt: skip
         monkeypatch.delenv(key, raising=False)
     for key, value in values.items():
@@ -111,3 +112,38 @@ def test_api_key_never_appears_in_repr_or_str(monkeypatch: pytest.MonkeyPatch) -
     assert "sk-ant-SEGREDO" not in str(settings)
     assert settings.anthropic_api_key is not None
     assert settings.anthropic_api_key.get_secret_value() == "sk-ant-SEGREDO"
+
+
+def test_hacc_defaults_to_the_simulated_source(monkeypatch: pytest.MonkeyPatch) -> None:
+    """SPEC-010 · REQ-HACC-001 (D-025): sem configuracao, nenhum HACC real e contatado."""
+    _env(monkeypatch, DATABASE_URL=URL)
+
+    settings = Settings()
+
+    assert settings.hacc_source == "simulated"
+    assert settings.hacc_base_url is None
+
+
+@pytest.mark.parametrize(
+    "extra",
+    [{}, {"HACC_BASE_URL": "https://hacc.example.com"}, {"HACC_ALLOWED_HOSTS": "hacc.example.com"}],
+)
+def test_http_hacc_requires_base_url_and_allowed_hosts(
+    monkeypatch: pytest.MonkeyPatch, extra: dict[str, str]
+) -> None:
+    _env(monkeypatch, DATABASE_URL=URL, HACC_SOURCE="http", **extra)
+
+    with pytest.raises(ValidationError):
+        Settings()
+
+
+def test_http_hacc_with_url_and_hosts_is_accepted(monkeypatch: pytest.MonkeyPatch) -> None:
+    _env(
+        monkeypatch,
+        DATABASE_URL=URL,
+        HACC_SOURCE="http",
+        HACC_BASE_URL="https://hacc.example.com",
+        HACC_ALLOWED_HOSTS="hacc.example.com, other.example.com",
+    )
+
+    assert Settings().hacc_source == "http"

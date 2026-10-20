@@ -38,4 +38,6 @@ Decisões estruturais: [ADR-0001](../adr/0001-modular-first.md) (três deployabl
 
 O assistente de IA (Fase 3, [SPEC-009](../../specs/functional/SPEC-009-ai-assistant.md), [ADR-0004](../adr/0004-assistant-architecture.md)) roda **dentro da API** (pacote `packages/assistant`; base em `knowledge/`, copiada para `/srv/knowledge` na imagem); não há novo container nem chamada de rede por padrão.
 
-Não existem ainda (fases futuras): adapter HACC (Fase 4). O cliente Unity/AR (Fase 2) existe, mas a cola Unity nunca foi compilada nem validada em aparelho.
+O HACC Spatial (Fase 4, [SPEC-010](../../specs/functional/SPEC-010-hacc-spatial.md), [ADR-0005](../adr/0005-hacc-adapter-and-scopes.md)) também roda **dentro da API** (pacote `packages/hacc`): fonte simulada por padrão; adaptador HTTP somente leitura opcional e desligado. Sem banco compartilhado e sem novo container.
+
+O cliente Unity/AR (Fase 2) existe, mas a cola Unity nunca foi compilada nem validada em aparelho, e não foi estendido aos leitos.

@@ -7,4 +7,4 @@ useDefault = true
 
 [allowlist]
 description = "Tokens demo ficticios usados nos exemplos de curl da documentacao"
-regexes = ['''demo-operator-[ab]\b''']
+regexes = ['''demo-(operator|nurse)-[ab]\b''']

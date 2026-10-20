@@ -1,0 +1,77 @@
+% Z-006 — Estado operacional do leito e escopo de acesso (SPEC-010, REQ-HACC-004, REQ-HACC-005)
+%
+% VERIFICAÇÃO: parse + typecheck com CZT via scripts/verify-z.ps1. NÃO prova teoremas;
+% as conjecturas (\vdash?) são checadas por Hypothesis em tests/unit/domain/test_beds.py
+% e tests/unit/api/test_hacc_api.py.
+\documentclass{article}
+\begin{document}
+
+\section*{Z-006: Bed status and access}
+
+\begin{zed}
+  [ORG, BED, USER]
+\end{zed}
+
+\begin{zed}
+  FLAG ::= on | off \\
+  BEDSTATUS ::= normal | attention | alert | offline | unknown
+\end{zed}
+
+\begin{schema}{EvaluateBed}
+  hasReading : FLAG \\
+  fresh : FLAG \\
+  occupied : FLAG \\
+  bedExit : FLAG \\
+  ivAlarm : FLAG \\
+  callButton : FLAG \\
+  cleaningDue : FLAG \\
+  status! : BEDSTATUS
+\where
+  hasReading = off \iff status! = unknown \\
+  (hasReading = on \land fresh = off) \iff status! = offline \\
+  (hasReading = on \land fresh = on \land
+    (ivAlarm = on \lor (bedExit = on \land occupied = on))) \iff status! = alert \\
+  (hasReading = on \land fresh = on \land \lnot (ivAlarm = on \lor (bedExit = on \land occupied = on))
+    \land (callButton = on \lor cleaningDue = on)) \iff status! = attention \\
+  (hasReading = on \land fresh = on \land \lnot (ivAlarm = on \lor (bedExit = on \land occupied = on))
+    \land callButton = off \land cleaningDue = off) \iff status! = normal
+\end{schema}
+
+\begin{schema}{BedAccess}
+  scopeOf : USER \pfun \power ORG \\
+  tenantOf : BED \pfun ORG \\
+  allowed : USER \rel BED
+\where
+  \forall u : USER; b : BED @ (u, b) \in allowed \iff
+    (b \in \dom tenantOf \land u \in \dom scopeOf \land tenantOf~b \in scopeOf~u)
+\end{schema}
+
+\subsection*{Conjecturas}
+
+B1: leitura ausente nunca é \emph{normal} (nem \emph{offline}).
+
+\begin{zed}
+  \vdash? \forall EvaluateBed @ hasReading = off \implies status! = unknown
+\end{zed}
+
+B2: leitura velha é sempre \emph{offline}, qualquer que seja o sinalizador (precedência).
+
+\begin{zed}
+  \vdash? \forall EvaluateBed @ (hasReading = on \land fresh = off) \implies status! = offline
+\end{zed}
+
+B3: \emph{normal} implica ausência de qualquer alarme ou pendência efetiva.
+
+\begin{zed}
+  \vdash? \forall EvaluateBed @ status! = normal \implies
+    (callButton = off \land cleaningDue = off \land ivAlarm = off)
+\end{zed}
+
+B4: acesso a um leito só existe dentro da organização do usuário.
+
+\begin{zed}
+  \vdash? \forall BedAccess; u : USER; b : BED @ (u, b) \in allowed \implies
+    tenantOf~b \in scopeOf~u
+\end{zed}
+
+\end{document}

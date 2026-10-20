@@ -1,0 +1,80 @@
+openapi: 3.1.0
+info:
+  title: Contrato ASSUMIDO do HACC (somente leitura)
+  version: 0.1.0
+  summary: Suposição desta plataforma sobre o que o HACC exporia. NÃO verificado contra o HACC real.
+  description: |
+    Este documento define o que o `HttpHaccSource` espera. Foi escrito pela plataforma (agente), sem
+    ler o repositório, o banco ou qualquer endpoint do HACC real (D-025). Antes de qualquer uso real,
+    o contrato verdadeiro do HACC deve substituir este, com análise LGPD e autorização.
+
+    Regras do cliente: somente `GET`; sem redirecionamentos; timeout 5 s; corpo <= 1 MB; qualquer
+    campo fora deste schema rejeita o payload inteiro (minimização, D-028).
+x-verified-against-real-hacc: false
+servers:
+  - url: https://hacc.invalid
+    description: Placeholder; o host real vem de HACC_BASE_URL e da lista permitida
+paths:
+  /v1/wards:
+    get:
+      operationId: haccListWards
+      summary: Alas visíveis ao cliente de leitura
+      responses:
+        "200":
+          description: Lista de alas
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Ward" }
+  /v1/wards/{ward_id}/beds:
+    get:
+      operationId: haccListBeds
+      summary: Leitos da ala com sinalizadores operacionais
+      parameters:
+        - name: ward_id
+          in: path
+          required: true
+          schema: { type: string, minLength: 1, maxLength: 64, pattern: "^[A-Za-z0-9._:-]+$" }
+      responses:
+        "200":
+          description: Lista de leitos
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Bed" }
+components:
+  schemas:
+    Ward:
+      type: object
+      required: [ward_id, tenant_id, name, width, height]
+      additionalProperties: false
+      properties:
+        ward_id: { type: string, pattern: "^[A-Za-z0-9._:-]{1,64}$" }
+        tenant_id: { type: string, pattern: "^[A-Za-z0-9._:-]{1,64}$" }
+        name: { type: string, minLength: 1, maxLength: 120 }
+        width: { type: integer, minimum: 1, maximum: 100 }
+        height: { type: integer, minimum: 1, maximum: 100 }
+    Bed:
+      type: object
+      required: [bed_id, ward_id, tenant_id, label, x, y, occupied, flags, observed_at]
+      additionalProperties: false
+      properties:
+        bed_id: { type: string, pattern: "^[A-Za-z0-9._:-]{1,64}$" }
+        ward_id: { type: string, pattern: "^[A-Za-z0-9._:-]{1,64}$" }
+        tenant_id: { type: string, pattern: "^[A-Za-z0-9._:-]{1,64}$" }
+        label: { type: string, minLength: 1, maxLength: 40 }
+        x: { type: integer, minimum: 1, maximum: 100 }
+        y: { type: integer, minimum: 1, maximum: 100 }
+        occupied: { type: boolean }
+        observed_at: { type: [string, "null"], format: date-time }
+        flags:
+          type: object
+          required: [bed_exit_alarm, iv_pump_alarm, call_button, cleaning_due]
+          additionalProperties: false
+          properties:
+            bed_exit_alarm: { type: boolean }
+            iv_pump_alarm: { type: boolean }
+            call_button: { type: boolean }
+            cleaning_due: { type: boolean }

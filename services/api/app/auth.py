@@ -1,16 +1,18 @@
 """Autenticacao (SPEC-006; REQ-SEC-003). Modo demo explicito, fail closed em producao (D-009)."""
 
 import hmac
-from dataclasses import dataclass
-from typing import Protocol
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from typing import Annotated, Protocol
 
-from fastapi import HTTPException, Request
+from fastapi import Depends, HTTPException, Request
 
 
 @dataclass(frozen=True)
 class Principal:
     user_id: str
     org_id: str
+    scopes: frozenset[str] = field(default_factory=frozenset)  # ex.: hacc:read (D-027)
 
 
 class Authenticator(Protocol):
@@ -23,6 +25,8 @@ class DemoAuthenticator:
     _TOKENS: dict[str, Principal] = {  # noqa: RUF012
         "demo-operator-a": Principal("user-a", "org-a"),
         "demo-operator-b": Principal("user-b", "org-b"),
+        "demo-nurse-a": Principal("nurse-a", "org-a", frozenset({"hacc:read"})),
+        "demo-nurse-b": Principal("nurse-b", "org-b", frozenset({"hacc:read"})),
     }
 
     def authenticate(self, token: str) -> Principal | None:
@@ -60,3 +64,17 @@ def require_principal(request: Request) -> Principal:
     if principal is None:
         raise unauthorized
     return principal
+
+
+def require_scope(scope: str) -> Callable[..., Principal]:
+    """Dependencia FastAPI: autenticado E com o escopo; senao 403 uniforme (REQ-HACC-004)."""
+
+    def dependency(principal: Annotated[Principal, Depends(require_principal)]) -> Principal:
+        if scope not in principal.scopes:
+            from app.audit import audit  # import tardio: audit importa Principal deste modulo
+
+            audit(principal, "hacc.access", "hacc", "forbidden")
+            raise HTTPException(status_code=403, detail="forbidden")
+        return principal
+
+    return dependency

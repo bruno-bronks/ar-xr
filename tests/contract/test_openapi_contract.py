@@ -1,6 +1,6 @@
 """Contrato HTTP (spec-first): specs/contracts/openapi.yaml <-> API real.
 
-Requisitos: REQ-ENG-002, REQ-ENG-003, REQ-MNT-006, REQ-AI-006.
+Requisitos: REQ-ENG-002, REQ-ENG-003, REQ-MNT-006, REQ-AI-006, REQ-HACC-002, REQ-HACC-004, REQ-HACC-005.
 """
 
 from pathlib import Path
@@ -55,7 +55,7 @@ def test_every_operation_declares_implementation_status() -> None:
 
 
 def test_mvp_contract_endpoints_are_all_declared() -> None:
-    """Plano mestre, secao 7."""
+    """Plano mestre, secao 7 (+ rotas de HACC Spatial da Fase 4)."""
     declared = _operations("implemented") | _operations("planned")
 
     assert declared == {
@@ -68,6 +68,8 @@ def test_mvp_contract_endpoints_are_all_declared() -> None:
         ("/api/v1/equipment/{equipment_id}/alerts", "get"),
         ("/api/v1/assistant/questions", "post"),
         ("/api/v1/spatial/markers/{marker_id}", "get"),
+        ("/api/v1/hacc/wards", "get"),
+        ("/api/v1/hacc/wards/{ward_id}/beds", "get"),
     }
 
 
@@ -299,3 +301,83 @@ def test_contract_rejects_an_answered_response_without_sources() -> None:
             "refusal_reason": "physical_action",
         }
     )
+
+
+# --- HACC Spatial (SPEC-010) ----------------------------------------------------------------------
+
+HACC_WARDS = "/api/v1/hacc/wards"
+HACC_BEDS = "/api/v1/hacc/wards/{ward_id}/beds"
+NURSE = {"Authorization": "Bearer demo-nurse-a"}
+
+
+def _hacc_schema(template: str, code: str) -> dict[str, Any]:
+    response = SPEC["paths"][template]["get"]["responses"][code]
+    if "$ref" in response:
+        response = SPEC["components"]["responses"][response["$ref"].rsplit("/", 1)[1]]
+    schema: dict[str, Any] = response["content"]["application/json"]["schema"]
+    return schema
+
+
+def _hacc_client() -> TestClient:
+    from spatial_hacc.simulated import SimulatedHaccSource
+
+    from tests.unit.api._app import NOW
+
+    return TestClient(
+        make_app(hacc=SimulatedHaccSource(lambda: NOW)), raise_server_exceptions=False
+    )
+
+
+@pytest.mark.parametrize(
+    ("template", "concrete", "headers", "code"),
+    [
+        (HACC_WARDS, "/api/v1/hacc/wards", NURSE, "200"),
+        (HACC_BEDS, "/api/v1/hacc/wards/WARD-A1/beds", NURSE, "200"),
+        (HACC_BEDS, "/api/v1/hacc/wards/WARD-UTI/beds", NURSE, "200"),
+        (HACC_BEDS, "/api/v1/hacc/wards/WARD-B1/beds", NURSE, "404"),
+        (HACC_WARDS, "/api/v1/hacc/wards", {"Authorization": "Bearer demo-operator-a"}, "403"),
+        (
+            HACC_BEDS,
+            "/api/v1/hacc/wards/WARD-A1/beds",
+            {"Authorization": "Bearer demo-operator-a"},
+            "403",
+        ),
+        (HACC_WARDS, "/api/v1/hacc/wards", {}, "401"),
+    ],
+)
+def test_hacc_responses_conform_to_the_contract(
+    template: str, concrete: str, headers: dict[str, str], code: str
+) -> None:
+    response = _hacc_client().get(concrete, headers=headers)
+
+    assert str(response.status_code) == code
+    assert code in SPEC["paths"][template]["get"]["responses"]
+    _validator(_hacc_schema(template, code)).validate(response.json())
+
+
+def test_hacc_503_conforms_to_the_contract() -> None:
+    class Down:
+        def list_wards(self) -> list[Any]:
+            from spatial_hacc.source import HaccUnavailable
+
+            raise HaccUnavailable("x")
+
+        def list_beds(self, ward_id: str) -> list[Any]:
+            return self.list_wards()
+
+    client = TestClient(make_app(hacc=Down()), raise_server_exceptions=False)
+    response = client.get("/api/v1/hacc/wards", headers=NURSE)
+
+    assert response.status_code == 503
+    _validator(_hacc_schema(HACC_WARDS, "503")).validate(response.json())
+
+
+def test_assumed_hacc_contract_is_marked_unverified_and_is_read_only() -> None:
+    assumed = yaml.safe_load((ROOT / "specs/contracts/hacc-readonly.yaml").read_text("utf-8"))
+
+    validate(assumed)
+    assert assumed["x-verified-against-real-hacc"] is False
+    methods = {m for item in assumed["paths"].values() for m in item if m in HTTP_METHODS}
+    assert methods == {"get"}
+    for name in ("Ward", "Bed"):
+        assert assumed["components"]["schemas"][name]["additionalProperties"] is False

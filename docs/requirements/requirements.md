@@ -67,11 +67,17 @@ Legenda de **Fase**: quando o requisito é implementado. Requisitos de fases fut
 | REQ-AI-006 | `POST /api/v1/assistant/questions` exige autenticação, isola por organização (equipamento alheio ≡ inexistente, 404 uniforme), tem rate limit por usuário e **nunca** registra o texto da pergunta ou da resposta (apenas metadados). | OUT-MNT-003 | 3 |
 | REQ-AI-007 | Um conjunto de avaliação rotulado mede alucinação (respostas com afirmações sem suporte), precisão de citação e taxa de recusa/abstenção correta; o relatório declara o tamanho e os limites do conjunto. | OUT-MNT-003 | 3 |
 
-## Planejados (fases futuras — sem implementação)
+## HACC Spatial (Fase 4)
 
 | ID | Requisito | Outcome | Fase |
 |---|---|---|---|
 | REQ-HACC-001 | Visualização de leitos usa apenas dados **simulados**; acesso não autorizado é bloqueado; HACC original preservado. | OUT-HACC-001 | 4 |
+| REQ-HACC-002 | O acesso ao HACC é **somente leitura**: a porta `HaccSource` só tem operações de leitura; o adaptador HTTP só envia `GET` a caminhos permitidos, em host/esquema permitidos, sem seguir redirecionamentos, com timeout e limite de tamanho; falha do HACC vira 503 uniforme sem vazar detalhes. | OUT-HACC-001 | 4 |
+| REQ-HACC-003 | Minimização: o modelo de leito não tem campo identificável de pessoa; payload com campos fora da lista permitida é **rejeitado por inteiro**; o conjunto simulado é determinístico e fictício. | OUT-HACC-001 | 4 |
+| REQ-HACC-004 | Autorização e segregação: `/api/v1/hacc/*` exige autenticação **e** o escopo `hacc:read`; sem escopo ⇒ 403; ala/leito de outra organização ≡ inexistente (404 uniforme); a organização é imposta no nosso lado, nunca confiada à resposta do HACC; todo acesso é auditado sem dados de leito. | OUT-HACC-001 | 4 |
+| REQ-HACC-005 | O estado do leito é por **regra determinística e operacional** (sem interpretação clínica): ausência de leitura ⇒ `UNKNOWN`, leitura velha ⇒ `OFFLINE` (precedência), alarmes ⇒ `ALERT`/`ATTENTION`; nunca `NORMAL` por dado ausente. | OUT-HACC-001 | 4 |
+| REQ-HACC-006 | O painel mostra a planta 2D da ala com os leitos, estado (texto + ícone, não só cor), alertas operacionais e frescor; usuário sem escopo vê aviso explícito e nenhum dado; todo texto da API entra como texto. | OUT-HACC-001 | 4 |
+
 
 ## Decisões de default explícitas (precisam de aprovação)
 
@@ -101,3 +107,11 @@ Legenda de **Fase**: quando o requisito é implementado. Requisitos de fases fut
 | D-022 | Texto de pergunta/resposta nunca vai para log; o log guarda comprimento, desfecho, provedor, ids de fonte e correlation ID. | Pergunta pode conter dados sensíveis; minimização. | Sim |
 | D-023 | Rate limit do assistente: 10 perguntas/min por usuário (o LLM tem custo). | Evita abuso e gasto. | Sim |
 | D-024 | **Aprovadas pelo usuário em 2026-10-20: D-018 a D-023** (assistente extrativo por padrão, base de conhecimento fictícia, recusa heurística, limiar de evidência, log sem texto, rate limit de 10/min). A aprovação **não** valida o conteúdo dos documentos fictícios nem o LLM, que continuam sem revisão/validação real. | Registro da decisão do usuário. | Sim |
+| D-025 | Fase 4 (**você pediu "Fazer a Fase 4" sem informar como o HACC expõe dados**): construo contra um **contrato assumido, somente leitura** (`specs/contracts/hacc-readonly.yaml`, marcado como NÃO verificado contra o HACC real) e uma **fonte simulada** como padrão. Nenhum repositório, banco ou endpoint real do HACC foi lido, tocado ou conectado. | O plano proíbe integração real sem autorização/LGPD e mexer no HACC. | Sim |
+| D-026 | Porta `HaccSource` com duas implementações reais (simulada, padrão; HTTP somente leitura, opcional e desligada). Troca por configuração (`HACC_SOURCE=simulated\|http`). | Strategy/Adapter só porque há segunda implementação (AGENTS.md). | Sim |
+| D-027 | Autorização por **escopo**: `Principal` ganha `scopes`; novos tokens demo `demo-nurse-a` (org-a) e `demo-nurse-b` (org-b) têm `hacc:read`; `demo-operator-*` **não** têm. Endpoints de equipamento continuam sem escopo (RBAC completo segue pendente). | Menor privilégio para dados de leitos sem reescrever a Fase 1. | Sim |
+| D-028 | Leito = id opaco, rótulo, posição (x, y) na planta, `occupied` (bool), sinalizadores operacionais (`bed_exit_alarm`, `iv_pump_alarm`, `call_button`, `cleaning_due`) e `observed_at`. **Sem** identificação de paciente, sinais vitais ou diagnóstico. | Minimização; nenhuma recomendação clínica. | Sim |
+| D-029 | Regras de estado do leito: sem leitura ⇒ `UNKNOWN`; leitura mais velha que 30 s ⇒ `OFFLINE` (precedência); `bed_exit_alarm` (só se ocupado) ou `iv_pump_alarm` ⇒ `ALERT`; `call_button` ou `cleaning_due` ⇒ `ATTENTION`; senão `NORMAL`. | Mesma filosofia da SPEC-002: dado ausente nunca é normal. | Sim |
+| D-030 | A organização do leito vem do campo `tenant_id` do registro e é comparada com a do principal **no nosso código**; registros de outro tenant são descartados mesmo que o HACC os devolva. | Segregação não pode depender do sistema externo. | Sim |
+| D-031 | Overlay da Fase 4 = planta 2D no painel web. **Não** estendi o cliente AR (cola Unity ainda não compilada nem validada em aparelho). | Não declarar o que não posso validar. | Sim |
+| D-032 | **Aprovadas pelo usuário em 2026-10-20: D-025 a D-031** (contrato do HACC assumido, fonte simulada padrão, escopo `hacc:read`, modelo sem dados de pessoa, regras de estado do leito, tenant imposto no nosso lado, overlay só 2D), com commit, push, PR e redeploy no VPS. A aprovação **não** valida o contrato assumido contra o HACC real nem autoriza qualquer integração real. | Registro da decisão do usuário. | Sim |
