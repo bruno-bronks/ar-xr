@@ -22,7 +22,10 @@ Tudo abaixo foi **executado** nesta máquina (Windows 11, Python 3.13, Docker 29
 - **Alucinação do extrativo: 0** (por construção: só devolve trechos literais). **Precisão de citação: 100 %.**
 - **Verificador de fundamentação contra LLM *simulado*:** rejeitou 11/11 saídas ruins; aceitou 3/4 boas; **aceitou 2/2 inversões semânticas** feitas com as mesmas palavras (limite conhecido do método lexical).
 
+## Redeploy no VPS (2026-10-20)
+Imagens e `compose.yaml` atualizados; `up -d --no-build --wait` saudável; log `knowledge base loaded` com 20 trechos e `rejected: []`. Testes de fora via `https://ar-xr.bronks.ia.br`: painel com o formulário, pergunta respondida (`DOC-COMP-001`), recusa (`physical_action`), org-b 404, sem cookie 401, `GET` 403, outro `POST` 403, corpo grande 413.
+
 ## Não verificado
 - Qualquer chamada a um LLM real (o adaptador Anthropic só foi testado com transporte simulado).
 - Qualidade em produção, com usuários reais ou com documentação real (a base é fictícia, sem revisão humana).
-- Deploy da Fase 3 no VPS (a pilha do VPS continua na versão da Fase 2).
+- Carga/desempenho do assistente no VPS compartilhado (o servidor estava com carga média ~7,6 durante o redeploy).

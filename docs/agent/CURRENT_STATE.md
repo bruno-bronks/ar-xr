@@ -33,10 +33,12 @@ Pilha completa simulador → Mosquitto → worker → PostgreSQL → API (Bearer
 - Testes C# **não rodam na máquina do desenvolvedor** (mesmo bloqueio de NuGet); só compilação local contra stub. Rodam na CI.
 - **Decisões D-013…D-015 adotadas por default** (ZXing.Net, `adb reverse`, projeto no repositório) sem confirmação do usuário (D-016).
 - **Dreaming:** ainda **não** instalado/usado (serviço de nuvem pago, acesso sob solicitação) — **decisão do usuário: opção B (adiar)**, com gatilhos de revisão em `docs/decisions/tool-evaluation.md`. Não atende ao pedido original de instalar/usar; é adiamento assumido.
-- **Fase 3:** base de conhecimento fictícia e sem revisão técnica humana (D-019); nenhum LLM real foi chamado; verificador de fundamentação é lexical (aceita inversões semânticas); D-018…D-023 adotadas por default sem sua confirmação; Fase 3 **não** foi implantada no VPS.
+- **Fase 3:** base de conhecimento fictícia e sem revisão técnica humana (D-019); nenhum LLM real foi chamado; verificador de fundamentação é lexical (aceita inversões semânticas); D-018…D-023 adotadas por default sem sua confirmação; o LLM real não está habilitado no VPS (sem chave).
 - Herdado: autenticação demo, Mosquitto anônimo, rate limit em memória, sem OIDC/RBAC, CI de segurança incompleta (Semgrep/Trivy/SBOM), Python 3.12 local não obtido.
 
-## Implantação de demonstração no VPS (2026-10-19)
+## Implantação de demonstração no VPS (2026-10-19; Fase 3 reimplantada em 2026-10-20)
+**Atualização 2026-10-20:** a versão da Fase 3 (assistente + campo no painel) foi reimplantada no VPS: imagens `api`/`migrate` reconstruídas, `compose.yaml` novo, log de partida com 20 trechos e 0 rejeições. O nginx passou a liberar **somente** `POST /api/v1/assistant/questions` (mesmo cookie do login). Testado de fora: pergunta respondida com fonte, recusa de ação física, org-b recebe 404 uniforme, sem cookie 401, `GET`/outros `POST` 403, corpo > 8 KB 413; outro site do servidor segue respondendo. Backups no servidor: `compose.yaml.bak-phase2` e `ar-xr.bronks.ia.br.bak-phase2`.
+
 Pilha completa rodando em VPS compartilhado, fora da CI: migração OK, `/health/ready` 200, simulador→worker→banco gravando, portas internas só em loopback; painel público em `https://ar-xr.bronks.ia.br/panel/` com login básico, somente leitura. Testado de fora (401 sem login, 200 com login, `POST` 403). Detalhes e limites em `deploy/vps/README.md`; override do Compose em `deploy/vps/compose.override.yaml`. **Não** é produção: auth demo, Mosquitto anônimo, sem monitoramento nem backup.
 
 ## Defeitos encontrados na Fase 2 (corrigidos)
@@ -48,7 +50,7 @@ Pilha completa rodando em VPS compartilhado, fora da CI: migração OK, `/health
 ## Próximo passo (depende de você)
 1. **Fase 3:** revisar e aprovar; pedir commit/push/PR/merge (nada foi enviado). Decidir se aprova D-018…D-023 e se a base fictícia deve ser substituída por documentos reais **aprovados por uma pessoa responsável**.
 2. **AR (Fase 2):** o aparelho escolhido é o Samsung A54 (lista oficial ARCore). Falta instalar Unity Hub (como administrador) + Unity 6.3 LTS com Android Build Support, ligar depuração USB e executar `docs/runbooks/ar-device-checklist.md`; erros de compilação da cola Unity são esperados na 1ª abertura. Só então REQ-AR-001…005 podem virar `verified`.
-3. **VPS:** a demonstração publicada ainda roda a versão da Fase 2; redeploy da Fase 3 só se você pedir. Pendências de segurança lá: trocar a senha root compartilhada no chat e remover a chave de deploy temporária.
+3. **VPS:** a demonstração já roda a Fase 3. Pendências de segurança lá: trocar a senha root compartilhada no chat e remover a chave de deploy temporária.
 4. **Dreaming:** adiado por decisão sua (opção B); gatilhos de revisão em `docs/decisions/tool-evaluation.md`.
 5. **LLM real** para o assistente: exige sua aprovação (serviço pago), chave em `.env` e validação manual do adaptador (nunca testado contra a API real).
 Fase 4 (HACC Spatial) **não** foi iniciada e depende da sua aprovação.
