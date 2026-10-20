@@ -23,8 +23,11 @@ Capturas: [planta da ala A](panel-hacc-ward.png).
 - **Autorização e segregação:** 401 sem token; 403 sem `hacc:read` (operadores); 404 idêntico para ala de outra organização ou inexistente; o `tenant_id` é imposto no nosso código mesmo que a fonte devolva registros alheios.
 - **Estado por regra:** `UNKNOWN` sem leitura, `OFFLINE` com precedência, `ALERT`/`ATTENTION`; ala sem leitos ou com leito sem leitura nunca é `NORMAL`.
 
+## Redeploy no VPS (2026-10-20)
+Imagens e `compose.yaml` atualizados; pilha saudável; `spatial_hacc` importável no contêiner. Testes de fora via `https://ar-xr.bronks.ia.br`: painel com leitos, `demo-nurse-a` (200; `WARD-UTI`: `U-03` OFFLINE), `demo-nurse-b` só `WARD-B1`, operador 403, ala de outra organização 404, `POST` 403, sem cookie 401.
+
 ## Não verificado
 - Qualquer chamada ao HACC real; compatibilidade do contrato assumido; dados reais; análise LGPD; validação clínica.
 - Rate limit e disjuntor nos endpoints `/hacc` (não existem; necessários antes de uma fonte HTTP real).
 - Celular físico (painel só em Edge/viewport emulado) e AR (o cliente Unity não foi estendido aos leitos).
-- Deploy da Fase 4 no VPS (a pilha do VPS continua na versão da Fase 3).
+- Carga/desempenho no VPS compartilhado (média de carga ~10 durante o deploy).
