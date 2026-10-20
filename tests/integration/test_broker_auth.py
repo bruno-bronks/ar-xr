@@ -75,6 +75,13 @@ def broker(tmp_path_factory: pytest.TempPathFactory) -> Iterator[Broker]:
         check=True, capture_output=True, text=True, timeout=120,
     )  # fmt: skip
     try:
+        state = subprocess.run(  # noqa: S603
+            ["docker", "inspect", "-f", "{{.State.Running}}", name],  # noqa: S607
+            capture_output=True, text=True, timeout=30,
+        ).stdout.strip()  # fmt: skip
+        if state != "true":
+            logs = subprocess.run(["docker", "logs", name], capture_output=True, text=True).stdout  # noqa: S603, S607
+            raise AssertionError(f"broker endurecido saiu ao iniciar:\n{logs[-800:]}")
         out = subprocess.run(  # noqa: S603
             ["docker", "port", name, "1883/tcp"],  # noqa: S607
             check=True, capture_output=True, text=True, timeout=30,

@@ -6,6 +6,8 @@ A compatibilidade com o broker REAL e provada em tests/integration/test_broker_a
 import base64
 import hashlib
 import importlib.util
+import stat
+import sys
 from pathlib import Path
 
 import pytest
@@ -78,3 +80,22 @@ def test_credentials_directory_is_gitignored() -> None:
     gitignore = (ROOT / ".gitignore").read_text("utf-8")
 
     assert "platform/mosquitto/secure/" in gitignore
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="modos POSIX nao existem no Windows")
+def test_file_modes_let_the_container_read_the_hashes_but_hide_the_plaintext(
+    tmp_path: Path,
+) -> None:
+    """Achado da CI: passwd 0600 nao e legivel pelo usuario do Mosquitto no contentor (Linux)."""
+    spec = importlib.util.spec_from_file_location(
+        "gen_broker_users", ROOT / "scripts" / "gen_broker_users.py"
+    )
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    passwd, credentials = module.generate(tmp_path, ["EQ-001"])
+
+    assert stat.S_IMODE(passwd.stat().st_mode) & 0o044 == 0o044  # grupo/outros leem os hashes
+    assert stat.S_IMODE(credentials.stat().st_mode) & 0o077 == 0  # senhas em claro: so o dono

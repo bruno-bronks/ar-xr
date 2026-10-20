@@ -36,8 +36,11 @@ def generate(out: Path, devices: list[str]) -> tuple[Path, Path]:
     env_lines += [f"MQTT_DEVICE_PASSWORD_{d.replace('-', '_')}={passwords[d]}" for d in devices]
     credentials = out / "credentials.env"
     credentials.write_text("\n".join(env_lines) + "\n", "utf-8")
-    for path in (passwd, credentials):
-        os.chmod(path, 0o600)  # no Windows e ignorado; em POSIX restringe ao dono
+    # passwd (so hashes): o Mosquitto roda como OUTRO usuario dentro do contentor e precisa LER o arquivo
+    # montado; com 0600 ele sai ao iniciar em Linux (achado da CI). 0644 gera apenas um aviso do broker.
+    # credentials.env (senhas em claro) fica 0600: so o dono, no host.
+    os.chmod(passwd, 0o644)
+    os.chmod(credentials, 0o600)
     return passwd, credentials
 
 

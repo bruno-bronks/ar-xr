@@ -17,7 +17,7 @@ O emulador monta `telemetry-event.v1`, valida com o parser estrito do worker e p
 .\.venv\Scripts\python.exe scripts\gen_broker_users.py --devices EQ-001,EQ-002,EQ-003   # senhas aleatórias; nunca impressas
 docker compose --env-file platform\mosquitto\secure\credentials.env -f compose.yaml -f compose.secure.yaml up --build --wait
 ```
-- `platform/mosquitto/secure/` (hashes + senhas) é **ignorado pelo Git**. Se você já usa um `.env`, passe-o também: `--env-file .env --env-file platform\mosquitto\secure\credentials.env`.
+- `platform/mosquitto/secure/` é **ignorado pelo Git**. O `passwd` (só hashes) sai com modo `0644` porque o Mosquitto roda como outro usuário no contêiner e precisa lê-lo (com `0600` ele não inicia em Linux; o broker 2.0.18 emite só avisos — de arquivo legível e de dono diferente de `mosquitto` — e diz que versões futuras podem recusar: o endurecimento definitivo é `chown mosquitto` + `0700` no servidor, ou imagem derivada); o `credentials.env` (senhas em claro) fica `0600`. Se você já usa um `.env`, passe-o também: `--env-file .env --env-file platform\mosquitto\secure\credentials.env`.
 - ACL (`platform/mosquitto/secure.acl`): `worker` só lê telemetria; `simulator` escreve; `health` só lê `$SYS`; cada dispositivo (usuário = id do equipamento) escreve **apenas** em `spatial/v1/equipment/{usuário}/telemetry` e não recebe nada. Não existe tópico de comando.
 - Emulador no modo endurecido: `$env:MQTT_PASSWORD = "<senha do dispositivo em credentials.env>"` e o mesmo comando acima (usuário = id do equipamento).
 - Observação do Mosquitto: ele pode responder SUBACK "concedido" mesmo sem permissão de leitura; a ACL impede a **entrega** (os testes verificam isso).
