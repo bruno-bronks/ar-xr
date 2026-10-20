@@ -1,0 +1,52 @@
+# Modelo do site nginx do VPS (sem segredos). Instalar como /etc/nginx/sites-available/ar-xr.bronks.ia.br,
+# trocando __GATE__ por um valor aleatorio (openssl rand -hex 24) e criando /etc/nginx/ar-xr.htpasswd
+# (usuario arxr; hash com `openssl passwd -apr1`). Nunca commitar o valor real nem o htpasswd.
+server {
+    listen 80;
+    listen [::]:80;
+    server_name ar-xr.bronks.ia.br;
+    location /.well-known/acme-challenge/ { root /var/www/certbot-arxr; }
+    location / { return 301 https://$host$request_uri; }
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name ar-xr.bronks.ia.br;
+
+    ssl_certificate /etc/letsencrypt/live/ar-xr.bronks.ia.br/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ar-xr.bronks.ia.br/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy no-referrer always;
+
+    # O painel envia "Authorization: Bearer" (token demo) no /api; por isso o login basico protege
+    # /panel/ e entrega um cookie que o /api exige (o navegador nao mistura os dois cabecalhos).
+    location = / { return 302 /panel/; }
+
+    location /panel/ {
+        auth_basic "AR-XR";
+        auth_basic_user_file /etc/nginx/ar-xr.htpasswd;
+        limit_except GET HEAD { deny all; }
+        add_header Set-Cookie "arxr_gate=__GATE__; Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=28800" always;
+        add_header X-Content-Type-Options nosniff always;
+        add_header Referrer-Policy no-referrer always;
+        proxy_pass http://127.0.0.1:8088;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+
+    location /api/ {
+        if ($cookie_arxr_gate != "__GATE__") { return 401; }
+        limit_except GET HEAD { deny all; }
+        proxy_pass http://127.0.0.1:8088;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+
+    location / { return 404; }
+}

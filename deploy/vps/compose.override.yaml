@@ -1,0 +1,43 @@
+# Override para o VPS COMPARTILHADO (copiado para /opt/ar-xr/compose.override.yaml; o Compose o mescla sozinho).
+# Objetivos: nao prejudicar os outros servicos do servidor (limites de CPU/memoria), sobreviver a reboot
+# (restart) e nao encher o disco (rotacao de logs). As portas continuam SOMENTE em 127.0.0.1 (compose.yaml).
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  db:
+    restart: unless-stopped
+    logging: *logging
+    deploy:
+      resources:
+        limits: { cpus: "0.75", memory: 512M }
+  broker:
+    restart: unless-stopped
+    logging: *logging
+    deploy:
+      resources:
+        limits: { cpus: "0.25", memory: 128M }
+  migrate:
+    logging: *logging
+    deploy:
+      resources:
+        limits: { cpus: "0.5", memory: 256M }
+  api:
+    restart: unless-stopped
+    logging: *logging
+    deploy:
+      resources:
+        limits: { cpus: "0.5", memory: 384M }
+  worker:
+    logging: *logging
+    deploy:
+      resources:
+        limits: { cpus: "0.5", memory: 256M }
+  simulator:
+    logging: *logging
+    deploy:
+      resources:
+        limits: { cpus: "0.25", memory: 128M }

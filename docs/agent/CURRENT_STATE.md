@@ -26,6 +26,9 @@ Pilha completa simulador → Mosquitto → worker → PostgreSQL → API (Bearer
 - **Dreaming:** ainda **não** instalado/usado (serviço de nuvem pago, acesso sob solicitação) — decisão pendente do usuário (opções A/B/C da Fase 1).
 - Herdado: autenticação demo, Mosquitto anônimo, rate limit em memória, sem OIDC/RBAC, CI de segurança incompleta (Semgrep/Trivy/SBOM), Python 3.12 local não obtido.
 
+## Implantação de demonstração no VPS (2026-10-19)
+Pilha completa rodando em VPS compartilhado, fora da CI: migração OK, `/health/ready` 200, simulador→worker→banco gravando, portas internas só em loopback; painel público em `https://ar-xr.bronks.ia.br/panel/` com login básico, somente leitura. Testado de fora (401 sem login, 200 com login, `POST` 403). Detalhes e limites em `deploy/vps/README.md`; override do Compose em `deploy/vps/compose.override.yaml`. **Não** é produção: auth demo, Mosquitto anônimo, sem monitoramento nem backup.
+
 ## Defeitos encontrados na Fase 2 (corrigidos)
 1. Driver usava `ConfigureAwait(false)`: a próxima requisição `UnityWebRequest` rodaria fora da thread principal — removido (visto na revisão, antes da CI).
 2. Teste de relógio com `AddSeconds(4.6)` truncava um tick no .NET — instantes exatos em binário.
