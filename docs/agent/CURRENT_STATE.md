@@ -1,6 +1,6 @@
 # CURRENT_STATE — memória determinística do projeto
 
-Atualizado: 2026-10-20 · `main` contém as Fases 0, 1 e 2. **Fase 3 (IA assistiva) implementada na branch `feature/ai-assistant-phase3`, ainda sem commit/push/PR** (aguarda seu pedido e sua aprovação). Fase 2 segue parcial: a validação em aparelho físico depende de hardware (Samsung A54 + Unity) — ver "Próximo passo".
+Atualizado: 2026-10-20 · `main` contém as Fases 0, 1, 2 e 3 (PR #1, #2 e **#3 mesclados** a pedido explícito do usuário; merge do PR #3: 1dad097, CI verde nos 5 jobs; última branch de trabalho: `feature/ai-assistant-phase3`, já mesclada). Fase 2 segue parcial: a validação em aparelho físico depende de hardware (Samsung A54 + Unity) — ver "Próximo passo".
 
 > Validado por `tests/unit/repo/test_agent_memory.py` (links, caminhos e REQs citados precisam existir).
 > Aprovações do usuário: Fase 0, decisões D-001/D-003/D-004/D-006, ADR-0001, Z via CZT, Graphify instalado e usado, Fase 1, merge do PR #1, **Fase 2** (sem responder às decisões D-013…D-015 nem informar o aparelho → ver D-016), Dreaming adiado (opção B), **Fase 3** (pedido de implementação em 2026-10-20) e **D-018…D-023 aprovadas em 2026-10-20** (D-024), com commit/push/PR, campo de pergunta no painel e redeploy no VPS.
@@ -17,7 +17,7 @@ Pilha completa simulador → Mosquitto → worker → PostgreSQL → API (Bearer
 - **Ferramentas:** .NET SDK 10.0.402 em `~/.tools` (SHA-512 verificado) para compilar o núcleo localmente contra um stub; Graphify agora também indexa C# (cruzamento em `graph/mappings/crosscheck.md`).
 - **CI:** job `csharp` e os demais verdes no PR #2 (head f72a2cb), antes do merge.
 
-## Fase 3 — IA assistiva (implementada, branch `feature/ai-assistant-phase3`, não commitada)
+## Fase 3 — IA assistiva (mesclada em `main` pelo PR #3; implantada no VPS)
 - **Spec/decisões:** [SPEC-009](../../specs/functional/SPEC-009-ai-assistant.md), [ADR-0004](../adr/0004-assistant-architecture.md), `specs/formal-z/z-005-assistant-answer.tex` (typecheck CZT OK; nada provado), REQ-AI-001…007 e D-018…D-023 em [requirements.md](../requirements/requirements.md). Runbook: [assistant.md](../runbooks/assistant.md).
 - **Código:** pacote puro `packages/assistant/src/spatial_assistant/` (base, recuperação BM25+cobertura, política de recusa, verificação de fundamentação, serviço), rota `services/api/app/assistant_routes.py` (`POST /api/v1/assistant/questions`), base **fictícia** em `knowledge/` (5 documentos, 20 trechos).
 - **Comportamento:** padrão **extrativo/offline** (trechos literais de documentos aprovados + fontes + confiança lexical + revisão humana); recusa ação física/contorno de segurança/injeção; abstém sem evidência; estado e alertas vêm da **regra** (`live_state`), não da IA; log só com metadados; 10 perguntas/min por usuário; isolamento por organização (404 uniforme).
@@ -48,7 +48,7 @@ Pilha completa rodando em VPS compartilhado, fora da CI: migração OK, `/health
 4. Teste que presumia rigor de tipo do Newtonsoft (número→string) — removido.
 
 ## Próximo passo (depende de você)
-1. **Fase 3:** revisar e aprovar; pedir commit/push/PR/merge (nada foi enviado). Decidir se aprova D-018…D-023 e se a base fictícia deve ser substituída por documentos reais **aprovados por uma pessoa responsável**.
+1. **Fase 3:** mesclada e implantada. Pendente: substituir a base fictícia por documentos reais **aprovados por uma pessoa responsável** (D-018…D-023 já aprovadas, D-024) e, se quiser o LLM real, aprovar o serviço pago e validar o adaptador (nunca testado contra a API).
 2. **AR (Fase 2):** o aparelho escolhido é o Samsung A54 (lista oficial ARCore). Falta instalar Unity Hub (como administrador) + Unity 6.3 LTS com Android Build Support, ligar depuração USB e executar `docs/runbooks/ar-device-checklist.md`; erros de compilação da cola Unity são esperados na 1ª abertura. Só então REQ-AR-001…005 podem virar `verified`.
 3. **VPS:** a demonstração já roda a Fase 3. Pendências de segurança lá: trocar a senha root compartilhada no chat e remover a chave de deploy temporária.
 4. **Dreaming:** adiado por decisão sua (opção B); gatilhos de revisão em `docs/decisions/tool-evaluation.md`.
