@@ -40,4 +40,6 @@ O assistente de IA (Fase 3, [SPEC-009](../../specs/functional/SPEC-009-ai-assist
 
 O HACC Spatial (Fase 4, [SPEC-010](../../specs/functional/SPEC-010-hacc-spatial.md), [ADR-0005](../adr/0005-hacc-adapter-and-scopes.md)) também roda **dentro da API** (pacote `packages/hacc`): fonte simulada por padrão; adaptador HTTP somente leitura opcional e desligado. Sem banco compartilhado e sem novo container.
 
+A Fase 5 não adiciona container de runtime: a visão vive só em `ml/` (offline, ambiente isolado) e o emulador de dispositivo é um módulo do simulador; o broker endurecido é um override opcional (`compose.secure.yaml`).
+
 O cliente Unity/AR (Fase 2) existe, mas a cola Unity nunca foi compilada nem validada em aparelho, e não foi estendido aos leitos.

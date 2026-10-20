@@ -1,7 +1,7 @@
 {
   "generated_from": "docs/requirements/traceability.csv",
   "note": "Arestas VERIFICADAS (a matriz e testada por tests/unit/repo/test_traceability.py).",
-  "edge_count": 407,
+  "edge_count": 465,
   "edges": [
     {
       "source": ".github/workflows/ci.yml",
@@ -795,6 +795,132 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "REQ-CV-001",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0006-vision-poc-and-iot-gate.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-001",
+      "relation": "SERVES",
+      "target": "OUT-CV-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-001",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-011-vision-and-iot.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ml/test_scene_dataset.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-002",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0006-vision-poc-and-iot-gate.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-002",
+      "relation": "SERVES",
+      "target": "OUT-CV-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-002",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-011-vision-and-iot.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-002",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ml/test_compare.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-002",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ml/test_weights.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-003",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0006-vision-poc-and-iot-gate.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-003",
+      "relation": "SERVES",
+      "target": "OUT-CV-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-003",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-011-vision-and-iot.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ml/test_compare.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ml/test_metrics_baselines.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-004",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0006-vision-poc-and-iot-gate.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-004",
+      "relation": "SERVES",
+      "target": "OUT-CV-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-004",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-011-vision-and-iot.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-CV-004",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ml/test_isolation.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "REQ-ENG-001",
       "relation": "CONTRACTED_BY",
       "target": "specs/contracts/openapi.yaml",
@@ -1463,6 +1589,125 @@
       "source": "REQ-HACC-006",
       "relation": "TESTED_BY",
       "target": "tests/e2e/test_panel.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-001",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0006-vision-poc-and-iot-gate.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-001",
+      "relation": "SERVES",
+      "target": "OUT-IOT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-001",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-011-vision-and-iot.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/repo/test_hardware_gate.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-002",
+      "relation": "CONTRACTED_BY",
+      "target": "packages/contracts/telemetry-event.v1.schema.json",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-002",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/asyncapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-002",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0006-vision-poc-and-iot-gate.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-002",
+      "relation": "SERVES",
+      "target": "OUT-IOT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-002",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-011-vision-and-iot.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-002",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_device_emulator_stack.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-002",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/simulator/test_device_emulator.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-003",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0006-vision-poc-and-iot-gate.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-003",
+      "relation": "SERVES",
+      "target": "OUT-IOT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-003",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-011-vision-and-iot.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-003",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_broker_auth.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/common/test_mosquitto_passwd.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-IOT-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/common/test_mqtt_auth.py",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -2314,6 +2559,13 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "compose.secure.yaml",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-IOT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "compose.yaml",
       "relation": "IMPLEMENTS",
       "target": "REQ-ENG-001",
@@ -2328,6 +2580,13 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "docs/hardware/esp32-electrical-safety-plan.md",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-IOT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "docs/requirements/traceability.csv",
       "relation": "IMPLEMENTS",
       "target": "REQ-ENG-006",
@@ -2338,6 +2597,111 @@
       "source": "graph/README.md",
       "relation": "IMPLEMENTS",
       "target": "REQ-ENG-008",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/evaluate.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/evaluate.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/fetch_weights.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/gen_dataset.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/spatial_cv/baselines.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/spatial_cv/compare.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/spatial_cv/compare.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/spatial_cv/compare.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/spatial_cv/dataset.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/spatial_cv/metrics.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/spatial_cv/scene.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/spatial_cv/truth.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/spatial_cv/truth.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/spatial_cv/weights.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "ml/train.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-CV-002",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -2454,6 +2818,20 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "packages/common/src/spatial_common/mosquitto_passwd.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-IOT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/common/src/spatial_common/mqtt_auth.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-IOT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "packages/domain/src/spatial_domain/beds.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-HACC-005",
@@ -2566,9 +2944,30 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "platform/mosquitto/mosquitto.secure.conf",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-IOT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "platform/mosquitto/secure.acl",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-IOT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "scripts/eval_assistant.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-AI-007",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "scripts/gen_broker_users.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-IOT-003",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -2800,6 +3199,13 @@
       "source": "services/equipment-simulator/Dockerfile",
       "relation": "IMPLEMENTS",
       "target": "REQ-ENG-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/equipment-simulator/simulator/device_emulator.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-IOT-002",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },

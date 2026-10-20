@@ -14,3 +14,10 @@ node_modules/
 graphify-out/
 bin/
 obj/
+
+# Fase 5: ambiente de ML e artefatos gerados (dataset e pesos sao reproduziveis por script)
+ml/.venv-ml/
+ml/data/
+ml/runs/
+ml/weights/
+platform/mosquitto/secure/
