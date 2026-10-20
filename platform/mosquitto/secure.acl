@@ -1,0 +1,18 @@
+# ACL do broker endurecido. Topico MQTT NAO substitui autorizacao da API (S-02): isto so limita quem
+# publica/assina no broker. Padrao de telemetria: spatial/v1/equipment/{equipment_id}/telemetry
+
+# Worker: le a telemetria de todos os equipamentos (nao publica).
+user worker
+topic read spatial/v1/equipment/+/telemetry
+
+# Simulador de demonstracao: publica para os equipamentos semeados.
+user simulator
+topic write spatial/v1/equipment/+/telemetry
+
+# Healthcheck do Compose: so le estatisticas do broker.
+user health
+topic read $SYS/#
+
+# Dispositivos (ESP32 ou emulador): usuario = id do equipamento; escreve SO no proprio topico
+# e nao le nada. %u e substituido pelo nome de usuario autenticado.
+pattern write spatial/v1/equipment/%u/telemetry

@@ -1,0 +1,24 @@
+# OVERRIDE OPT-IN: broker com autenticacao e ACL (SPEC-011, REQ-IOT-003, D-039).
+# 1) python scripts/gen_broker_users.py            (cria platform/mosquitto/secure/ — ignorado pelo Git)
+# 2) docker compose --env-file platform/mosquitto/secure/credentials.env \
+#      -f compose.yaml -f compose.secure.yaml up --build --wait
+# Sem TLS ainda: nao use com dispositivos reais (ver docs/hardware/esp32-electrical-safety-plan.md).
+services:
+  broker:
+    environment:
+      MQTT_HEALTH_PASSWORD: ${MQTT_HEALTH_PASSWORD:?rode scripts/gen_broker_users.py}
+    volumes:
+      - ./platform/mosquitto/mosquitto.secure.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./platform/mosquitto/secure/passwd:/mosquitto/config/passwd:ro
+      - ./platform/mosquitto/secure.acl:/mosquitto/config/acl:ro
+      - broker-data:/mosquitto/data
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_sub -h 127.0.0.1 -u health -P \"$$MQTT_HEALTH_PASSWORD\" -t '$$SYS/broker/uptime' -C 1 -W 3 >/dev/null"]
+  worker:
+    environment:
+      MQTT_USERNAME: worker
+      MQTT_PASSWORD: ${MQTT_WORKER_PASSWORD:?rode scripts/gen_broker_users.py}
+  simulator:
+    environment:
+      MQTT_USERNAME: simulator
+      MQTT_PASSWORD: ${MQTT_SIMULATOR_PASSWORD:?rode scripts/gen_broker_users.py}

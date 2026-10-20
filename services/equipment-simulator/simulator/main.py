@@ -9,9 +9,10 @@ from typing import Any
 
 import paho.mqtt.client as mqtt
 from paho.mqtt.enums import CallbackAPIVersion
-from pydantic import Field
+from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from spatial_common.logging_json import configure_logging
+from spatial_common.mqtt_auth import apply_credentials
 
 from simulator.scenarios import SimConfig, Simulation
 
@@ -23,6 +24,8 @@ class SimulatorSettings(BaseSettings):
 
     mqtt_host: str = "localhost"
     mqtt_port: int = Field(default=1883, ge=1, le=65535)
+    mqtt_username: str | None = None  # broker endurecido (REQ-IOT-003); anonimo por padrao
+    mqtt_password: SecretStr | None = None
     sim_interval_seconds: float = Field(default=2.0, gt=0)
     sim_cycle_ticks: int = Field(default=120, gt=0)
     sim_seed: int = 42
@@ -51,6 +54,11 @@ def main() -> None:
     stop = threading.Event()
 
     client = mqtt.Client(CallbackAPIVersion.VERSION2, client_id=f"equipment-simulator-{run_id}")
+    apply_credentials(
+        client,
+        settings.mqtt_username,
+        settings.mqtt_password.get_secret_value() if settings.mqtt_password else None,
+    )
     client.reconnect_delay_set(min_delay=1, max_delay=30)
 
     def on_connect(_c: Any, _u: Any, _f: Any, reason_code: Any, _p: Any) -> None:

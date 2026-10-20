@@ -13,6 +13,7 @@ from paho.mqtt.enums import CallbackAPIVersion
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from spatial_common.logging_json import configure_logging
+from spatial_common.mqtt_auth import apply_credentials
 from spatial_storage.postgres import PostgresRepository
 from sqlalchemy import create_engine
 
@@ -29,6 +30,8 @@ class WorkerSettings(BaseSettings):
     mqtt_host: str = "localhost"
     mqtt_port: int = Field(default=1883, ge=1, le=65535)
     mqtt_client_id: str = "telemetry-worker-1"
+    mqtt_username: str | None = None  # broker endurecido (REQ-IOT-003); anonimo por padrao
+    mqtt_password: SecretStr | None = None
     heartbeat_file: str = "/tmp/worker-heartbeat"  # noqa: S108
     log_level: str = "INFO"
     stats_interval_seconds: float = 30.0
@@ -61,6 +64,11 @@ def main() -> None:
         client_id=settings.mqtt_client_id,
         clean_session=False,  # sessao persistente => redelivery de QoS 1 nao confirmado
         manual_ack=True,
+    )
+    apply_credentials(
+        client,
+        settings.mqtt_username,
+        settings.mqtt_password.get_secret_value() if settings.mqtt_password else None,
     )
     client.reconnect_delay_set(min_delay=1, max_delay=30)
     client.on_connect = consumer.on_connect
