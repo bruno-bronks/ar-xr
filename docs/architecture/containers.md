@@ -36,4 +36,6 @@ Todas as portas publicadas escutam só em `127.0.0.1`. Contexto de build = raiz 
 
 Decisões estruturais: [ADR-0001](../adr/0001-modular-first.md) (três deployables) e [ADR-0002](../adr/0002-shared-storage-package-and-demo-auth.md) (pacote de persistência compartilhado, auth demo).
 
-Não existem ainda (fases futuras): cliente Unity/AR (Fase 2), assistente de IA (Fase 3), adapter HACC (Fase 4).
+O assistente de IA (Fase 3, [SPEC-009](../../specs/functional/SPEC-009-ai-assistant.md), [ADR-0004](../adr/0004-assistant-architecture.md)) roda **dentro da API** (pacote `packages/assistant`; base em `knowledge/`, copiada para `/srv/knowledge` na imagem); não há novo container nem chamada de rede por padrão.
+
+Não existem ainda (fases futuras): adapter HACC (Fase 4). O cliente Unity/AR (Fase 2) existe, mas a cola Unity nunca foi compilada nem validada em aparelho.

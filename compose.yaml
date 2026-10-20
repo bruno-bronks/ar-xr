@@ -61,6 +61,9 @@ services:
       DATABASE_URL: *database_url
       MQTT_HOST: broker
       MQTT_PORT: "1883"
+      # Assistente (SPEC-009, D-018): extrativo/offline por padrao; LLM so com provider=llm + chave no .env
+      ASSISTANT_PROVIDER: ${ASSISTANT_PROVIDER:-extractive}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
     ports:
       - "127.0.0.1:${API_PORT:-8088}:8000"
     depends_on:

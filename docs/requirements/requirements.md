@@ -54,11 +54,23 @@ Legenda de **Fase**: quando o requisito é implementado. Requisitos de fases fut
 | REQ-AR-006 | Os 3 QR de teste (e os negativos) podem ser gerados para impressão por script reprodutível, e a decodificação com a **mesma biblioteca do app** (ZXing.Net) devolve exatamente o marker. | OUT-MNT-001 | 2 |
 | REQ-AR-007 | A AR só é declarada validada com **checklist executado em aparelho Android físico**, com vídeo e métricas (latência QR→overlay, estabilidade) por dispositivo. | OUT-MNT-001, OUT-MNT-002 | 2 (depende de hardware) |
 
+## Assistente de IA (Fase 3)
+
+| ID | Requisito | Outcome | Fase |
+|---|---|---|---|
+| REQ-UX-002 | O painel web tem um campo de pergunta ao assistente: mostra desfecho, resposta, fontes, confiança, estado pelas regras e a necessidade de revisão humana; recusas e erros (401/404/422/429/rede) são visíveis; todo texto da API entra como texto (nunca HTML); troca de organização limpa a conversa. | OUT-MNT-002 | 3 |
+| REQ-AI-001 | Toda resposta do assistente que dá orientação (`answered`) cita documentação aprovada, expressa a confiança e é apenas assistiva: nenhuma ação física é executada, comandada ou prometida pelo sistema. | OUT-MNT-003 | 3 |
+| REQ-AI-002 | A base de conhecimento só contém documentos **aprovados** (`status: approved` + aprovador + data). Rascunhos, documentos sem aprovação e trechos com instrução embutida para o sistema (injeção de prompt) nunca são recuperados nem enviados a um LLM. | OUT-MNT-003 | 3 |
+| REQ-AI-003 | Resposta `answered` tem ≥ 1 fonte, e cada trecho citado é **literal** de um trecho aprovado e recuperado para aquele equipamento. Sem evidência suficiente o assistente responde `insufficient_evidence` e não inventa. | OUT-MNT-003 | 3 |
+| REQ-AI-004 | Pedidos para acionar/alterar equipamento, contornar proteção ou alarme, ou instruções dirigidas ao próprio sistema são **recusados** (`refused`) com `human_review_required`. Trechos de risco alto exigem revisão humana. | OUT-MNT-003 | 3 |
+| REQ-AI-005 | O LLM é opcional e desligado por padrão. Indisponibilidade, saída inválida ou não fundamentada nos trechos citados degradam para a resposta extrativa (fallback), sem erro ao usuário e sem vazar segredo. | OUT-MNT-003 | 3 |
+| REQ-AI-006 | `POST /api/v1/assistant/questions` exige autenticação, isola por organização (equipamento alheio ≡ inexistente, 404 uniforme), tem rate limit por usuário e **nunca** registra o texto da pergunta ou da resposta (apenas metadados). | OUT-MNT-003 | 3 |
+| REQ-AI-007 | Um conjunto de avaliação rotulado mede alucinação (respostas com afirmações sem suporte), precisão de citação e taxa de recusa/abstenção correta; o relatório declara o tamanho e os limites do conjunto. | OUT-MNT-003 | 3 |
+
 ## Planejados (fases futuras — sem implementação)
 
 | ID | Requisito | Outcome | Fase |
 |---|---|---|---|
-| REQ-AI-001 | Toda sugestão de manutenção da IA cita documentação aprovada, expressa incerteza e nunca aciona ação física. | OUT-MNT-003 | 3 |
 | REQ-HACC-001 | Visualização de leitos usa apenas dados **simulados**; acesso não autorizado é bloqueado; HACC original preservado. | OUT-HACC-001 | 4 |
 
 ## Decisões de default explícitas (precisam de aprovação)
@@ -82,3 +94,10 @@ Legenda de **Fase**: quando o requisito é implementado. Requisitos de fases fut
 | D-015 | Projeto Unity versionado neste repositório (`clients/ar-unity/`, `Library/` ignorada). | Rastreabilidade única. | Sim |
 | D-016 | **Você aprovou a Fase 2 sem responder às decisões 1–4 nem informar o modelo do aparelho**: adotei as recomendações (D-013…D-015) como defaults provisórios. | Reversíveis até existir código Unity validado. | Sim |
 | D-017 | O cliente **nunca** calcula status: usa o `status` do twin do servidor. Dado é "desatualizado" no cliente após 3 s sem atualização bem-sucedida (1,5× o intervalo de 2 s). | Fonte única da verdade (SPEC-002) e evita divergência. | Sim |
+| D-018 | Provedor padrão do assistente = **extrativo determinístico** (recuperação lexical + trechos literais), sem LLM e sem nuvem. LLM (Anthropic) é opcional: só com `ASSISTANT_PROVIDER=llm` + `ANTHROPIC_API_KEY` no ambiente; sua saída só vale se passar na verificação de fundamentação, senão cai no extrativo. | Plano proíbe contratar nuvem sem aprovação e exige fallback mock; é a única configuração que posso testar de ponta a ponta. | Sim |
+| D-019 | Base de conhecimento = arquivos Markdown versionados em `knowledge/` com front matter. "Aprovado" = `status: approved` + `approved_by` + `approved_on`. **O conteúdo atual é FICTÍCIO, escrito pelo agente, sem revisão técnica humana** — serve só para demonstrar o mecanismo; não usar em manutenção real. | Não há manual real nem aprovador humano disponível. | Sim |
+| D-020 | Recusa por regras (padrões de ação física, contorno de segurança, instrução ao sistema). É heurística e **não exaustiva**; por isso a defesa principal é estrutural (nada executa ação; saída só com trechos aprovados). | Lista de palavras nunca cobre tudo; declarar o limite. | Sim |
+| D-021 | Evidência mínima: ao menos 50 % dos termos significativos da pergunta presentes no trecho recuperado (e ≥ 1 termo); abaixo disso `insufficient_evidence`. Confiança: ≥ 0,8 alta · ≥ 0,65 média · senão baixa. | Limiar a priori, avaliado no conjunto dourado (REQ-AI-007) e reportado com os erros. | Sim |
+| D-022 | Texto de pergunta/resposta nunca vai para log; o log guarda comprimento, desfecho, provedor, ids de fonte e correlation ID. | Pergunta pode conter dados sensíveis; minimização. | Sim |
+| D-023 | Rate limit do assistente: 10 perguntas/min por usuário (o LLM tem custo). | Evita abuso e gasto. | Sim |
+| D-024 | **Aprovadas pelo usuário em 2026-10-20: D-018 a D-023** (assistente extrativo por padrão, base de conhecimento fictícia, recusa heurística, limiar de evidência, log sem texto, rate limit de 10/min). A aprovação **não** valida o conteúdo dos documentos fictícios nem o LLM, que continuam sem revisão/validação real. | Registro da decisão do usuário. | Sim |

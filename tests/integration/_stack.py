@@ -158,3 +158,18 @@ def latest_value(equipment: str, sensor: str, token: str = TOKEN_A) -> float | N
 def equipment_status(equipment: str, token: str = TOKEN_A) -> str | None:
     status, body = api(f"/api/v1/equipment/{equipment}", token)
     return body["status"] if status == 200 else None
+
+
+def api_post(path: str, body: object, token: str | None = TOKEN_A) -> tuple[int, Any]:
+    assert BASE_URL is not None
+    headers = {"Content-Type": "application/json"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    request = urllib.request.Request(  # noqa: S310
+        BASE_URL + path, data=json.dumps(body).encode(), headers=headers, method="POST"
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=10) as response:  # noqa: S310
+            return response.status, json.loads(response.read())
+    except urllib.error.HTTPError as error:
+        return error.code, json.loads(error.read() or b"null")

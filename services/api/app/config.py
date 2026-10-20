@@ -2,7 +2,7 @@
 
 from typing import Literal, Self
 
-from pydantic import Field, SecretStr, model_validator
+from pydantic import Field, SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,6 +17,24 @@ class Settings(BaseSettings):
     auth_mode: Literal["demo", "oidc"] = "demo"
     marker_rate_limit: int = Field(default=30, ge=1)  # resolucoes de marker por minuto/principal
     panel_dir: str | None = None
+    knowledge_dir: str | None = None
+    assistant_provider: Literal["extractive", "llm"] = (
+        "extractive"  # D-018: LLM desligado por padrao
+    )
+    anthropic_api_key: SecretStr | None = None
+    assistant_model: str = "claude-sonnet-5-5"
+    assistant_rate_limit: int = Field(default=10, ge=1)  # perguntas por minuto/usuario (D-023)
+
+    @field_validator("anthropic_api_key", mode="before")
+    @classmethod
+    def _blank_key_is_none(cls, value: object) -> object:
+        return None if isinstance(value, str) and not value.strip() else value
+
+    @model_validator(mode="after")
+    def _llm_requires_a_key(self) -> Self:
+        if self.assistant_provider == "llm" and self.anthropic_api_key is None:
+            raise ValueError("ASSISTANT_PROVIDER=llm requires ANTHROPIC_API_KEY")
+        return self
 
     @model_validator(mode="after")
     def _demo_auth_never_in_production(self) -> Self:

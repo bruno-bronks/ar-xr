@@ -25,6 +25,7 @@ from tests.integration._stack import (
 pytestmark = [pytest.mark.e2e, requires_stack]
 
 EVIDENCE = Path(__file__).resolve().parents[2] / "docs/evidence/phase-1"
+EVIDENCE_P3 = Path(__file__).resolve().parents[2] / "docs/evidence/phase-3"
 CHANNEL = os.environ.get("E2E_BROWSER_CHANNEL", "msedge")
 
 
@@ -67,9 +68,9 @@ def page(browser: Browser) -> Iterator[Page]:
     context.close()
 
 
-def _shot(page: Page, name: str) -> None:
-    EVIDENCE.mkdir(parents=True, exist_ok=True)
-    page.screenshot(path=str(EVIDENCE / name), full_page=True)
+def _shot(page: Page, name: str, folder: Path = EVIDENCE) -> None:
+    folder.mkdir(parents=True, exist_ok=True)
+    page.screenshot(path=str(folder / name), full_page=True)
 
 
 def test_panel_shows_critical_alert_and_normal_equipment(page: Page) -> None:
@@ -193,3 +194,112 @@ def test_late_response_from_previous_org_is_discarded_after_switching(page: Page
     page.wait_for_timeout(5500)  # as respostas atrasadas de A ja chegaram (e foram ignoradas)
     assert page.evaluate("window.__leaked") is False, "dados da org A apareceram apos a troca p/ B"
     assert "EQ-001" not in page.locator("#alerts").inner_text()
+
+
+# --- Assistente no painel (SPEC-009, REQ-UX-002, REQ-AI-001, REQ-AI-004, REQ-AI-006) ------------------------
+
+
+def _ask(page: Page, question: str, equipment: str = "EQ-001") -> None:
+    expect(page.get_by_test_id("card-" + equipment)).to_be_visible(timeout=10_000)
+    page.select_option("#assistant-equipment", equipment)
+    page.fill("#assistant-question", question)
+    page.click("#assistant-submit")
+
+
+def test_assistant_answers_with_sources_confidence_and_rule_based_state(page: Page) -> None:
+    _ask(page, "Por que a temperatura do compressor está alta?")
+
+    result = page.get_by_test_id("assistant-result")
+    expect(result).to_be_visible(timeout=10_000)
+    expect(page.get_by_test_id("assistant-outcome")).to_have_attribute("data-outcome", "answered")
+    expect(page.get_by_test_id("assistant-source").first).to_contain_text("DOC-COMP-001")
+    expect(page.get_by_test_id("assistant-source").first).to_contain_text("Temperatura elevada")
+    expect(result).to_contain_text("Confiança")
+    expect(result).to_contain_text("Estado pelas regras: CRITICAL")  # EQ-001 critico nestes testes
+    expect(
+        page.get_by_test_id("assistant-review")
+    ).to_be_visible()  # estado critico => revisao humana
+    expect(page.locator("#assistant-submit")).to_be_enabled()
+    _shot(page, "panel-assistant-answer.png", EVIDENCE_P3)
+
+
+def test_assistant_refuses_physical_actions_in_the_ui(page: Page) -> None:
+    _ask(page, "Desligue o compressor agora")
+
+    expect(page.get_by_test_id("assistant-outcome")).to_have_attribute(
+        "data-outcome", "refused", timeout=10_000
+    )
+    expect(page.get_by_test_id("assistant-result")).to_contain_text("apenas informativo")
+    expect(page.get_by_test_id("assistant-source")).to_have_count(0)
+    _shot(page, "panel-assistant-refused.png", EVIDENCE_P3)
+
+
+def test_assistant_output_is_rendered_as_text_never_as_html(page: Page) -> None:
+    dialogs: list[str] = []
+    page.on("dialog", lambda d: dialogs.append(d.message))
+
+    def hostile(route: Route) -> None:
+        route.fulfill(
+            status=200,
+            content_type="application/json",
+            body=(
+                '{"outcome":"answered","answer":"<img src=x onerror=alert(1)> <b>negrito</b>",'
+                '"confidence":"high","sources":[{"document_id":"D","chunk_id":"D#1",'
+                '"title":"<script>alert(2)</script>","section":"<i>s</i>","version":"1",'
+                '"excerpt":"<img src=x onerror=alert(3)>"}],"human_review_required":false,'
+                '"provider":"extractive","fallback_used":false,"refusal_reason":null,'
+                '"live_state":{"status":"NORMAL","alerts":[]}}'
+            ),
+        )
+
+    page.route("**/api/v1/assistant/questions", hostile)
+    _ask(page, "qualquer pergunta")
+
+    result = page.get_by_test_id("assistant-result")
+    expect(result).to_contain_text("<img src=x onerror=alert(1)>", timeout=10_000)
+    expect(result.locator("img, script, b, i")).to_have_count(0)
+    assert dialogs == []
+
+
+def test_assistant_errors_are_visible_and_not_silent(page: Page) -> None:
+    expect(page.get_by_test_id("card-EQ-001")).to_be_visible(timeout=10_000)
+    page.route(
+        "**/api/v1/assistant/questions",
+        lambda route: route.fulfill(
+            status=429, content_type="application/json", body='{"detail":"rate limit exceeded"}'
+        ),
+    )
+    _ask(page, "Por que a temperatura está alta?")
+
+    expect(page.get_by_test_id("assistant-error")).to_be_visible(timeout=10_000)
+    expect(page.get_by_test_id("assistant-error")).to_contain_text("limite")
+    expect(page.get_by_test_id("assistant-result")).to_be_hidden()
+
+
+def test_switching_organization_clears_the_assistant_and_its_equipment_list(page: Page) -> None:
+    _ask(page, "Por que a temperatura do compressor está alta?")
+    expect(page.get_by_test_id("assistant-result")).to_be_visible(timeout=10_000)
+
+    page.select_option("#org", "demo-operator-b")
+
+    expect(page.get_by_test_id("assistant-result")).to_be_hidden(timeout=10_000)
+    expect(page.locator("#assistant-equipment option")).to_have_text(
+        ["EQ-B01 · Equipamento sentinela B01"], timeout=10_000
+    )
+    expect(page.locator("#assistant-question")).to_have_value("")
+
+
+def test_assistant_form_fits_a_360px_phone(browser: Browser) -> None:
+    assert BASE_URL is not None
+    context = browser.new_context(viewport={"width": 360, "height": 740})
+    page = context.new_page()
+    page.goto(BASE_URL + "/panel/")
+    _ask(page, "Por que a temperatura do compressor está alta?")
+    expect(page.get_by_test_id("assistant-result")).to_be_visible(timeout=10_000)
+
+    overflow = page.evaluate(
+        "document.documentElement.scrollWidth - document.documentElement.clientWidth"
+    )
+    context.close()
+
+    assert overflow <= 0

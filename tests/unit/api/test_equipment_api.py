@@ -118,12 +118,6 @@ def test_health_endpoints_remain_public() -> None:
     assert client.get("/health/ready").status_code == 200
 
 
-def test_assistant_endpoint_is_not_routed_until_phase_3() -> None:
-    response = make_client().post("/api/v1/assistant/questions", json={}, headers=auth())
-
-    assert response.status_code in {404, 405}
-
-
 # --- REQ-MNT-006: leitura e isolamento ----------------------------------------------------
 
 

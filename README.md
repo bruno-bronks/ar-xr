@@ -5,7 +5,8 @@ Plataforma de IA espacial com duas verticais: **AR Maintenance AI** (primeiro MV
 > **Estado: Fases 0–1 em `main`. Fase 2 (AR Android) PARCIAL no PR #2 (rascunho): núcleo C# testado na CI; cola Unity NÃO compilada; AR NÃO validada em aparelho (falta hardware).**
 > Fase 1 (vertical industrial, sem AR nativa): Fluxo real e testado:
 > simulador → Mosquitto → worker (valida, deduplica, persiste) → PostgreSQL → API autenticada → **painel web 2D**.
-> **Não existe ainda:** Unity/AR (Fase 2), assistente de IA (Fase 3), HACC (Fase 4), visão computacional/IoT real (Fase 5), cloud (Fase 6).
+> **Fase 3 (IA assistiva):** `POST /api/v1/assistant/questions` responde com **trechos literais de documentos aprovados**, fontes, confiança e revisão humana; recusa pedidos de ação física/contorno de segurança; funciona **offline** (LLM é opcional e desligado). A base de conhecimento é **fictícia**. Limites medidos: [docs/evidence/phase-3/eval-report.md](docs/evidence/phase-3/eval-report.md).
+> **Não existe ainda:** HACC (Fase 4), visão computacional/IoT real (Fase 5), cloud (Fase 6). A AR (Fase 2) não foi validada em aparelho.
 > Autenticação é **demo** (tokens fictícios; a API recusa iniciar assim em produção). Detalhes, evidências e limitações: [docs/agent/CURRENT_STATE.md](docs/agent/CURRENT_STATE.md).
 
 ## Pré-requisitos
@@ -35,6 +36,12 @@ O simulador percorre um ciclo de ~4 min: **EQ-001** estável (`NORMAL`); **EQ-00
 | API + painel | `8088` | `/panel/` · `/api/v1/*` (Bearer demo) · `/health/*` · `/docs` (fora de produção) |
 | PostgreSQL | `55432` | usuário/senha de **desenvolvimento** fictícios (ver `.env.example`) |
 | Mosquitto | `1883` | anônimo — **apenas dev** (ver threat model S-02) |
+
+Assistente (extrativo, sem custo):
+```powershell
+$body = '{"equipment_id":"EQ-001","question":"Por que a temperatura do compressor está alta?"}'
+curl.exe -s -X POST -H "Authorization: Bearer demo-operator-a" -H "Content-Type: application/json" -d $body http://127.0.0.1:8088/api/v1/assistant/questions
+```
 
 Tokens demo: `demo-operator-a` (org-a: EQ-001…003) e `demo-operator-b` (org-b: EQ-B01, sentinela de isolamento). QR de teste: `QR-EQ-001/002/003` via `GET /api/v1/spatial/markers/{id}`.
 

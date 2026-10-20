@@ -45,6 +45,8 @@ jobs:
         run: mypy
       - name: Tests (unit + contract + property-based + PostgreSQL real)
         run: pytest -q
+      - name: Assistant evaluation runs (deterministic, no network, no real LLM)
+        run: python scripts/eval_assistant.py --out "$RUNNER_TEMP/eval-phase3"
       - name: Traceability edges are up to date
         run: python scripts/trace_edges.py --check
       - name: Dependency audit
