@@ -31,6 +31,7 @@ server {
         auth_basic_user_file /etc/nginx/ar-xr.htpasswd;
         limit_except GET HEAD { deny all; }
         add_header Set-Cookie "arxr_gate=__GATE__; Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=28800" always;
+        add_header Cache-Control "no-cache" always;  # o navegador revalida o painel (evita ver versao antiga)
         add_header X-Content-Type-Options nosniff always;
         add_header Referrer-Policy no-referrer always;
         proxy_pass http://127.0.0.1:8088;
