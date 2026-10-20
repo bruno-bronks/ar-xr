@@ -151,3 +151,27 @@ tr[data-valid="false"] td { color: var(--muted); font-style: italic; }
   clip: rect(0 0 0 0); white-space: nowrap;
 }
 footer { margin-top: 24px; max-width: 70ch; }
+
+.assistant {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin: 0 0 18px;
+}
+.assistant h2 { margin-top: 0; }
+#assistant-form { display: grid; gap: 6px; max-width: 70ch; }
+#assistant-form select,
+#assistant-form textarea { width: 100%; box-sizing: border-box; font: inherit; padding: 6px; }
+#assistant-form button { justify-self: start; font: inherit; padding: 6px 16px; }
+#assistant-form button:disabled { opacity: 0.6; cursor: progress; }
+.assistant-result { margin-top: 12px; max-width: 70ch; overflow-wrap: anywhere; }
+.assistant-result .answer-text { white-space: pre-wrap; margin: 8px 0; }
+.assistant-result .sources { padding-left: 18px; }
+.assistant-result .excerpt { margin: 2px 0 8px; color: var(--muted); }
+.assistant-result .assistant-meta { font-size: 0.85rem; color: var(--muted); margin: 4px 0; }
+.assistant-result .review { font-weight: 700; margin: 6px 0; }
+.outcome { display: inline-block; padding: 3px 10px; border-radius: 999px; font-weight: 700; font-size: 0.9rem; }
+.outcome[data-outcome="answered"] { background: var(--normal-bg); color: var(--normal); }
+.outcome[data-outcome="insufficient_evidence"] { background: var(--unknown-bg); color: var(--unknown); }
+.outcome[data-outcome="refused"] { background: var(--warning-bg); color: var(--warning); }

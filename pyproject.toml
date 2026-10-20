@@ -27,7 +27,7 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-pythonpath = ["packages/domain/src", "packages/storage/src", "packages/common/src", "services/api", "services/telemetry-worker", "services/equipment-simulator"]
+pythonpath = ["packages/domain/src", "packages/storage/src", "packages/common/src", "packages/assistant/src", "services/api", "services/telemetry-worker", "services/equipment-simulator"]
 testpaths = ["tests"]
 addopts = "-ra --strict-markers"
 markers = [
@@ -51,7 +51,7 @@ ignore = ["E501"]
 [tool.mypy]
 python_version = "3.12"
 strict = true
-mypy_path = "packages/domain/src:packages/storage/src:packages/common/src:services/api:services/telemetry-worker:services/equipment-simulator"
+mypy_path = "packages/domain/src:packages/storage/src:packages/common/src:packages/assistant/src:services/api:services/telemetry-worker:services/equipment-simulator"
 explicit_package_bases = true
-files = ["packages/domain/src", "packages/storage/src", "packages/common/src", "services/api/app", "services/telemetry-worker/worker", "services/equipment-simulator/simulator", "tests"]
+files = ["packages/domain/src", "packages/storage/src", "packages/common/src", "packages/assistant/src", "services/api/app", "services/telemetry-worker/worker", "services/equipment-simulator/simulator", "tests"]
 plugins = ["pydantic.mypy"]

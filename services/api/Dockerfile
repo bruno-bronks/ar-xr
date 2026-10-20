@@ -14,8 +14,10 @@ RUN pip install -r requirements.txt
 COPY packages/domain/src/spatial_domain ./spatial_domain
 COPY packages/storage/src/spatial_storage ./spatial_storage
 COPY packages/common/src/spatial_common ./spatial_common
+COPY packages/assistant/src/spatial_assistant ./spatial_assistant
 COPY services/api/app ./app
 COPY clients/web-fallback /srv/panel
+COPY knowledge /srv/knowledge
 
 RUN useradd --system --uid 10001 --no-create-home appuser
 USER appuser

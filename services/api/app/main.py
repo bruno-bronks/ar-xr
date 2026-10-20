@@ -1,5 +1,6 @@
 """Composition root da API."""
 
+import logging
 import os
 from collections.abc import Callable, Mapping
 from datetime import UTC, datetime
@@ -9,12 +10,16 @@ from fastapi import FastAPI, Request
 from fastapi.exception_handlers import http_exception_handler
 from fastapi.responses import JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
+from spatial_assistant.knowledge import load_knowledge_base
+from spatial_assistant.llm_anthropic import AnthropicProvider
+from spatial_assistant.service import AssistantService
 from spatial_common.logging_json import configure_logging
 from spatial_storage.postgres import PostgresRepository
 from spatial_storage.repository import Repository
 from sqlalchemy import create_engine
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from app.assistant_routes import router as assistant_router
 from app.auth import build_authenticator
 from app.config import Settings
 from app.health import Check, build_router, check_broker, check_database
@@ -35,6 +40,40 @@ def _find_panel_dir(configured: str | None, module_file: Path = Path(__file__)) 
     return next((c for c in candidates if c is not None and (c / "index.html").is_file()), None)
 
 
+def _find_knowledge_dir(configured: str | None, module_file: Path = Path(__file__)) -> Path | None:
+    parents = module_file.resolve().parents
+    checkout = parents[3] / "knowledge" if len(parents) > 3 else None  # repo local
+    candidates = [
+        Path(configured) if configured else None,
+        Path(os.environ["KNOWLEDGE_DIR"]) if "KNOWLEDGE_DIR" in os.environ else None,
+        checkout,
+        Path("/srv/knowledge"),  # imagem Docker
+    ]
+    return next((c for c in candidates if c is not None and c.is_dir()), None)
+
+
+def build_assistant(settings: Settings | None) -> AssistantService:
+    """Base aprovada + provedor extrativo; LLM so se configurado explicitamente (D-018)."""
+    log = logging.getLogger("app.assistant")
+    directory = _find_knowledge_dir(settings.knowledge_dir if settings else None)
+    kb = load_knowledge_base(directory) if directory else load_knowledge_base(Path("/nonexistent"))
+    log.info(
+        "knowledge base loaded",
+        extra={
+            "chunks": len(kb.chunks),
+            "rejected": [f"{r.source}: {r.reason}" for r in kb.rejections],
+        },
+    )
+    if not kb.chunks:
+        log.warning("knowledge base is empty: the assistant will always abstain")
+    llm = None
+    if settings is not None and settings.assistant_provider == "llm" and settings.anthropic_api_key:
+        llm = AnthropicProvider(
+            settings.anthropic_api_key.get_secret_value(), settings.assistant_model
+        )
+    return AssistantService(kb, llm)
+
+
 def create_app(
     *,
     checks: Mapping[str, Check] | None = None,
@@ -42,6 +81,8 @@ def create_app(
     repo: Repository | None = None,
     clock: Callable[[], datetime] | None = None,
     marker_rate_limit: int | None = None,
+    assistant: AssistantService | None = None,
+    assistant_rate_limit: int | None = None,
 ) -> FastAPI:
     """Sem `settings`, `checks` e `repo` precisam ser injetados (composicao de testes)."""
     if settings is None and (checks is None or repo is None):
@@ -82,6 +123,9 @@ def create_app(
     app.state.clock = clock or (lambda: datetime.now(UTC))
     limit = marker_rate_limit or (settings.marker_rate_limit if settings else 30)
     app.state.marker_limiter = FixedWindowLimiter(limit, 60.0, app.state.clock)
+    app.state.assistant = assistant if assistant is not None else build_assistant(settings)
+    ask_limit = assistant_rate_limit or (settings.assistant_rate_limit if settings else 10)
+    app.state.assistant_limiter = FixedWindowLimiter(ask_limit, 60.0, app.state.clock)
 
     @app.exception_handler(StarletteHTTPException)
     async def uniform_not_found(request: Request, exc: StarletteHTTPException) -> Response:
@@ -93,6 +137,7 @@ def create_app(
     app.add_middleware(RequestContextMiddleware)
     app.include_router(build_router(checks))
     app.include_router(api_router)
+    app.include_router(assistant_router)
 
     panel_dir = _find_panel_dir(settings.panel_dir if settings else None)
     if panel_dir is not None:

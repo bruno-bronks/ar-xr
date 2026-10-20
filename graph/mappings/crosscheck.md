@@ -23,14 +23,14 @@
 | REQ-SEC-003 | `tests/unit/api/test_auth_config.py` | `services/api/app/auth.py` | CONFIRMED (INFERRED) | 1 |
 | REQ-SEC-003 | `tests/unit/api/test_auth_config.py` | `services/api/app/config.py` | CONFIRMED (INFERRED) | 1 |
 | REQ-SEC-003 | `tests/unit/api/test_auth_config.py` | `services/api/app/routes.py` | CONFIRMED (INFERRED) | 2 |
-| REQ-SEC-003 | `tests/unit/api/test_equipment_api.py` | `services/api/app/auth.py` | CONFIRMED (INFERRED) | 3 |
-| REQ-SEC-003 | `tests/unit/api/test_equipment_api.py` | `services/api/app/config.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-SEC-003 | `tests/unit/api/test_equipment_api.py` | `services/api/app/auth.py` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-SEC-003 | `tests/unit/api/test_equipment_api.py` | `services/api/app/config.py` | CONFIRMED (EXTRACTED) | 3 |
 | REQ-SEC-003 | `tests/unit/api/test_equipment_api.py` | `services/api/app/routes.py` | CONFIRMED (INFERRED) | 2 |
 | REQ-SEC-003 | `tests/integration/test_stack_flow.py` | `services/api/app/auth.py` | NOT CONFIRMED (black-box) | - |
 | REQ-SEC-003 | `tests/integration/test_stack_flow.py` | `services/api/app/config.py` | NOT CONFIRMED (black-box) | - |
 | REQ-SEC-003 | `tests/integration/test_stack_flow.py` | `services/api/app/routes.py` | NOT CONFIRMED (black-box) | - |
 | REQ-SEC-004 | `tests/unit/api/test_equipment_api.py` | `services/api/app/audit.py` | CONFIRMED (INFERRED) | 3 |
-| REQ-SEC-004 | `tests/unit/api/test_equipment_api.py` | `services/api/app/ratelimit.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-SEC-004 | `tests/unit/api/test_equipment_api.py` | `services/api/app/ratelimit.py` | CONFIRMED (EXTRACTED) | 3 |
 | REQ-MNT-001 | `tests/unit/domain/test_markers.py` | `packages/domain/src/spatial_domain/markers.py` | CONFIRMED (INFERRED) | 1 |
 | REQ-MNT-001 | `tests/unit/domain/test_markers.py` | `packages/storage/src/spatial_storage/postgres.py` | CONFIRMED (EXTRACTED) | 4 |
 | REQ-MNT-001 | `tests/unit/domain/test_markers.py` | `services/api/app/routes.py` | CONFIRMED (INFERRED) | 4 |
@@ -111,7 +111,7 @@
 | REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/QrRoundTripTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (EXTRACTED) | 2 |
 | REQ-AR-001 | `tests/csharp/Spatial.Ar.Core.Tests/QrRoundTripTests.cs` | `clients/ar-unity/Assets/Scripts/QrScanner.cs` | NOT CONFIRMED | - |
 | REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (INFERRED) | 1 |
-| REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | CONFIRMED (INFERRED) | 3 |
 | REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (EXTRACTED) | 1 |
 | REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/OverlayViewModelTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | CONFIRMED (EXTRACTED) | 1 |
 | REQ-AR-002 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (EXTRACTED) | 1 |
@@ -128,10 +128,10 @@
 | REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/Dtos.cs` | CONFIRMED (EXTRACTED) | 2 |
 | REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (INFERRED) | 1 |
 | REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Assets/Scripts/SpatialArApp.cs` | CONFIRMED (EXTRACTED) | 2 |
-| REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | NOT CONFIRMED | - |
-| REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/Dtos.cs` | NOT CONFIRMED | - |
+| REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | CONFIRMED (INFERRED) | 4 |
+| REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/Dtos.cs` | CONFIRMED (INFERRED) | 4 |
 | REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | NOT CONFIRMED | - |
-| REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Assets/Scripts/SpatialArApp.cs` | NOT CONFIRMED | - |
+| REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Assets/Scripts/SpatialArApp.cs` | CONFIRMED (INFERRED) | 4 |
 | REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (INFERRED) | 1 |
 | REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs` | CONFIRMED (INFERRED) | 2 |
 | REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/MarkerSessionTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (EXTRACTED) | 2 |
@@ -148,8 +148,8 @@
 | REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs` | CONFIRMED (EXTRACTED) | 1 |
 | REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (INFERRED) | 1 |
 | REQ-AR-004 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Assets/Scripts/UnityWebRequestTransport.cs` | CONFIRMED (EXTRACTED) | 2 |
-| REQ-AR-004 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | NOT CONFIRMED | - |
-| REQ-AR-004 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs` | NOT CONFIRMED | - |
+| REQ-AR-004 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/MarkerSession.cs` | CONFIRMED (INFERRED) | 3 |
+| REQ-AR-004 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SessionDriver.cs` | CONFIRMED (INFERRED) | 4 |
 | REQ-AR-004 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | NOT CONFIRMED | - |
 | REQ-AR-004 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Assets/Scripts/UnityWebRequestTransport.cs` | NOT CONFIRMED | - |
 | REQ-AR-005 | `tests/csharp/Spatial.Ar.Core.Tests/QrPayloadTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/ClientConfig.cs` | CONFIRMED (INFERRED) | 4 |
@@ -166,13 +166,103 @@
 | REQ-AR-005 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Assets/Scripts/SpatialArApp.cs` | CONFIRMED (EXTRACTED) | 2 |
 | REQ-AR-006 | `tests/unit/repo/test_generate_qr.py` | `scripts/generate_qr.py` | NOT CONFIRMED | - |
 | REQ-AR-006 | `tests/csharp/Spatial.Ar.Core.Tests/QrRoundTripTests.cs` | `scripts/generate_qr.py` | NOT CONFIRMED | - |
+| REQ-AI-001 | `tests/unit/assistant/test_service.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-001 | `tests/unit/assistant/test_service.py` | `packages/assistant/src/spatial_assistant/models.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-001 | `tests/unit/assistant/test_service.py` | `services/api/app/assistant_routes.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-AI-001 | `tests/unit/assistant/test_invariants.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-001 | `tests/unit/assistant/test_invariants.py` | `packages/assistant/src/spatial_assistant/models.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-001 | `tests/unit/assistant/test_invariants.py` | `services/api/app/assistant_routes.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-AI-001 | `tests/unit/api/test_assistant_api.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-001 | `tests/unit/api/test_assistant_api.py` | `packages/assistant/src/spatial_assistant/models.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-AI-001 | `tests/unit/api/test_assistant_api.py` | `services/api/app/assistant_routes.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-AI-001 | `tests/integration/test_assistant_stack.py` | `packages/assistant/src/spatial_assistant/service.py` | NOT CONFIRMED (black-box) | - |
+| REQ-AI-001 | `tests/integration/test_assistant_stack.py` | `packages/assistant/src/spatial_assistant/models.py` | NOT CONFIRMED (black-box) | - |
+| REQ-AI-001 | `tests/integration/test_assistant_stack.py` | `services/api/app/assistant_routes.py` | NOT CONFIRMED (black-box) | - |
+| REQ-AI-002 | `tests/unit/assistant/test_knowledge.py` | `packages/assistant/src/spatial_assistant/knowledge.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AI-002 | `tests/unit/assistant/test_knowledge.py` | `packages/assistant/src/spatial_assistant/policy.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-002 | `tests/unit/assistant/test_invariants.py` | `packages/assistant/src/spatial_assistant/knowledge.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AI-002 | `tests/unit/assistant/test_invariants.py` | `packages/assistant/src/spatial_assistant/policy.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-002 | `tests/integration/test_assistant_stack.py` | `packages/assistant/src/spatial_assistant/knowledge.py` | NOT CONFIRMED (black-box) | - |
+| REQ-AI-002 | `tests/integration/test_assistant_stack.py` | `packages/assistant/src/spatial_assistant/policy.py` | NOT CONFIRMED (black-box) | - |
+| REQ-AI-003 | `tests/unit/assistant/test_text_retrieval.py` | `packages/assistant/src/spatial_assistant/retrieval.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AI-003 | `tests/unit/assistant/test_text_retrieval.py` | `packages/assistant/src/spatial_assistant/grounding.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-003 | `tests/unit/assistant/test_text_retrieval.py` | `packages/assistant/src/spatial_assistant/text.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AI-003 | `tests/unit/assistant/test_text_retrieval.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-AI-003 | `tests/unit/assistant/test_grounding_llm.py` | `packages/assistant/src/spatial_assistant/retrieval.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-003 | `tests/unit/assistant/test_grounding_llm.py` | `packages/assistant/src/spatial_assistant/grounding.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AI-003 | `tests/unit/assistant/test_grounding_llm.py` | `packages/assistant/src/spatial_assistant/text.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-003 | `tests/unit/assistant/test_grounding_llm.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-003 | `tests/unit/assistant/test_service.py` | `packages/assistant/src/spatial_assistant/retrieval.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-AI-003 | `tests/unit/assistant/test_service.py` | `packages/assistant/src/spatial_assistant/grounding.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-003 | `tests/unit/assistant/test_service.py` | `packages/assistant/src/spatial_assistant/text.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-AI-003 | `tests/unit/assistant/test_service.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-003 | `tests/unit/assistant/test_invariants.py` | `packages/assistant/src/spatial_assistant/retrieval.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AI-003 | `tests/unit/assistant/test_invariants.py` | `packages/assistant/src/spatial_assistant/grounding.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AI-003 | `tests/unit/assistant/test_invariants.py` | `packages/assistant/src/spatial_assistant/text.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-003 | `tests/unit/assistant/test_invariants.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-003 | `tests/unit/assistant/test_evaluation.py` | `packages/assistant/src/spatial_assistant/retrieval.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-003 | `tests/unit/assistant/test_evaluation.py` | `packages/assistant/src/spatial_assistant/grounding.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-003 | `tests/unit/assistant/test_evaluation.py` | `packages/assistant/src/spatial_assistant/text.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-003 | `tests/unit/assistant/test_evaluation.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-004 | `tests/unit/assistant/test_policy.py` | `packages/assistant/src/spatial_assistant/policy.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AI-004 | `tests/unit/assistant/test_policy.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-004 | `tests/unit/assistant/test_service.py` | `packages/assistant/src/spatial_assistant/policy.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-004 | `tests/unit/assistant/test_service.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-004 | `tests/unit/api/test_assistant_api.py` | `packages/assistant/src/spatial_assistant/policy.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-004 | `tests/unit/api/test_assistant_api.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-004 | `tests/integration/test_assistant_stack.py` | `packages/assistant/src/spatial_assistant/policy.py` | NOT CONFIRMED (black-box) | - |
+| REQ-AI-004 | `tests/integration/test_assistant_stack.py` | `packages/assistant/src/spatial_assistant/service.py` | NOT CONFIRMED (black-box) | - |
+| REQ-AI-005 | `tests/unit/assistant/test_grounding_llm.py` | `packages/assistant/src/spatial_assistant/llm.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-005 | `tests/unit/assistant/test_grounding_llm.py` | `packages/assistant/src/spatial_assistant/llm_anthropic.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-005 | `tests/unit/assistant/test_grounding_llm.py` | `packages/assistant/src/spatial_assistant/grounding.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AI-005 | `tests/unit/assistant/test_grounding_llm.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-005 | `tests/unit/assistant/test_grounding_llm.py` | `services/api/app/config.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-AI-005 | `tests/unit/assistant/test_grounding_llm.py` | `services/api/app/main.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-AI-005 | `tests/unit/assistant/test_service.py` | `packages/assistant/src/spatial_assistant/llm.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AI-005 | `tests/unit/assistant/test_service.py` | `packages/assistant/src/spatial_assistant/llm_anthropic.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-005 | `tests/unit/assistant/test_service.py` | `packages/assistant/src/spatial_assistant/grounding.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-005 | `tests/unit/assistant/test_service.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-005 | `tests/unit/assistant/test_service.py` | `services/api/app/config.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-AI-005 | `tests/unit/assistant/test_service.py` | `services/api/app/main.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-005 | `tests/unit/assistant/test_invariants.py` | `packages/assistant/src/spatial_assistant/llm.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-AI-005 | `tests/unit/assistant/test_invariants.py` | `packages/assistant/src/spatial_assistant/llm_anthropic.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-AI-005 | `tests/unit/assistant/test_invariants.py` | `packages/assistant/src/spatial_assistant/grounding.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AI-005 | `tests/unit/assistant/test_invariants.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-005 | `tests/unit/assistant/test_invariants.py` | `services/api/app/config.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-AI-005 | `tests/unit/assistant/test_invariants.py` | `services/api/app/main.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-AI-005 | `tests/unit/api/test_config.py` | `packages/assistant/src/spatial_assistant/llm.py` | CONFIRMED (INFERRED) | 4 |
+| REQ-AI-005 | `tests/unit/api/test_config.py` | `packages/assistant/src/spatial_assistant/llm_anthropic.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-AI-005 | `tests/unit/api/test_config.py` | `packages/assistant/src/spatial_assistant/grounding.py` | CONFIRMED (INFERRED) | 4 |
+| REQ-AI-005 | `tests/unit/api/test_config.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-AI-005 | `tests/unit/api/test_config.py` | `services/api/app/config.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-005 | `tests/unit/api/test_config.py` | `services/api/app/main.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-AI-005 | `tests/unit/api/test_assistant_api.py` | `packages/assistant/src/spatial_assistant/llm.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-AI-005 | `tests/unit/api/test_assistant_api.py` | `packages/assistant/src/spatial_assistant/llm_anthropic.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-AI-005 | `tests/unit/api/test_assistant_api.py` | `packages/assistant/src/spatial_assistant/grounding.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-005 | `tests/unit/api/test_assistant_api.py` | `packages/assistant/src/spatial_assistant/service.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-AI-005 | `tests/unit/api/test_assistant_api.py` | `services/api/app/config.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-AI-005 | `tests/unit/api/test_assistant_api.py` | `services/api/app/main.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-006 | `tests/unit/api/test_assistant_api.py` | `services/api/app/assistant_routes.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-AI-006 | `tests/unit/api/test_assistant_api.py` | `services/api/app/schemas.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-AI-006 | `tests/unit/api/test_assistant_api.py` | `services/api/app/main.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-006 | `tests/unit/api/test_assistant_api.py` | `services/api/app/ratelimit.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-AI-006 | `tests/contract/test_openapi_contract.py` | `services/api/app/assistant_routes.py` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-AI-006 | `tests/contract/test_openapi_contract.py` | `services/api/app/schemas.py` | CONFIRMED (INFERRED) | 4 |
+| REQ-AI-006 | `tests/contract/test_openapi_contract.py` | `services/api/app/main.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-AI-006 | `tests/contract/test_openapi_contract.py` | `services/api/app/ratelimit.py` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-AI-006 | `tests/integration/test_assistant_stack.py` | `services/api/app/assistant_routes.py` | NOT CONFIRMED (black-box) | - |
+| REQ-AI-006 | `tests/integration/test_assistant_stack.py` | `services/api/app/schemas.py` | NOT CONFIRMED (black-box) | - |
+| REQ-AI-006 | `tests/integration/test_assistant_stack.py` | `services/api/app/main.py` | NOT CONFIRMED (black-box) | - |
+| REQ-AI-006 | `tests/integration/test_assistant_stack.py` | `services/api/app/ratelimit.py` | NOT CONFIRMED (black-box) | - |
+| REQ-AI-007 | `tests/unit/assistant/test_evaluation.py` | `packages/assistant/src/spatial_assistant/evaluation.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-AI-007 | `tests/unit/assistant/test_evaluation.py` | `scripts/eval_assistant.py` | CONFIRMED (EXTRACTED) | 2 |
 
 ## Resumo
 
-- CONFIRMED (EXTRACTED): **51**
-- CONFIRMED (INFERRED): **70**
-- NOT CONFIRMED (black-box): **24**
-- NOT CONFIRMED: **15**
+- CONFIRMED (EXTRACTED): **89**
+- CONFIRMED (INFERRED): **116**
+- NOT CONFIRMED (black-box): **35**
+- NOT CONFIRMED: **10**
 - NOT IN GRAPH: **0**
 
 - `NOT CONFIRMED (black-box)`: teste de integracao/E2E/performance; exercita o codigo por HTTP/MQTT/Docker,

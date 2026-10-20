@@ -141,8 +141,8 @@ paths:
     post:
       tags: [assistant]
       operationId: askAssistant
-      summary: Pergunta ao assistente (Fase 3). Apenas assistivo, com fontes e incerteza.
-      x-implementation: planned
+      summary: Pergunta ao assistente (SPEC-009). Apenas assistivo, com fontes e incerteza; equipamento de outra organização ≡ inexistente (404); 10/min por usuário.
+      x-implementation: implemented
       requestBody:
         required: true
         content:
@@ -152,15 +152,23 @@ paths:
               required: [equipment_id, question]
               additionalProperties: false
               properties:
-                equipment_id: { type: string }
+                equipment_id: { type: string, minLength: 1, maxLength: 64, pattern: "^[A-Za-z0-9._:-]+$" }
                 question: { type: string, minLength: 1, maxLength: 2000 }
       responses:
         "200":
-          description: Resposta com referências
+          description: Resposta com referências (ou recusa / evidência insuficiente, sempre explícitas)
           content:
             application/json:
               schema: { $ref: "#/components/schemas/AssistantAnswer" }
         "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429":
+          description: Limite de perguntas excedido
+          headers:
+            Retry-After: { schema: { type: integer, minimum: 1 } }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
   /api/v1/spatial/markers/{marker_id}:
     get:
       tags: [spatial]
@@ -312,14 +320,57 @@ components:
         sensor_type: { type: string }
         value: { type: number }
         limit: { type: number }
+    AssistantSource:
+      type: object
+      required: [document_id, chunk_id, title, section, version, excerpt]
+      additionalProperties: false
+      properties:
+        document_id: { type: string }
+        chunk_id: { type: string }
+        title: { type: string }
+        section: { type: string }
+        version: { type: string }
+        excerpt: { type: string, description: "Trecho LITERAL do documento aprovado" }
+    AssistantLiveAlert:
+      type: object
+      required: [severity, rule]
+      additionalProperties: false
+      properties:
+        severity: { type: string, enum: [WARNING, CRITICAL, OFFLINE] }
+        rule: { type: string }
+    AssistantLiveState:
+      type: object
+      description: Estado e alertas por REGRA determinística (twin). Não são hipóteses de IA e o assistente não os altera.
+      required: [status, alerts]
+      additionalProperties: false
+      properties:
+        status: { $ref: "#/components/schemas/Status" }
+        alerts:
+          type: array
+          items: { $ref: "#/components/schemas/AssistantLiveAlert" }
     AssistantAnswer:
       type: object
-      required: [answer, confidence, sources, human_review_required]
+      required: [outcome, answer, confidence, sources, human_review_required, provider, fallback_used, refusal_reason, live_state]
+      additionalProperties: false
       properties:
+        outcome: { type: string, enum: [answered, insufficient_evidence, refused] }
         answer: { type: string }
-        confidence: { type: string, enum: [low, medium, high] }
+        confidence:
+          type: string
+          enum: [low, medium, high]
+          description: Cobertura LEXICAL da pergunta pelo trecho (D-021); não é probabilidade de acerto.
         sources:
           type: array
-          minItems: 1
-          items: { type: object, required: [document_id, excerpt], properties: { document_id: { type: string }, excerpt: { type: string } } }
+          items: { $ref: "#/components/schemas/AssistantSource" }
         human_review_required: { type: boolean }
+        provider: { type: string, enum: [extractive, llm] }
+        fallback_used: { type: boolean, description: "true se o LLM foi pedido e a resposta veio do extrativo" }
+        refusal_reason: { type: [string, "null"], enum: [physical_action, safety_bypass, prompt_injection, null] }
+        live_state: { $ref: "#/components/schemas/AssistantLiveState" }
+      allOf:
+        - if: { properties: { outcome: { const: answered } }, required: [outcome] }
+          then: { properties: { sources: { minItems: 1 } } }
+        - if: { properties: { outcome: { enum: [insufficient_evidence, refused] } }, required: [outcome] }
+          then: { properties: { sources: { maxItems: 0 }, human_review_required: { const: true } } }
+        - if: { properties: { outcome: { const: refused } }, required: [outcome] }
+          then: { properties: { refusal_reason: { type: string } } }

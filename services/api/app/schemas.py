@@ -3,7 +3,7 @@
 from datetime import UTC, datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, field_serializer
+from pydantic import BaseModel, ConfigDict, Field, field_serializer
 
 Status = Literal["NORMAL", "WARNING", "CRITICAL", "OFFLINE", "UNKNOWN"]
 Quality = Literal["GOOD", "BAD"]
@@ -71,3 +71,41 @@ class AlertOut(_Out):
 
 class ErrorOut(_Out):
     detail: str
+
+
+class AssistantAskIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    equipment_id: str = Field(min_length=1, max_length=64, pattern=r"^[A-Za-z0-9._:-]+$")
+    question: str = Field(min_length=1, max_length=2000)
+
+
+class AssistantSourceOut(_Out):
+    document_id: str
+    chunk_id: str
+    title: str
+    section: str
+    version: str
+    excerpt: str
+
+
+class AssistantLiveAlertOut(_Out):
+    severity: Literal["WARNING", "CRITICAL", "OFFLINE"]
+    rule: str
+
+
+class AssistantLiveStateOut(_Out):
+    status: Status
+    alerts: list[AssistantLiveAlertOut]
+
+
+class AssistantAnswerOut(_Out):
+    outcome: Literal["answered", "insufficient_evidence", "refused"]
+    answer: str
+    confidence: Literal["low", "medium", "high"]
+    sources: list[AssistantSourceOut]
+    human_review_required: bool
+    provider: Literal["extractive", "llm"]
+    fallback_used: bool
+    refusal_reason: Literal["physical_action", "safety_bypass", "prompt_injection"] | None
+    live_state: AssistantLiveStateOut

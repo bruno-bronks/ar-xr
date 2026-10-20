@@ -1,0 +1,73 @@
+% Z-005 — Resposta do assistente (SPEC-009, REQ-AI-001..005)
+%
+% VERIFICAÇÃO: parse + typecheck com CZT via scripts/verify-z.ps1. NÃO prova teoremas;
+% as conjecturas (\vdash?) são checadas por Hypothesis em tests/unit/assistant/test_invariants.py.
+\documentclass{article}
+\begin{document}
+
+\section*{Z-005: Assistant answer}
+
+\begin{zed}
+  [CHUNK, DOC, EQTYPE, EXCERPT]
+\end{zed}
+
+\begin{zed}
+  OUTCOME ::= answered | insufficientEvidence | refused \\
+  RISK ::= normalRisk | highRisk \\
+  REVIEW ::= reviewRequired | reviewNotRequired
+\end{zed}
+
+\begin{schema}{KnowledgeBase}
+  approved : \finset DOC \\
+  chunkDoc : CHUNK \pfun DOC \\
+  chunkRisk : CHUNK \fun RISK \\
+  scope : CHUNK \fun \finset EQTYPE \\
+  text : CHUNK \fun \finset EXCERPT
+\where
+  \ran chunkDoc \subseteq approved
+\end{schema}
+
+\begin{schema}{Answer}
+  KnowledgeBase \\
+  equipmentType? : EQTYPE \\
+  retrieved : \finset CHUNK \\
+  outcome! : OUTCOME \\
+  sources! : \finset CHUNK \\
+  excerpts! : \finset EXCERPT \\
+  review! : REVIEW
+\where
+  retrieved \subseteq \dom chunkDoc \\
+  \forall c : retrieved @ equipmentType? \in scope~c \\
+  sources! \subseteq retrieved \\
+  excerpts! \subseteq \bigcup \{ c : sources! @ text~c \} \\
+  outcome! = answered \iff sources! \neq \emptyset \\
+  outcome! \neq answered \implies excerpts! = \emptyset \\
+  outcome! \neq answered \implies review! = reviewRequired \\
+  (\exists c : sources! @ chunkRisk~c = highRisk) \implies review! = reviewRequired
+\end{schema}
+
+\subsection*{Conjecturas}
+
+A1: toda fonte citada pertence a um documento aprovado.
+
+\begin{zed}
+  \vdash? \forall Answer @ \forall c : sources! @ chunkDoc~c \in approved
+\end{zed}
+
+A2: toda fonte citada está no escopo do tipo de equipamento consultado.
+
+\begin{zed}
+  \vdash? \forall Answer @ \forall c : sources! @ equipmentType? \in scope~c
+\end{zed}
+
+A3: resposta sem fonte nunca é \emph{answered} (sem evidência não há orientação).
+
+\begin{zed}
+  \vdash? \forall Answer @ sources! = \emptyset \implies outcome! \neq answered
+\end{zed}
+
+% A4 (recusa nunca cita fonte) segue do esquema: outcome! \neq answered => excerpts! = \emptyset.
+% A5 (cada excerto é literal) é a propriedade \subseteq \bigcup acima; o verificador de texto em
+% spatial_assistant.grounding aplica o análogo lexical à saída de um LLM.
+
+\end{document}

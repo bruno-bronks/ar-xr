@@ -10,7 +10,7 @@
   <header class="top">
     <div>
       <h1>Painel de equipamentos</h1>
-      <p class="subtitle">Fallback web 2D · dados <strong>simulados</strong> · somente leitura</p>
+      <p class="subtitle">Fallback web 2D · dados <strong>simulados</strong> · somente leitura · o assistente é apenas informativo</p>
     </div>
     <div class="controls">
       <label for="org">Organização (demo)</label>
@@ -29,6 +29,24 @@
     <h2 id="alerts-title">Alertas ativos <span id="alert-count" class="count">0</span></h2>
     <ul id="alerts" aria-live="polite"></ul>
     <p id="no-alerts" class="muted">Nenhum alerta ativo no momento.</p>
+  </section>
+
+  <section aria-labelledby="assistant-title" class="assistant">
+    <h2 id="assistant-title">Assistente (apenas informativo)</h2>
+    <p class="muted">
+      Responde com trechos de documentação aprovada (base de demonstração <strong>fictícia</strong>), com fontes e
+      incerteza. Não liga, desliga nem altera nenhum equipamento; o estado e os alertas continuam sendo das regras.
+    </p>
+    <form id="assistant-form" autocomplete="off">
+      <label for="assistant-equipment">Equipamento</label>
+      <select id="assistant-equipment" required></select>
+      <label for="assistant-question">Pergunta</label>
+      <textarea id="assistant-question" rows="2" maxlength="2000" required
+        placeholder="Ex.: Por que a temperatura do compressor está alta?"></textarea>
+      <button type="submit" id="assistant-submit">Perguntar</button>
+    </form>
+    <p id="assistant-error" class="banner banner-error" role="alert" data-testid="assistant-error" hidden></p>
+    <div id="assistant-result" class="assistant-result" data-testid="assistant-result" aria-live="polite" hidden></div>
   </section>
 
   <main>

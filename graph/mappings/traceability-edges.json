@@ -1,7 +1,7 @@
 {
   "generated_from": "docs/requirements/traceability.csv",
   "note": "Arestas VERIFICADAS (a matriz e testada por tests/unit/repo/test_traceability.py).",
-  "edge_count": 255,
+  "edge_count": 343,
   "edges": [
     {
       "source": ".github/workflows/ci.yml",
@@ -26,8 +26,407 @@
     },
     {
       "source": "REQ-AI-001",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0004-assistant-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-001",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-005-assistant-answer.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-001",
       "relation": "SERVES",
       "target": "OUT-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-001",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-009-ai-assistant.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-001",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_assistant_stack.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_assistant_api.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_invariants.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_service.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-002",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-002",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0004-assistant-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-002",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-005-assistant-answer.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-002",
+      "relation": "SERVES",
+      "target": "OUT-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-002",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-009-ai-assistant.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-002",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_assistant_stack.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-002",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_invariants.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-002",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_knowledge.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-003",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-003",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0004-assistant-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-003",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-005-assistant-answer.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-003",
+      "relation": "SERVES",
+      "target": "OUT-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-003",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-009-ai-assistant.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_evaluation.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_grounding_llm.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_invariants.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_service.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_text_retrieval.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-004",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-004",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0004-assistant-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-004",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-005-assistant-answer.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-004",
+      "relation": "SERVES",
+      "target": "OUT-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-004",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-009-ai-assistant.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-004",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_assistant_stack.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-004",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_assistant_api.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-004",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_policy.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-004",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_service.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-005",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-005",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0004-assistant-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-005",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-005-assistant-answer.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-005",
+      "relation": "SERVES",
+      "target": "OUT-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-005",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-009-ai-assistant.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-005",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_assistant_api.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-005",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_config.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-005",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_grounding_llm.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-005",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_invariants.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-005",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_service.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-006",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-006",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0004-assistant-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-006",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-005-assistant-answer.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-006",
+      "relation": "SERVES",
+      "target": "OUT-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-006",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-009-ai-assistant.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-006",
+      "relation": "TESTED_BY",
+      "target": "tests/contract/test_openapi_contract.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-006",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_assistant_stack.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-006",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_assistant_api.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-007",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-007",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0004-assistant-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-007",
+      "relation": "SERVES",
+      "target": "OUT-MNT-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-007",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-009-ai-assistant.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-AI-007",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/assistant/test_evaluation.py",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -1355,6 +1754,41 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "REQ-UX-002",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/openapi.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-002",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0004-assistant-architecture.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-002",
+      "relation": "SERVES",
+      "target": "OUT-MNT-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-002",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-009-ai-assistant.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-002",
+      "relation": "TESTED_BY",
+      "target": "tests/e2e/test_panel.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "clients/ar-unity/Assets/Scripts/QrScanner.cs",
       "relation": "IMPLEMENTS",
       "target": "REQ-AR-001",
@@ -1481,7 +1915,28 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "clients/web-fallback/app.js",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "clients/web-fallback/index.html",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/web-fallback/index.html",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/web-fallback/style.css",
       "relation": "IMPLEMENTS",
       "target": "REQ-UX-001",
       "status": "VERIFIED",
@@ -1490,7 +1945,7 @@
     {
       "source": "clients/web-fallback/style.css",
       "relation": "IMPLEMENTS",
-      "target": "REQ-UX-001",
+      "target": "REQ-UX-002",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -1519,6 +1974,111 @@
       "source": "graph/README.md",
       "relation": "IMPLEMENTS",
       "target": "REQ-ENG-008",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/evaluation.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-007",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/grounding.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/grounding.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/knowledge.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/llm.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/llm_anthropic.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/models.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/policy.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/policy.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/retrieval.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/service.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/service.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/service.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/service.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/assistant/src/spatial_assistant/text.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-003",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -1600,6 +2160,13 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "scripts/eval_assistant.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-007",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "scripts/generate_qr.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-AR-006",
@@ -1635,6 +2202,20 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "services/api/app/assistant_routes.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/assistant_routes.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-006",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "services/api/app/audit.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-SEC-004",
@@ -1645,6 +2226,13 @@
       "source": "services/api/app/auth.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-SEC-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/config.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-005",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -1677,9 +2265,30 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "services/api/app/main.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/main.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-006",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "services/api/app/middleware.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-ENG-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/ratelimit.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-006",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -1708,6 +2317,13 @@
       "source": "services/api/app/routes.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-SEC-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/schemas.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-AI-006",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
