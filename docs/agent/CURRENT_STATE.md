@@ -23,7 +23,7 @@ Pilha completa simulador → Mosquitto → worker → PostgreSQL → API (Bearer
 - **`scripts/fetch-zxing-unity.ps1` não foi executado:** o proxy corporativo bloqueia `.nupkg` ("File Transfer Blocked"); **não contornei**. Por isso `Assets/Plugins/ZXing/zxing.dll` não existe. Corrigi um erro meu: o pacote ZXing.Net 0.16.9 **não** tem `lib/unity` (achado na CI) — usa-se `netstandard2.1`.
 - Testes C# **não rodam na máquina do desenvolvedor** (mesmo bloqueio de NuGet); só compilação local contra stub. Rodam na CI.
 - **Decisões D-013…D-015 adotadas por default** (ZXing.Net, `adb reverse`, projeto no repositório) sem confirmação do usuário (D-016).
-- **Dreaming:** ainda **não** instalado/usado (serviço de nuvem pago, acesso sob solicitação) — decisão pendente do usuário (opções A/B/C da Fase 1).
+- **Dreaming:** ainda **não** instalado/usado (serviço de nuvem pago, acesso sob solicitação) — **decisão do usuário: opção B (adiar)**, com gatilhos de revisão em `docs/decisions/tool-evaluation.md`. Não atende ao pedido original de instalar/usar; é adiamento assumido.
 - Herdado: autenticação demo, Mosquitto anônimo, rate limit em memória, sem OIDC/RBAC, CI de segurança incompleta (Semgrep/Trivy/SBOM), Python 3.12 local não obtido.
 
 ## Implantação de demonstração no VPS (2026-10-19)

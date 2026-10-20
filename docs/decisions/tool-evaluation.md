@@ -51,7 +51,12 @@ O que já existe para recebê-lo com segurança (plano §9: "memória gerada nun
 - `tests/unit/repo/test_agent_memory.py`: quebra o build se a memória citar arquivos/REQs inexistentes (o problema de "entradas obsoletas" que o Dreaming resolve);
 - qualquer saída de um dream futuro entra **só por PR** em `docs/agent/` (nunca em `specs/`, `docs/adr/` ou código).
 
-Opções para você decidir: ver relatório final.
+**Decisão do usuário (2026-10-19): opção B — adiar com critério.** O Dreaming não será contratado agora. A memória segue em `docs/agent/CURRENT_STATE.md`, protegida por `tests/unit/repo/test_agent_memory.py`. Isso **não** atende ao pedido original de "instalar e usar" o Dreaming; é um adiamento assumido, não uma adoção.
+
+Revisitar (e então reavaliar a opção A: pedir acesso, API key só em `.env`, saída só por PR em `docs/agent/`) quando ocorrer qualquer um destes gatilhos:
+- o recurso sair de *research preview* ou o acesso for concedido;
+- `CURRENT_STATE.md` passar de ~150 linhas ou acumular entradas que o teste de memória não detecta (obsoletas, duplicadas);
+- o projeto passar a ter sessões de agente em volume que justifique o custo de tokens.
 
 ## Ainda não instaladas (aguardam necessidade/aprovação)
 Gitleaks, Semgrep, Trivy, Schemathesis, `cyclonedx-bom` (SBOM): rodam na CI (não executada) ou ainda não foram adicionados. Z/EVES (provador): não avaliado.
