@@ -175,3 +175,43 @@ footer { margin-top: 24px; max-width: 70ch; }
 .outcome[data-outcome="answered"] { background: var(--normal-bg); color: var(--normal); }
 .outcome[data-outcome="insufficient_evidence"] { background: var(--unknown-bg); color: var(--unknown); }
 .outcome[data-outcome="refused"] { background: var(--warning-bg); color: var(--warning); }
+
+.hacc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin: 0 0 18px;
+}
+.hacc h2 { margin-top: 0; }
+.hacc-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0; }
+.hacc-controls select { font: inherit; padding: 4px 6px; max-width: 100%; }
+.plan {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+}
+.plan[data-stale="true"] { opacity: 0.6; }
+.bed {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 6px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 0.9rem;
+}
+.bed[data-status="NORMAL"] { border-top-color: var(--normal); }
+.bed[data-status="ATTENTION"] { border-top-color: var(--warning); }
+.bed[data-status="ALERT"] { border-top-color: var(--critical); }
+.bed[data-status="OFFLINE"] { border-top-color: var(--offline); }
+.bed[data-status="UNKNOWN"] { border-top-color: var(--unknown); }
+.bed h3 { margin: 0 0 4px; font-size: 1rem; }
+.bed ul { margin: 4px 0 0; padding-left: 16px; }
+.bed .bed-meta { color: var(--muted); font-size: 0.8rem; margin: 4px 0 0; }
+.bed .badge[data-status="ATTENTION"] { background: var(--warning-bg); color: var(--warning); }
+.bed .badge[data-status="ALERT"] { background: var(--critical-bg); color: var(--critical); }

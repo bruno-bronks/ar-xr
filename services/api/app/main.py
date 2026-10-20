@@ -14,6 +14,9 @@ from spatial_assistant.knowledge import load_knowledge_base
 from spatial_assistant.llm_anthropic import AnthropicProvider
 from spatial_assistant.service import AssistantService
 from spatial_common.logging_json import configure_logging
+from spatial_hacc.http import HttpHaccSource
+from spatial_hacc.simulated import SimulatedHaccSource
+from spatial_hacc.source import HaccSource
 from spatial_storage.postgres import PostgresRepository
 from spatial_storage.repository import Repository
 from sqlalchemy import create_engine
@@ -22,6 +25,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.assistant_routes import router as assistant_router
 from app.auth import build_authenticator
 from app.config import Settings
+from app.hacc_routes import router as hacc_router
 from app.health import Check, build_router, check_broker, check_database
 from app.middleware import RequestContextMiddleware, SecurityHeadersMiddleware
 from app.ratelimit import FixedWindowLimiter
@@ -74,6 +78,14 @@ def build_assistant(settings: Settings | None) -> AssistantService:
     return AssistantService(kb, llm)
 
 
+def build_hacc(settings: Settings | None, clock: Callable[[], datetime]) -> HaccSource:
+    """Fonte HACC: SIMULADA por padrao (D-025); HTTP somente leitura so se configurada."""
+    if settings is not None and settings.hacc_source == "http" and settings.hacc_base_url:
+        hosts = [h.strip() for h in settings.hacc_allowed_hosts.split(",") if h.strip()]
+        return HttpHaccSource(settings.hacc_base_url, allowed_hosts=hosts)
+    return SimulatedHaccSource(clock)
+
+
 def create_app(
     *,
     checks: Mapping[str, Check] | None = None,
@@ -83,6 +95,7 @@ def create_app(
     marker_rate_limit: int | None = None,
     assistant: AssistantService | None = None,
     assistant_rate_limit: int | None = None,
+    hacc: HaccSource | None = None,
 ) -> FastAPI:
     """Sem `settings`, `checks` e `repo` precisam ser injetados (composicao de testes)."""
     if settings is None and (checks is None or repo is None):
@@ -126,6 +139,7 @@ def create_app(
     app.state.assistant = assistant if assistant is not None else build_assistant(settings)
     ask_limit = assistant_rate_limit or (settings.assistant_rate_limit if settings else 10)
     app.state.assistant_limiter = FixedWindowLimiter(ask_limit, 60.0, app.state.clock)
+    app.state.hacc = hacc if hacc is not None else build_hacc(settings, app.state.clock)
 
     @app.exception_handler(StarletteHTTPException)
     async def uniform_not_found(request: Request, exc: StarletteHTTPException) -> Response:
@@ -138,6 +152,7 @@ def create_app(
     app.include_router(build_router(checks))
     app.include_router(api_router)
     app.include_router(assistant_router)
+    app.include_router(hacc_router)
 
     panel_dir = _find_panel_dir(settings.panel_dir if settings else None)
     if panel_dir is not None:

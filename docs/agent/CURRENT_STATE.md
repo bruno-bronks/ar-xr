@@ -1,9 +1,9 @@
 # CURRENT_STATE — memória determinística do projeto
 
-Atualizado: 2026-10-20 · `main` contém as Fases 0, 1, 2 e 3 (PR #1, #2 e **#3 mesclados** a pedido explícito do usuário; merge do PR #3: 1dad097, CI verde nos 5 jobs; última branch de trabalho: `feature/ai-assistant-phase3`, já mesclada). Fase 2 segue parcial: a validação em aparelho físico depende de hardware (Samsung A54 + Unity) — ver "Próximo passo".
+Atualizado: 2026-10-20 · `main` contém as Fases 0, 1, 2 e 3 (PR #1, #2 e #3 mesclados a pedido explícito; último merge 1dad097). **Fase 4 (HACC Spatial, dados SIMULADOS) implementada na branch `feature/hacc-spatial-phase4`, ainda sem commit/push/PR** (aguarda seu pedido e sua aprovação). Fase 2 segue parcial: a validação em aparelho físico depende de hardware (Samsung A54 + Unity) — ver "Próximo passo".
 
 > Validado por `tests/unit/repo/test_agent_memory.py` (links, caminhos e REQs citados precisam existir).
-> Aprovações do usuário: Fase 0, decisões D-001/D-003/D-004/D-006, ADR-0001, Z via CZT, Graphify instalado e usado, Fase 1, merge do PR #1, **Fase 2** (sem responder às decisões D-013…D-015 nem informar o aparelho → ver D-016), Dreaming adiado (opção B), **Fase 3** (pedido de implementação em 2026-10-20) e **D-018…D-023 aprovadas em 2026-10-20** (D-024), com commit/push/PR, campo de pergunta no painel e redeploy no VPS.
+> Aprovações do usuário: Fase 0, decisões D-001/D-003/D-004/D-006, ADR-0001, Z via CZT, Graphify instalado e usado, Fase 1, merge do PR #1, **Fase 2** (sem responder às decisões D-013…D-015 nem informar o aparelho → ver D-016), Dreaming adiado (opção B), **Fase 3** (pedido de implementação em 2026-10-20) e **D-018…D-023 aprovadas em 2026-10-20** (D-024), com commit/push/PR, campo de pergunta no painel e redeploy no VPS; **Fase 4** (pedido em 2026-10-20) e **D-025…D-031 aprovadas em 2026-10-20** (D-032), com commit, push, PR e redeploy no VPS.
 
 ## Fases 0–1 (mescladas em `main`, verificadas)
 Pilha completa simulador → Mosquitto → worker → PostgreSQL → API (Bearer **demo**) → painel 2D; 528 testes passaram com pilha real, PostgreSQL real e E2E (Edge); CI do GitHub verde nos 4 jobs originais. Evidências em `docs/evidence/phase-0/` e `docs/evidence/phase-1/` (latência publicar→API p95 0,276 s, n=100, 1 máquina). Specs Z passam no typecheck do CZT; **nenhum teorema provado**.
@@ -26,6 +26,14 @@ Pilha completa simulador → Mosquitto → worker → PostgreSQL → API (Bearer
 - **Testes executados:** 601 passam em `scripts/check.ps1` (+ ruff, mypy strict, pip-audit sem achados); 682 com PostgreSQL real; 32 de integração/desempenho + 4 do assistente + 8 E2E na pilha real reconstruída. Invariantes A1–A4 por Hypothesis; mutação manual 11/11. Evidência e números honestos em `docs/evidence/phase-3/README.md` e `docs/evidence/phase-3/eval-report.md`.
 - **Avaliação (conjuntos do próprio agente; não independente):** alucinação do extrativo 0 e citação 100 % literal (por construção); recuperação lexical ainda erra sinônimos e responde fora de escopo em parte das perguntas; no conjunto de reserva 2 de 5 pedidos de contorno/injeção parafraseados não foram recusados (sem ação nem resposta inventada).
 
+## Fase 4 — HACC Spatial (implementada, branch `feature/hacc-spatial-phase4`, não commitada)
+- **Spec/decisões:** [SPEC-010](../../specs/functional/SPEC-010-hacc-spatial.md), [ADR-0005](../adr/0005-hacc-adapter-and-scopes.md), `specs/formal-z/z-006-bed-status.tex` (typecheck CZT OK; nada provado), REQ-HACC-001…006 e D-025…D-031 em [requirements.md](../requirements/requirements.md). Runbook: [hacc-spatial.md](../runbooks/hacc-spatial.md).
+- **IMPORTANTE:** você pediu a Fase 4 sem informar como o HACC expõe dados. **Não li, contatei nem alterei o HACC real.** Construí contra um **contrato assumido** `specs/contracts/hacc-readonly.yaml` (marcado como NÃO verificado) e uma **fonte simulada** padrão (D-025).
+- **Código:** regra pura `packages/domain/src/spatial_domain/beds.py`; pacote `packages/hacc/src/spatial_hacc/` (porta somente leitura `HaccSource`, `SimulatedHaccSource`, `HttpHaccSource` opcional e desligado, modelos estritos); rotas `services/api/app/hacc_routes.py` (`GET /api/v1/hacc/wards` e `/wards/{id}/beds`); escopos em `services/api/app/auth.py` (`hacc:read`; tokens demo `demo-nurse-a/b`); planta 2D no painel `clients/web-fallback/`.
+- **Comportamento:** exige autenticação **e** escopo `hacc:read` (403); ala de outra organização ≡ inexistente (404); `tenant_id` imposto no nosso código; estado do leito por regra (sem leitura ⇒ `UNKNOWN`, leitura velha ⇒ `OFFLINE`, alarmes ⇒ `ALERT`/`ATTENTION`); modelo sem campo de pessoa e payload com campo extra rejeitado por inteiro; log/auditoria sem estado de leito; sem banco, tabela ou migração nova.
+- **Testes executados:** 747 passam em `scripts/check.ps1` (+ ruff, mypy strict, pip-audit sem achados); 829 com PostgreSQL real; 36 de integração/desempenho (4 do HACC) e 21 E2E no navegador na pilha real reconstruída; Hypothesis B1–B3; mutação manual 16/16. Evidência e limites em `docs/evidence/phase-4/README.md`.
+- **Limites:** nenhuma integração real; adaptador HTTP só testado contra servidor local; RBAC com um único escopo (endpoints de equipamento seguem sem escopo, então a enfermagem também enxerga equipamentos); sem rate limit/disjuntor em `/hacc`; overlay só 2D (cliente AR não estendido); não implantado no VPS; D-025…D-031 adotadas por default sem sua confirmação.
+
 ## O que NÃO foi feito / não está verificado
 - **AR em aparelho físico: NADA validado** (REQ-AR-007 `planned`). Sem Android/ARCore, sem Unity instalado, sem câmera. Não há vídeo, latência QR→overlay, FPS nem estabilidade.
 - **Cola Unity nunca compilada:** erros de compilação na 1ª abertura são esperados. Em especial não verificadas: `XRCpuImage.Convert`, `ARAnchorManager.TryAddAnchorAsync`/`result.status.IsSuccess()` (API do AR Foundation 6), asmdefs e referências. `QrScanner.cs` não é tocado por nenhum teste.
@@ -34,6 +42,7 @@ Pilha completa simulador → Mosquitto → worker → PostgreSQL → API (Bearer
 - **Decisões D-013…D-015 adotadas por default** (ZXing.Net, `adb reverse`, projeto no repositório) sem confirmação do usuário (D-016).
 - **Dreaming:** ainda **não** instalado/usado (serviço de nuvem pago, acesso sob solicitação) — **decisão do usuário: opção B (adiar)**, com gatilhos de revisão em `docs/decisions/tool-evaluation.md`. Não atende ao pedido original de instalar/usar; é adiamento assumido.
 - **Fase 3:** base de conhecimento fictícia e sem revisão técnica humana (D-019); nenhum LLM real foi chamado; verificador de fundamentação é lexical (aceita inversões semânticas); D-018…D-023 adotadas por default sem sua confirmação; o LLM real não está habilitado no VPS (sem chave).
+- **Fase 4:** HACC real não integrado; contrato assumido; ver a seção da Fase 4.
 - Herdado: autenticação demo, Mosquitto anônimo, rate limit em memória, sem OIDC/RBAC, CI de segurança incompleta (Semgrep/Trivy/SBOM), Python 3.12 local não obtido.
 
 ## Implantação de demonstração no VPS (2026-10-19; Fase 3 reimplantada em 2026-10-20)
@@ -53,4 +62,5 @@ Pilha completa rodando em VPS compartilhado, fora da CI: migração OK, `/health
 3. **VPS:** a demonstração já roda a Fase 3. Pendências de segurança lá: trocar a senha root compartilhada no chat e remover a chave de deploy temporária.
 4. **Dreaming:** adiado por decisão sua (opção B); gatilhos de revisão em `docs/decisions/tool-evaluation.md`.
 5. **LLM real** para o assistente: exige sua aprovação (serviço pago), chave em `.env` e validação manual do adaptador (nunca testado contra a API real).
-Fase 4 (HACC Spatial) **não** foi iniciada e depende da sua aprovação.
+5. **Fase 4:** D-025…D-031 aprovadas (D-032); falta o merge do PR (CI do GitHub). Para uma integração REAL: fornecer o contrato verdadeiro do HACC (sem credenciais no chat), autorizar a leitura e fazer a análise LGPD; antes disso, adicionar rate limit/disjuntor e RBAC completo.
+Fase 5 (visão computacional/IoT real) **não** foi iniciada e depende da sua aprovação.

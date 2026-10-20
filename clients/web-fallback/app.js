@@ -26,6 +26,26 @@ const els = {
   askSubmit: document.getElementById("assistant-submit"),
   askError: document.getElementById("assistant-error"),
   askResult: document.getElementById("assistant-result"),
+  haccMsg: document.getElementById("hacc-msg"),
+  haccControls: document.getElementById("hacc-controls"),
+  haccWard: document.getElementById("hacc-ward"),
+  haccSummary: document.getElementById("hacc-summary"),
+  haccPlan: document.getElementById("hacc-plan"),
+};
+
+const BED_STATUS = {
+  NORMAL: { icon: "✓", label: "Normal" },
+  ATTENTION: { icon: "!", label: "Atenção" },
+  ALERT: { icon: "✕", label: "Alerta" },
+  OFFLINE: { icon: "⏻", label: "Offline" },
+  UNKNOWN: { icon: "?", label: "Desconhecido" },
+};
+const BED_RULE = {
+  bed_exit_alarm: "Saída do leito",
+  iv_pump_alarm: "Bomba de infusão",
+  call_button: "Chamada",
+  cleaning_due: "Limpeza pendente",
+  offline: "Sem dados recentes",
 };
 
 const OUTCOME = {
@@ -55,6 +75,107 @@ async function api(path, token) {
     throw new Error(response.status === 401 ? "não autenticado (401)" : "erro HTTP " + response.status);
   }
   return response.json();
+}
+
+// --- HACC Spatial (SPEC-010): planta 2D de leitos SIMULADOS; todo texto entra via textContent ----
+
+class HaccError extends Error {
+  constructor(message, status) {
+    super(message);
+    this.status = status;
+  }
+}
+
+async function haccApi(path, token) {
+  const response = await fetch(path, { headers: { Authorization: "Bearer " + token }, cache: "no-store" });
+  if (!response.ok) throw new HaccError("HTTP " + response.status, response.status);
+  return response.json();
+}
+
+function resetHacc() {
+  els.haccMsg.hidden = true;
+  els.haccControls.hidden = true;
+  els.haccWard.replaceChildren();
+  els.haccSummary.textContent = "";
+  els.haccPlan.replaceChildren();
+  els.haccPlan.hidden = true;
+  els.haccPlan.setAttribute("data-stale", "false");
+}
+
+function showHaccMessage(text) {
+  els.haccMsg.textContent = text;
+  els.haccMsg.hidden = false;
+}
+
+function renderBed(bed, evaluatedAt) {
+  const meta = BED_STATUS[bed.status] || BED_STATUS.UNKNOWN;
+  const card = el("article", { class: "bed", "data-testid": "bed-" + bed.bed_id, "data-status": bed.status });
+  card.style.gridColumn = String(bed.x);
+  card.style.gridRow = String(bed.y);
+  card.appendChild(el("h3", {}, bed.label));
+  const badge = el("span", { class: "badge", "data-status": bed.status });
+  badge.appendChild(el("span", { "aria-hidden": "true" }, meta.icon));
+  badge.appendChild(el("span", {}, meta.label));
+  card.appendChild(badge);
+  if (bed.alerts.length > 0) {
+    const list = el("ul");
+    for (const alert of bed.alerts) list.appendChild(el("li", {}, BED_RULE[alert.rule] || alert.rule));
+    card.appendChild(list);
+  }
+  let age = "sem leitura";
+  if (bed.observed_at) {
+    const seconds = Math.max(0, Math.round((Date.parse(evaluatedAt) - Date.parse(bed.observed_at)) / 1000));
+    age = "leitura há " + seconds + " s";
+  }
+  card.appendChild(el("p", { class: "bed-meta" }, (bed.occupied ? "Ocupado" : "Livre") + " · " + age));
+  return card;
+}
+
+function renderPlan(data) {
+  els.haccPlan.style.gridTemplateColumns = "repeat(" + data.ward.width + ", minmax(0, 1fr))";
+  els.haccPlan.replaceChildren(...data.beds.map((bed) => renderBed(bed, data.evaluated_at)));
+  els.haccPlan.hidden = false;
+  els.haccPlan.setAttribute("data-stale", "false");
+  const meta = BED_STATUS[data.status] || BED_STATUS.UNKNOWN;
+  els.haccSummary.textContent = "Estado da ala (pior leito): " + meta.icon + " " + meta.label;
+}
+
+let haccInFlight = false;
+
+async function refreshHacc(mine, token) {
+  if (haccInFlight) return; // nao empilha requisicoes se a fonte estiver lenta
+  haccInFlight = true;
+  try {
+    const wards = await haccApi("/api/v1/hacc/wards", token);
+    if (mine !== generation) return;
+    const previous = els.haccWard.value;
+    els.haccWard.replaceChildren(...wards.map((w) => el("option", { value: w.ward_id }, w.ward_id + " · " + w.name)));
+    if (wards.some((w) => w.ward_id === previous)) els.haccWard.value = previous;
+    els.haccControls.hidden = wards.length === 0;
+    if (wards.length === 0) {
+      els.haccPlan.hidden = true;
+      showHaccMessage("Nenhuma ala disponível para esta organização.");
+      return;
+    }
+    const data = await haccApi("/api/v1/hacc/wards/" + encodeURIComponent(els.haccWard.value) + "/beds", token);
+    if (mine !== generation) return;
+    renderPlan(data);
+    els.haccMsg.hidden = true;
+  } catch (error) {
+    if (mine !== generation) return;
+    if (error instanceof HaccError && error.status === 403) {
+      resetHacc();
+      showHaccMessage("Sem permissão para ver leitos: este usuário não tem o escopo hacc:read.");
+    } else if (error instanceof HaccError && error.status === 503) {
+      showHaccMessage("Fonte HACC indisponível; a planta exibida pode estar desatualizada.");
+      els.haccPlan.setAttribute("data-stale", "true");
+    } else {
+      showHaccMessage("Falha ao atualizar os leitos: " + error.message + ". Os dados exibidos podem estar desatualizados.");
+      els.haccPlan.setAttribute("data-stale", "true");
+    }
+  } finally {
+    haccInFlight = false;
+  }
 }
 
 // --- Assistente (SPEC-009): somente informativo; todo texto entra via textContent ---------------
@@ -220,6 +341,7 @@ async function refresh() {
   const token = els.org.value; // fixado no inicio: uma troca de org nao contamina requisicoes em voo
   if (inFlightGeneration === mine) return;
   inFlightGeneration = mine;
+  refreshHacc(mine, token); // independente do restante: uma falha aqui nao derruba os equipamentos
   try {
     const equipmentList = await api("/api/v1/equipment", token);
     const details = await Promise.all(
@@ -264,6 +386,7 @@ els.org.addEventListener("change", () => {
   renderAlerts([]);
   els.error.hidden = true;
   resetAssistant();
+  resetHacc();
   lastOk = null;
   refresh();
 });

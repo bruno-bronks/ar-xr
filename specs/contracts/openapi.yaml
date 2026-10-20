@@ -7,7 +7,7 @@ info:
     Fonte da verdade do contrato (spec-first). `tests/contract/test_openapi_contract.py`
     garante que as operações `implemented` existem na API, que nenhuma rota da API fica fora
     deste documento e que as respostas reais obedecem aos schemas. Operações `planned`
-    pertencem a fases futuras (assistente de IA: Fase 3).
+    pertencem a fases futuras (hoje não há nenhuma).
 
     Autenticação: `Authorization: Bearer <token>`. Fase 1 = modo demo (tokens fictícios,
     recusado em produção). Recurso de outra organização e recurso inexistente retornam o mesmo 404.
@@ -19,6 +19,7 @@ tags:
   - name: equipment
   - name: assistant
   - name: spatial
+  - name: hacc
 
 paths:
   /health/live:
@@ -195,6 +196,44 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Error" }
+  /api/v1/hacc/wards:
+    get:
+      tags: [hacc]
+      operationId: listHaccWards
+      summary: Alas do HACC (SIMULADO) da organização do chamador. Exige o escopo hacc:read (SPEC-010).
+      x-implementation: implemented
+      responses:
+        "200":
+          description: Alas com estado agregado
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/HaccWardSummary" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "503": { $ref: "#/components/responses/HaccUnavailable" }
+  /api/v1/hacc/wards/{ward_id}/beds:
+    get:
+      tags: [hacc]
+      operationId: listHaccBeds
+      summary: Leitos de uma ala para a planta 2D (SIMULADO). Ala de outra organização ≡ inexistente (404).
+      x-implementation: implemented
+      parameters:
+        - name: ward_id
+          in: path
+          required: true
+          schema: { type: string, minLength: 1, maxLength: 64, pattern: "^[A-Za-z0-9._:-]+$" }
+      responses:
+        "200":
+          description: Leitos com estado operacional calculado no servidor
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/HaccWardBeds" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "503": { $ref: "#/components/responses/HaccUnavailable" }
 
 security:
   - bearerAuth: []
@@ -228,6 +267,16 @@ components:
       content:
         application/json:
           schema: { $ref: "#/components/schemas/Error" }
+    Forbidden:
+      description: Autenticado, mas sem o escopo necessário (hacc:read)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    HaccUnavailable:
+      description: Fonte HACC indisponível ou payload inválido (sem detalhes internos)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
   schemas:
     Live:
       type: object
@@ -253,6 +302,62 @@ components:
       required: [detail]
       properties:
         detail: { type: string }
+    BedStatus:
+      type: string
+      enum: [NORMAL, ATTENTION, ALERT, OFFLINE, UNKNOWN]
+    HaccAlert:
+      type: object
+      required: [severity, rule]
+      additionalProperties: false
+      properties:
+        severity: { type: string, enum: [ALERT, ATTENTION, OFFLINE] }
+        rule: { type: string }
+    HaccWardSummary:
+      type: object
+      required: [ward_id, name, bed_count, status, alert_count]
+      additionalProperties: false
+      properties:
+        ward_id: { type: string }
+        name: { type: string }
+        bed_count: { type: integer, minimum: 0 }
+        status: { $ref: "#/components/schemas/BedStatus" }
+        alert_count: { type: integer, minimum: 0 }
+    HaccBed:
+      type: object
+      description: Leito SIMULADO. Sem identificação de pessoa, sinais vitais ou diagnóstico (D-028).
+      required: [bed_id, label, x, y, occupied, status, observed_at, alerts]
+      additionalProperties: false
+      properties:
+        bed_id: { type: string }
+        label: { type: string }
+        x: { type: integer, minimum: 1 }
+        y: { type: integer, minimum: 1 }
+        occupied: { type: boolean }
+        status: { $ref: "#/components/schemas/BedStatus" }
+        observed_at: { type: [string, "null"], format: date-time }
+        alerts:
+          type: array
+          items: { $ref: "#/components/schemas/HaccAlert" }
+    HaccWardInfo:
+      type: object
+      required: [ward_id, name, width, height]
+      additionalProperties: false
+      properties:
+        ward_id: { type: string }
+        name: { type: string }
+        width: { type: integer, minimum: 1 }
+        height: { type: integer, minimum: 1 }
+    HaccWardBeds:
+      type: object
+      required: [ward, evaluated_at, status, beds]
+      additionalProperties: false
+      properties:
+        ward: { $ref: "#/components/schemas/HaccWardInfo" }
+        evaluated_at: { type: string, format: date-time }
+        status: { $ref: "#/components/schemas/BedStatus" }
+        beds:
+          type: array
+          items: { $ref: "#/components/schemas/HaccBed" }
     Status:
       type: string
       enum: [NORMAL, WARNING, CRITICAL, OFFLINE, UNKNOWN]
