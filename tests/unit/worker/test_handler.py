@@ -163,3 +163,18 @@ def test_rejection_log_never_contains_oversized_or_raw_payload(
 
     assert "INVALID_JSON" in caplog.text
     assert secret not in caplog.text
+
+
+def test_accepted_message_carries_the_ingestion_lag_for_the_freshness_sli() -> None:
+    """SPEC-012 / REQ-OPS-006: lag = recebido - observado (so para mensagens ACEITAS e correntes)."""
+    handler, _ = _handler()
+
+    accepted = handler.handle(TOPIC, _bytes(with_(observed_at="2026-10-19T12:00:03Z")))
+    duplicate = handler.handle(TOPIC, _bytes(with_(observed_at="2026-10-19T12:00:03Z", value=1.0)))
+    old = handler.handle(
+        TOPIC, _bytes(with_(event_id="old", observed_at="2026-10-19T11:00:00Z", value=2.0))
+    )
+
+    assert accepted.lag_s == 2.0
+    assert duplicate.lag_s is None
+    assert old.lag_s is None  # historico atrasado nao entra no SLI de frescor

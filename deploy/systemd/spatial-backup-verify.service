@@ -1,0 +1,20 @@
+[Unit]
+Description=Spatial AI - ensaio de restauracao do ultimo backup (nao destrutivo)
+Documentation=file:///opt/ar-xr/docs/runbooks/backup-restore.md
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+User=arxr
+Group=arxr
+SupplementaryGroups=docker
+WorkingDirectory=/opt/ar-xr
+ExecStart=/usr/bin/python3 /opt/ar-xr/scripts/backup.py verify --env vps
+TimeoutStartSec=30min
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/opt/ar-xr/.deploy
+RestrictSUIDSGID=yes

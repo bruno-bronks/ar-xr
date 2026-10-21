@@ -1,0 +1,49 @@
+# Release por TAG (SPEC-012, REQ-OPS-001; D-044). ESCRITO, NAO EXECUTADO: criar a tag `v*` e uma acao externa
+# que PUBLICA imagens no GHCR; so faca quando decidir. As imagens herdam a visibilidade do repositorio;
+# servidor com imagem privada precisa de token de pull (read:packages).
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate tag and compute the registry prefix (GHCR requires lowercase)
+        id: meta
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          [[ "$tag" =~ ^v[0-9A-Za-z._-]{1,62}$ ]] || { echo "tag invalida: $tag"; exit 1; }
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "registry=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/" >> "$GITHUB_OUTPUT"
+      - name: Build the three images with the release tag
+        env:
+          IMAGE_TAG: ${{ steps.meta.outputs.tag }}
+          IMAGE_REGISTRY: ${{ steps.meta.outputs.registry }}
+        run: docker compose build api worker simulator
+      - name: Scan images (fail on fixable CRITICAL)
+        env:
+          IMAGE_TAG: ${{ steps.meta.outputs.tag }}
+          IMAGE_REGISTRY: ${{ steps.meta.outputs.registry }}
+        run: |
+          for name in api worker simulator; do
+            docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.58.1 image \
+              --severity CRITICAL --ignore-unfixed --exit-code 1 "${IMAGE_REGISTRY}spatial-ai-${name}:${IMAGE_TAG}"
+          done
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push
+        env:
+          IMAGE_TAG: ${{ steps.meta.outputs.tag }}
+          IMAGE_REGISTRY: ${{ steps.meta.outputs.registry }}
+        run: docker compose push api worker simulator

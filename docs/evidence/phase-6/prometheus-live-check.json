@@ -1,0 +1,37 @@
+{
+  "targets_up": [
+    [
+      "api",
+      "up"
+    ],
+    [
+      "worker",
+      "up"
+    ]
+  ],
+  "prometheus_version": "3.15.0",
+  "ingest_lag_p95_s_30m": [
+    "0.11499999999999977"
+  ],
+  "ingest_lag_fraction_within_5s_30m": [],
+  "ingested_messages_total": [
+    "2024"
+  ],
+  "api_p95_s_30m": [
+    "0.07431841197485686"
+  ],
+  "api_error_ratio_30m": [
+    "0"
+  ],
+  "alerts_firing": [],
+  "after_le_fix": {
+    "prometheus_version": "3.15.0",
+    "sli:ingest_lag_slow_ratio:rate30m": [
+      "0.0016818028927010342"
+    ],
+    "ingest_lag_p95_s_5m": [
+      "0.09691061452513967"
+    ],
+    "note": "Antes da correcao a regra usava le=\"5\" e retornava vazio (o Prometheus rotula le=\"5.0\"); achado desta validacao ao vivo."
+  }
+}

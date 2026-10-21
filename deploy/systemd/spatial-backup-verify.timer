@@ -1,0 +1,10 @@
+[Unit]
+Description=Spatial AI - ensaio semanal de restauracao
+
+[Timer]
+OnCalendar=Sun *-*-* 04:30:00
+Persistent=true
+Unit=spatial-backup-verify.service
+
+[Install]
+WantedBy=timers.target

@@ -1,4 +1,6 @@
 # Ambiente LOCAL de desenvolvimento. Nao e configuracao de producao.
+# Imagens versionadas (REQ-OPS-001): IMAGE_TAG (padrao `latest`) e IMAGE_REGISTRY (ex.: `localhost:5000/`, com a barra final).
+# `migrate` e `api` usam a MESMA imagem. Deploy/rollback por tag: scripts/deploy.py.
 # Portas publicadas somente em 127.0.0.1 (REQ-SEC-002). Valores padrao ficticios e "dev-only".
 name: spatial-ai
 
@@ -6,7 +8,7 @@ x-database-url: &database_url postgresql+psycopg://${POSTGRES_USER:-spatial}:${P
 
 services:
   db:
-    image: postgres:16.4-alpine
+    image: postgres:16.15-alpine
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-spatial}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-spatial-dev-only}
@@ -23,7 +25,7 @@ services:
       start_period: 5s
 
   broker:
-    image: eclipse-mosquitto:2.0.18
+    image: eclipse-mosquitto:2.0.22
     ports:
       - "127.0.0.1:${MQTT_PORT:-1883}:1883"
     volumes:
@@ -38,6 +40,7 @@ services:
 
   # One-shot: aplica migracoes Alembic e o seed de DEV (idempotente) antes de api/worker.
   migrate:
+    image: ${IMAGE_REGISTRY:-}spatial-ai-api:${IMAGE_TAG:-latest}
     build:
       context: .
       dockerfile: services/api/Dockerfile
@@ -51,6 +54,7 @@ services:
     restart: "no"
 
   api:
+    image: ${IMAGE_REGISTRY:-}spatial-ai-api:${IMAGE_TAG:-latest}
     build:
       context: .
       dockerfile: services/api/Dockerfile
@@ -66,6 +70,8 @@ services:
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       # HACC Spatial (SPEC-010, D-025): fonte SIMULADA por padrao; nenhum HACC real e contatado
       HACC_SOURCE: ${HACC_SOURCE:-simulated}
+      # /metrics (SPEC-012): so existe com token proprio (>= 16 caracteres); vazio = desligado
+      METRICS_TOKEN: ${METRICS_TOKEN:-}
     ports:
       - "127.0.0.1:${API_PORT:-8088}:8000"
     depends_on:
@@ -83,6 +89,7 @@ services:
       start_period: 5s
 
   worker:
+    image: ${IMAGE_REGISTRY:-}spatial-ai-worker:${IMAGE_TAG:-latest}
     build:
       context: .
       dockerfile: services/telemetry-worker/Dockerfile
@@ -108,6 +115,7 @@ services:
       start_period: 10s
 
   simulator:
+    image: ${IMAGE_REGISTRY:-}spatial-ai-simulator:${IMAGE_TAG:-latest}
     build:
       context: .
       dockerfile: services/equipment-simulator/Dockerfile
@@ -126,6 +134,32 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  # Observabilidade opcional (SPEC-012, REQ-OPS-005): docker compose --profile observability up -d prometheus
+  # Exige METRICS_TOKEN no ambiente (o mesmo da API). UI/alertas em http://127.0.0.1:9090 (so loopback).
+  prometheus:
+    profiles: ["observability"]
+    image: prom/prometheus:v3.15.0
+    entrypoint:
+      - /bin/sh
+      - -c
+      - >-
+        printf %s "$$METRICS_TOKEN" > /tmp/metrics_token &&
+        exec /bin/prometheus --config.file=/etc/prometheus/prometheus.yml
+        --storage.tsdb.path=/prometheus --storage.tsdb.retention.time=7d
+        --web.listen-address=0.0.0.0:9090
+    environment:
+      METRICS_TOKEN: ${METRICS_TOKEN:-}
+    ports:
+      - "127.0.0.1:${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ./platform/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./platform/prometheus/rules:/etc/prometheus/rules:ro
+      - prometheus-data:/prometheus
+    depends_on:
+      api:
+        condition: service_healthy
+
 volumes:
   db-data:
   broker-data:
+  prometheus-data:

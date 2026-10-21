@@ -1,0 +1,12 @@
+{
+  "deploy_v1_s": 28.1,
+  "deploy_v2_s": 27.7,
+  "bad_release_and_auto_rollback_s": 60.8,
+  "manual_rollback_s": 30.9,
+  "backup_size_bytes": 11487.0,
+  "drill_restore_s": 2.4,
+  "rto_total_s": 23.5,
+  "restore_only_s": 1.66,
+  "gitops_apply_s": 33.8,
+  "gitops_drift_correction_s": 35.8
+}

@@ -14,6 +14,7 @@ from spatial_assistant.knowledge import load_knowledge_base
 from spatial_assistant.llm_anthropic import AnthropicProvider
 from spatial_assistant.service import AssistantService
 from spatial_common.logging_json import configure_logging
+from spatial_common.metrics import Registry
 from spatial_hacc.http import HttpHaccSource
 from spatial_hacc.simulated import SimulatedHaccSource
 from spatial_hacc.source import HaccSource
@@ -27,6 +28,7 @@ from app.auth import build_authenticator
 from app.config import Settings
 from app.hacc_routes import router as hacc_router
 from app.health import Check, build_router, check_broker, check_database
+from app.metrics import MetricsMiddleware, build_metrics_router
 from app.middleware import RequestContextMiddleware, SecurityHeadersMiddleware
 from app.ratelimit import FixedWindowLimiter
 from app.routes import router as api_router
@@ -96,6 +98,7 @@ def create_app(
     assistant: AssistantService | None = None,
     assistant_rate_limit: int | None = None,
     hacc: HaccSource | None = None,
+    metrics_token: str | None = None,
 ) -> FastAPI:
     """Sem `settings`, `checks` e `repo` precisam ser injetados (composicao de testes)."""
     if settings is None and (checks is None or repo is None):
@@ -147,12 +150,21 @@ def create_app(
             return JSONResponse(status_code=404, content={"detail": "not found"})
         return await http_exception_handler(request, exc)
 
+    registry = Registry()
+    app.state.metrics = registry
+    token = metrics_token or (
+        settings.metrics_token.get_secret_value() if settings and settings.metrics_token else None
+    )
+
     app.add_middleware(SecurityHeadersMiddleware)
     app.add_middleware(RequestContextMiddleware)
+    app.add_middleware(MetricsMiddleware, registry=registry)  # mais externo: ve ate os 5xx
     app.include_router(build_router(checks))
     app.include_router(api_router)
     app.include_router(assistant_router)
     app.include_router(hacc_router)
+    if token:
+        app.include_router(build_metrics_router(registry, token, checks))
 
     panel_dir = _find_panel_dir(settings.panel_dir if settings else None)
     if panel_dir is not None:

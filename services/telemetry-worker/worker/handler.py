@@ -32,6 +32,7 @@ class Disposition(StrEnum):
 class HandleResult:
     disposition: Disposition
     reason: RejectReason | None = None
+    lag_s: float | None = None  # recebido - observado; so em ACCEPTED (SLI de frescor)
 
 
 @dataclass
@@ -90,7 +91,11 @@ class MessageHandler:
             outcome = self._repo.record(event, received_at)
         except UnknownEquipmentError as exc:  # removido entre a checagem e a gravacao
             raise TelemetryRejected(RejectReason.UNKNOWN_EQUIPMENT) from exc
-        return HandleResult(Disposition(outcome.value))
+        disposition = Disposition(outcome.value)
+        lag = (received_at - event.observed_at).total_seconds()
+        return HandleResult(
+            disposition, lag_s=max(lag, 0.0) if disposition is Disposition.ACCEPTED else None
+        )
 
 
 __all__ = ["Disposition", "HandleResult", "MessageHandler", "RecordOutcome", "Stats"]

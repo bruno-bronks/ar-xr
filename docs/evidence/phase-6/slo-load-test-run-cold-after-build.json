@@ -1,0 +1,62 @@
+{
+  "total": 4800,
+  "duration_s": 120.0,
+  "achieved_rps": 40.0,
+  "status_class": {
+    "2xx": 4550,
+    "4xx": 250
+  },
+  "availability": 1.0,
+  "latency_ms": {
+    "p50": 26.551200018730015,
+    "p95": 975.0876000034623,
+    "p99": 1660.1487000007182,
+    "max": 2110.883300018031
+  },
+  "slo": {
+    "availability": {
+      "target": 0.995,
+      "value": 1.0,
+      "met": true
+    },
+    "latency": {
+      "threshold_s": 0.5,
+      "target": 0.95,
+      "fraction_fast": 0.9345833333333333,
+      "met": false
+    },
+    "all_met": false
+  },
+  "profile": {
+    "rps": 40.0,
+    "workers": 4,
+    "duration_s": 120.0,
+    "seed": 20261020,
+    "mix": [
+      {
+        "route": "/api/v1/equipment",
+        "weight": 3.0
+      },
+      {
+        "route": "/api/v1/equipment/{equipment_id}/twin",
+        "weight": 3.0
+      },
+      {
+        "route": "/api/v1/equipment/{equipment_id}/telemetry/latest",
+        "weight": 2.0
+      },
+      {
+        "route": "/health/ready",
+        "weight": 1.0
+      },
+      {
+        "route": "/api/v1/equipment",
+        "weight": 0.5
+      }
+    ]
+  },
+  "server_crosscheck": {
+    "consistent": true,
+    "mismatches": {}
+  }
+}

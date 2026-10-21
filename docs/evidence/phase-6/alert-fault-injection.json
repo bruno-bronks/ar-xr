@@ -1,0 +1,9 @@
+{
+  "fault": "broker stopped",
+  "firing_seconds_after_fault": {
+    "DependencyDown/broker": 80,
+    "WorkerBrokerDisconnected": 140
+  },
+  "firing_after_recovery": [],
+  "alerts_cleared_after_s": 40
+}

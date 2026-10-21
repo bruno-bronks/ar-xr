@@ -1,0 +1,11 @@
+[Unit]
+Description=Spatial AI - executa o reconciliador GitOps periodicamente
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=5min
+RandomizedDelaySec=30s
+Unit=spatial-gitops.service
+
+[Install]
+WantedBy=timers.target

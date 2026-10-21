@@ -1,12 +1,26 @@
 {
   "generated_from": "docs/requirements/traceability.csv",
   "note": "Arestas VERIFICADAS (a matriz e testada por tests/unit/repo/test_traceability.py).",
-  "edge_count": 465,
+  "edge_count": 564,
   "edges": [
     {
       "source": ".github/workflows/ci.yml",
       "relation": "IMPLEMENTS",
       "target": "REQ-ENG-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": ".github/workflows/ci.yml",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-007",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": ".github/workflows/release.yml",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-001",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -2097,6 +2111,391 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "REQ-OPS-001",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0007-release-gitops-and-ops-tooling.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-001",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-007-deploy-and-backup.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-001",
+      "relation": "SERVES",
+      "target": "OUT-OPS-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-001",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-012-cloud-and-operations.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-001",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_ops_e2e.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ops/test_deploy.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-001",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ops/test_provisioning.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-002",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0007-release-gitops-and-ops-tooling.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-002",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-007-deploy-and-backup.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-002",
+      "relation": "SERVES",
+      "target": "OUT-OPS-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-002",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-012-cloud-and-operations.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-002",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_ops_e2e.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-002",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ops/test_deploy.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-003",
+      "relation": "CONTRACTED_BY",
+      "target": "specs/contracts/desired-state.schema.json",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-003",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0007-release-gitops-and-ops-tooling.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-003",
+      "relation": "SERVES",
+      "target": "OUT-OPS-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-003",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-012-cloud-and-operations.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-003",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_ops_e2e.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ops/test_gitops.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-003",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ops/test_provisioning.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-004",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0007-release-gitops-and-ops-tooling.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-004",
+      "relation": "FORMALIZED_BY",
+      "target": "specs/formal-z/z-007-deploy-and-backup.tex",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-004",
+      "relation": "SERVES",
+      "target": "OUT-OPS-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-004",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-012-cloud-and-operations.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-004",
+      "relation": "TESTED_BY",
+      "target": "tests/integration/test_ops_e2e.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-004",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ops/test_backup.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-005",
+      "relation": "CONTRACTED_BY",
+      "target": "platform/prometheus/rules/slo.rules.yml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-005",
+      "relation": "CONTRACTED_BY",
+      "target": "platform/prometheus/tests/slo.test.yml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-005",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0007-release-gitops-and-ops-tooling.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-005",
+      "relation": "SERVES",
+      "target": "OUT-OPS-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-005",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-012-cloud-and-operations.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-005",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_config.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-005",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_metrics_endpoint.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-005",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/common/test_metrics.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-005",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ops/test_rules_contract.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-005",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/worker/test_metrics.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-006",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0007-release-gitops-and-ops-tooling.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-006",
+      "relation": "SERVES",
+      "target": "OUT-OPS-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-006",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-012-cloud-and-operations.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-006",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ops/test_loadtest.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-007",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0007-release-gitops-and-ops-tooling.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-007",
+      "relation": "SERVES",
+      "target": "OUT-OPS-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-007",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-012-cloud-and-operations.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-007",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/api/test_metrics_endpoint.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-007",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ops/test_deploy.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-007",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ops/test_gitops.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-008",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0007-release-gitops-and-ops-tooling.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-008",
+      "relation": "SERVES",
+      "target": "OUT-OPS-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-008",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-012-cloud-and-operations.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-008",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ops/test_cost.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-009",
+      "relation": "CONTRACTED_BY",
+      "target": "deploy/cloud-init/user-data.yaml",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-009",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0007-release-gitops-and-ops-tooling.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-009",
+      "relation": "SERVES",
+      "target": "OUT-OPS-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-009",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-012-cloud-and-operations.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-OPS-009",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/ops/test_provisioning.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "REQ-SEC-001",
       "relation": "CONTRACTED_BY",
       "target": ".env.example",
@@ -2575,7 +2974,133 @@
     {
       "source": "compose.yaml",
       "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "compose.yaml",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "compose.yaml",
+      "relation": "IMPLEMENTS",
       "target": "REQ-SEC-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "deploy/cloud-init/user-data.yaml",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-009",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "deploy/desired/README.md",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "deploy/desired/homolog.json",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "deploy/envs/homolog.env",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "deploy/systemd/spatial-backup-verify.service",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "deploy/systemd/spatial-backup-verify.timer",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "deploy/systemd/spatial-backup.service",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "deploy/systemd/spatial-backup.service",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-009",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "deploy/systemd/spatial-backup.timer",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "deploy/systemd/spatial-gitops.service",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "deploy/systemd/spatial-gitops.service",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-009",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "deploy/systemd/spatial-gitops.timer",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "docs/cloud/cost-estimate.md",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-008",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "docs/evidence/phase-6/sbom/api.cdx.json",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-007",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "docs/evidence/phase-6/semgrep.json",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-007",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "docs/evidence/phase-6/trivy/spatial-ai-api_latest.json",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-007",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -2583,6 +3108,20 @@
       "source": "docs/hardware/esp32-electrical-safety-plan.md",
       "relation": "IMPLEMENTS",
       "target": "REQ-IOT-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "docs/ops/security-review.md",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-007",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "docs/ops/slo.md",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-006",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -2818,6 +3357,13 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "packages/common/src/spatial_common/metrics.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "packages/common/src/spatial_common/mosquitto_passwd.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-IOT-003",
@@ -2902,6 +3448,76 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "packages/ops/src/spatial_ops/backup.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/ops/src/spatial_ops/cost.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-008",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/ops/src/spatial_ops/deploy.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/ops/src/spatial_ops/deploy.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/ops/src/spatial_ops/gitops.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/ops/src/spatial_ops/loadtest.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-006",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/ops/src/spatial_ops/runner.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/ops/src/spatial_ops/state.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/ops/src/spatial_ops/state.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "packages/ops/src/spatial_ops/wiring.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "packages/storage/src/spatial_storage/migrate.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-MNT-007",
@@ -2958,6 +3574,48 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "platform/prometheus/prometheus.yml",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "scripts/backup.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "scripts/check_prometheus.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "scripts/cost_model.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-008",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "scripts/deploy.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "scripts/deploy.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "scripts/eval_assistant.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-AI-007",
@@ -2979,9 +3637,23 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "scripts/gitops_reconcile.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "scripts/graph_crosscheck.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-ENG-008",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "scripts/load_test.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-006",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -2996,6 +3668,13 @@
       "source": "scripts/verify-z.ps1",
       "relation": "IMPLEMENTS",
       "target": "REQ-ENG-007",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "scripts/verify_host.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-009",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -3122,6 +3801,13 @@
       "source": "services/api/app/main.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-HACC-001",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/api/app/metrics.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-005",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },
@@ -3255,6 +3941,13 @@
       "source": "services/telemetry-worker/worker/main.py",
       "relation": "IMPLEMENTS",
       "target": "REQ-MNT-005",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "services/telemetry-worker/worker/metrics.py",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-OPS-005",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     }

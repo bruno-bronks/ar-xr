@@ -21,3 +21,15 @@ ml/data/
 ml/runs/
 ml/weights/
 platform/mosquitto/secure/
+
+# Fase 6: estado de deploy, backups e ambientes com segredos
+.deploy/
+deploy/envs/*.env
+!deploy/envs/homolog.env
+
+.deploy-e2e.log
+.trivy-cache/
+.deploy-*.log
+
+# evidencia da Fase 6 (SBOM CycloneDX versionado)
+!docs/evidence/phase-6/sbom/

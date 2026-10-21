@@ -1,0 +1,24 @@
+[Unit]
+Description=Spatial AI - reconciliador GitOps (converge a pilha para o estado desejado no Git)
+Documentation=file:///opt/ar-xr/docs/runbooks/gitops-and-deploy.md
+After=network-online.target docker.service
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+User=arxr
+Group=arxr
+SupplementaryGroups=docker
+WorkingDirectory=/opt/ar-xr
+ExecStart=/usr/bin/python3 /opt/ar-xr/scripts/gitops_reconcile.py --env vps
+TimeoutStartSec=45min
+# Endurecimento: so escreve em .deploy/ (estado, trava, backups); sem privilegios novos; /tmp privado.
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/opt/ar-xr/.deploy
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes

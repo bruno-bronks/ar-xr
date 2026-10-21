@@ -27,8 +27,9 @@ class Settings(BaseSettings):
     hacc_source: Literal["simulated", "http"] = "simulated"  # D-025/D-026: simulada por padrao
     hacc_base_url: str | None = None
     hacc_allowed_hosts: str = ""  # lista separada por virgula
+    metrics_token: SecretStr | None = None  # /metrics so existe com token proprio (REQ-OPS-005)
 
-    @field_validator("anthropic_api_key", mode="before")
+    @field_validator("anthropic_api_key", "metrics_token", mode="before")
     @classmethod
     def _blank_key_is_none(cls, value: object) -> object:
         return None if isinstance(value, str) and not value.strip() else value
@@ -39,6 +40,12 @@ class Settings(BaseSettings):
             self.hacc_base_url and self.hacc_allowed_hosts.strip()
         ):
             raise ValueError("HACC_SOURCE=http requires HACC_BASE_URL and HACC_ALLOWED_HOSTS")
+        return self
+
+    @model_validator(mode="after")
+    def _metrics_token_is_long_enough(self) -> Self:
+        if self.metrics_token is not None and len(self.metrics_token.get_secret_value()) < 16:
+            raise ValueError("METRICS_TOKEN must have at least 16 characters")
         return self
 
     @model_validator(mode="after")

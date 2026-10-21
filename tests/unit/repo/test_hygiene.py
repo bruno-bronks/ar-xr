@@ -62,7 +62,11 @@ def test_no_env_file_is_tracked_by_git() -> None:
 
 
 def test_compose_has_expected_services() -> None:
-    assert set(_compose()["services"]) == {"db", "broker", "migrate", "api", "worker", "simulator"}
+    services = _compose()["services"]
+    assert set(services) == {"db", "broker", "migrate", "api", "worker", "simulator", "prometheus"}
+    # observabilidade e opcional (REQ-OPS-005): so sobe com `--profile observability`
+    assert services["prometheus"]["profiles"] == ["observability"]
+    assert all("profiles" not in s for n, s in services.items() if n != "prometheus")
 
 
 def test_compose_published_ports_bind_loopback_only() -> None:

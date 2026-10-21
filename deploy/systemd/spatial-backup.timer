@@ -1,0 +1,11 @@
+[Unit]
+Description=Spatial AI - backup diario do PostgreSQL
+
+[Timer]
+OnCalendar=*-*-* 03:15:00
+Persistent=true
+RandomizedDelaySec=5min
+Unit=spatial-backup.service
+
+[Install]
+WantedBy=timers.target

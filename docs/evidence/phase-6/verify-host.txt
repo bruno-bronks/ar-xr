@@ -1,0 +1,6 @@
+debconf: delaying package configuration, since apt-utils is not installed
+== systemd-analyze verify ==
+systemd-analyze: OK
+== cloud-init schema ==
+Valid cloud-config: /src/deploy/cloud-init/user-data.yaml
+exit=0
