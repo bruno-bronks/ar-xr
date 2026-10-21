@@ -1,0 +1,98 @@
+% Z-007 — Estado de deploy (tag atual/anterior, rollback) e verificação de backup (SPEC-012, REQ-OPS-001/002/004)
+%
+% VERIFICAÇÃO: parse + typecheck com CZT via scripts/verify-z.ps1. NÃO prova teoremas.
+% As conjecturas (T1, T2, T3) são checadas por testes (tests/unit/ops) e pelo e2e com Docker real
+% (tests/integration/test_ops_e2e.py), não provadas.
+\documentclass{article}
+\begin{document}
+
+\section*{Z-007: Deploy state, rollback and backup verification}
+
+\begin{zed}
+  [TAG, TABLE]
+\end{zed}
+
+Um conjunto com no máximo um elemento representa ``nenhuma tag'' (vazio) ou ``uma tag''.
+
+\begin{schema}{DeployState}
+  current : \power TAG \\
+  previous : \power TAG
+\where
+  \# current \leq 1 \\
+  \# previous \leq 1 \\
+  current \cap previous = \emptyset
+\end{schema}
+
+\begin{schema}{DeployOk}
+  \Delta DeployState \\
+  tag? : TAG
+\where
+  tag? \notin current \\
+  previous' = current \\
+  current' = \{ tag? \}
+\end{schema}
+
+A release que falha no \emph{smoke} é desfeita automaticamente: o estado registrado não muda.
+
+\begin{schema}{DeployFailedRolledBack}
+  \Xi DeployState \\
+  tag? : TAG
+\end{schema}
+
+\begin{schema}{Rollback}
+  \Delta DeployState
+\where
+  previous \neq \emptyset \\
+  current' = previous \\
+  previous' = current
+\end{schema}
+
+\begin{zed}
+  Deploy == DeployOk \lor DeployFailedRolledBack
+\end{zed}
+
+\subsection*{Conjecturas}
+
+T1 (rollback é uma involução): desfazer duas vezes volta ao estado original.
+
+\begin{zed}
+  RollbackTwice == Rollback \semi Rollback
+\end{zed}
+
+\begin{zed}
+  \vdash? \forall RollbackTwice @ current' = current
+\end{zed}
+
+T2 (nunca coincidem): a tag atual nunca é igual à anterior.
+
+\begin{zed}
+  \vdash? \forall Deploy @ current' \cap previous' = \emptyset
+\end{zed}
+
+\section*{Backup verification}
+
+As tabelas só crescem; contagens são tomadas antes e depois do \texttt{pg\_dump}.
+
+\begin{schema}{BackupManifest}
+  before : TABLE \pfun \nat \\
+  after : TABLE \pfun \nat
+\where
+  \dom before = \dom after \\
+  \forall t : \dom before @ before~t \leq after~t
+\end{schema}
+
+\begin{schema}{VerifyOk}
+  BackupManifest \\
+  restored : TABLE \pfun \nat
+\where
+  \dom restored = \dom before \\
+  \forall t : \dom before @ before~t \leq restored~t \land restored~t \leq after~t
+\end{schema}
+
+T3 (a restauração não perde linhas do instante do backup): toda tabela restaurada tem pelo menos as linhas contadas antes.
+
+\begin{zed}
+  \vdash? \forall VerifyOk @ \forall t : \dom before @ restored~t \geq before~t
+\end{zed}
+
+\end{document}

@@ -1,0 +1,76 @@
+#cloud-config
+# MODELO de provisionamento de um host Ubuntu/Debian neutro quanto a provedor (SPEC-012, REQ-OPS-009; D-048).
+# NADA aqui foi executado em servidor real: o arquivo so e validado (cloud-init schema). Antes de usar,
+# preencha os campos marcados com PREENCHER. Segredos NUNCA entram neste arquivo: o POSTGRES_PASSWORD e
+# gerado no proprio host no primeiro boot (runcmd) e fica em deploy/envs/vps.env (0600, fora do Git).
+# A aplicacao fica so em 127.0.0.1; expor ao mundo (TLS + proxy reverso) e uma decisao a parte (ver
+# deploy/vps/README.md) e NAO e feita por este arquivo.
+hostname: spatial-ai-hml
+manage_etc_hosts: true
+ssh_pwauth: false
+disable_root: true
+package_update: true
+package_upgrade: true
+packages:
+  - docker.io
+  - docker-compose-v2
+  - git
+  - python3
+  - ufw
+  - unattended-upgrades
+
+users:
+  - name: arxr
+    gecos: Spatial AI (servico)
+    shell: /bin/bash
+    lock_passwd: true
+    groups: [docker]
+    ssh_authorized_keys:
+      - "PREENCHER: ssh-ed25519 AAAA... chave publica do operador"
+
+write_files:
+  - path: /etc/ssh/sshd_config.d/10-hardening.conf
+    permissions: "0644"
+    content: |
+      PasswordAuthentication no
+      PermitRootLogin no
+      KbdInteractiveAuthentication no
+  - path: /etc/apt/apt.conf.d/20auto-upgrades
+    permissions: "0644"
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+  - path: /usr/local/sbin/spatial-bootstrap.sh
+    permissions: "0750"
+    content: |
+      #!/bin/sh
+      # Primeiro boot: baixa o codigo, gera o segredo no host e instala os timers. Idempotente.
+      set -eu
+      REPO="PREENCHER: https://github.com/<org>/<repo>.git"
+      install -d -o arxr -g arxr -m 0755 /opt/ar-xr
+      [ -d /opt/ar-xr/.git ] || git clone --quiet "$REPO" /opt/ar-xr
+      chown -R arxr:arxr /opt/ar-xr
+      ENVFILE=/opt/ar-xr/deploy/envs/vps.env
+      if [ ! -f "$ENVFILE" ]; then
+        umask 077
+        {
+          cat /opt/ar-xr/deploy/envs/vps.env.example
+          echo "POSTGRES_PASSWORD=$(head -c 24 /dev/urandom | base64 | tr -dc 'A-Za-z0-9' | head -c 32)"
+        } > "$ENVFILE"
+        chown arxr:arxr "$ENVFILE"
+      fi
+      install -d -o arxr -g arxr -m 0750 /opt/ar-xr/.deploy
+      install -m 0644 /opt/ar-xr/deploy/systemd/*.service /opt/ar-xr/deploy/systemd/*.timer /etc/systemd/system/
+      systemctl daemon-reload
+      systemctl enable --now spatial-gitops.timer spatial-backup.timer spatial-backup-verify.timer
+
+runcmd:
+  - [ ufw, default, deny, incoming ]
+  - [ ufw, default, allow, outgoing ]
+  - [ ufw, allow, OpenSSH ]
+  - [ ufw, --force, enable ]
+  - [ systemctl, enable, --now, docker ]
+  - [ systemctl, restart, ssh ]
+  - [ /usr/local/sbin/spatial-bootstrap.sh ]
+
+final_message: "Spatial AI: host provisionado apos $UPTIME segundos. Proximo passo: declarar a tag em deploy/desired/vps.json."

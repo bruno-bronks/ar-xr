@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/spatial-ai/desired-state.schema.json",
+  "title": "Estado desejado de um ambiente (GitOps) - deploy/desired/<ambiente>.json",
+  "description": "Contrato estrito lido pelo reconciliador (spatial_ops.gitops.parse_desired). O arquivo vem do Git e e tratado como dado NAO confiavel.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tag"],
+  "x-implementation": "implemented: packages/ops/src/spatial_ops/gitops.py",
+  "properties": {
+    "tag": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$",
+      "description": "Tag de imagem a implantar (imutavel por convencao)."
+    },
+    "backup": {
+      "type": "boolean",
+      "default": false,
+      "description": "Faz backup + ensaio de restauracao antes de subir (use quando a release traz migracao)."
+    },
+    "note": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Texto livre, nunca interpretado."
+    }
+  }
+}

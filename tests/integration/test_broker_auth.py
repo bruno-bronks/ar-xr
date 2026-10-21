@@ -20,7 +20,7 @@ import pytest
 from paho.mqtt.enums import CallbackAPIVersion
 
 ROOT = Path(__file__).resolve().parents[2]
-IMAGE = "eclipse-mosquitto:2.0.18"
+IMAGE = "eclipse-mosquitto:2.0.22"
 DEVICE_A, DEVICE_B = "EQ-T01", "EQ-T02"
 TOPIC = "spatial/v1/equipment/{}/telemetry"
 

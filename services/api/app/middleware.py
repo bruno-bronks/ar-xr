@@ -44,7 +44,7 @@ class SecurityHeadersMiddleware:
             if message["type"] == "http.response.start":
                 headers = list(message.get("headers", []))
                 headers.append((b"x-content-type-options", b"nosniff"))
-                if path.startswith(("/api/", "/health")):
+                if path.startswith(("/api/", "/health", "/metrics")):
                     headers.append((b"cache-control", b"no-store"))
                 if path.startswith("/panel"):
                     headers.append((b"content-security-policy", _PANEL_CSP.encode()))

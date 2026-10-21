@@ -12,7 +12,7 @@ def _env(monkeypatch: pytest.MonkeyPatch, **values: str) -> None:
     for key in (
         "DATABASE_URL", "MQTT_HOST", "MQTT_PORT", "ENVIRONMENT", "LOG_LEVEL",
         "ASSISTANT_PROVIDER", "ANTHROPIC_API_KEY", "ASSISTANT_MODEL", "ASSISTANT_RATE_LIMIT",
-        "HACC_SOURCE", "HACC_BASE_URL", "HACC_ALLOWED_HOSTS",
+        "HACC_SOURCE", "HACC_BASE_URL", "HACC_ALLOWED_HOSTS", "METRICS_TOKEN",
     ):  # fmt: skip
         monkeypatch.delenv(key, raising=False)
     for key, value in values.items():
@@ -147,3 +147,27 @@ def test_http_hacc_with_url_and_hosts_is_accepted(monkeypatch: pytest.MonkeyPatc
     )
 
     assert Settings().hacc_source == "http"
+
+
+# --- SPEC-012 · REQ-OPS-005: token de /metrics -------------------------------------------
+
+
+def test_metrics_token_defaults_to_disabled_and_blank_means_disabled(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _env(monkeypatch, DATABASE_URL=URL)
+    assert Settings().metrics_token is None
+
+    _env(monkeypatch, DATABASE_URL=URL, METRICS_TOKEN="  ")
+    assert Settings().metrics_token is None
+
+
+def test_metrics_token_must_be_long_and_is_never_printed(monkeypatch: pytest.MonkeyPatch) -> None:
+    _env(monkeypatch, DATABASE_URL=URL, METRICS_TOKEN="short")
+    with pytest.raises(ValidationError):
+        Settings()
+
+    _env(monkeypatch, DATABASE_URL=URL, METRICS_TOKEN="a-sufficiently-long-token-1")
+    settings = Settings()
+    assert settings.metrics_token is not None
+    assert "a-sufficiently-long-token-1" not in repr(settings)

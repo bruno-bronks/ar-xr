@@ -1,0 +1,728 @@
+{
+ "ArtifactName": "postgres:16.4-alpine",
+ "OS": {
+  "Family": "alpine",
+  "Name": "3.20.3",
+  "EOSL": true
+ },
+ "Scanner": "trivy 0.58.1 (banco do dia 2026-10-20/21), severidade HIGH,CRITICAL",
+ "Nota": "Relatorio reduzido: metadados/config da imagem removidos (variaveis de ambiente publicas, como GPG_KEY, disparavam o gitleaks).",
+ "Results": [
+  {
+   "Target": "postgres:16.4-alpine (alpine 3.20.3)",
+   "Class": "os-pkgs",
+   "Vulnerabilities": [
+    {
+     "VulnerabilityID": "CVE-2026-31789",
+     "PkgName": "libcrypto3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.7-r0",
+     "Severity": "CRITICAL",
+     "Title": "openssl: OpenSSL: Heap buffer overflow on 32-bit systems from large X.509 certificate processing"
+    },
+    {
+     "VulnerabilityID": "CVE-2024-12797",
+     "PkgName": "libcrypto3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.3-r0",
+     "Severity": "HIGH",
+     "Title": "openssl: RFC7250 handshakes with unauthenticated servers don't abort as expected"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-15467",
+     "PkgName": "libcrypto3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.6-r0",
+     "Severity": "HIGH",
+     "Title": "openssl: OpenSSL: Remote code execution or Denial of Service via oversized Initialization Vector in CMS parsing"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-69421",
+     "PkgName": "libcrypto3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.6-r0",
+     "Severity": "HIGH",
+     "Title": "openssl: OpenSSL: Denial of Service via malformed PKCS#12 file processing"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-28387",
+     "PkgName": "libcrypto3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.7-r0",
+     "Severity": "HIGH",
+     "Title": "openssl: OpenSSL: Arbitrary code execution due to use-after-free in DANE TLSA authentication"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-28388",
+     "PkgName": "libcrypto3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.7-r0",
+     "Severity": "HIGH",
+     "Title": "openssl: OpenSSL: Denial of Service due to NULL pointer dereference in delta CRL processing"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-28389",
+     "PkgName": "libcrypto3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.7-r0",
+     "Severity": "HIGH",
+     "Title": "openssl: OpenSSL: Denial of Service vulnerability in CMS processing"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-28390",
+     "PkgName": "libcrypto3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.7-r0",
+     "Severity": "HIGH",
+     "Title": "openssl: OpenSSL: Denial of Service due to NULL pointer dereference in CMS EnvelopedData processing"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-31789",
+     "PkgName": "libssl3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.7-r0",
+     "Severity": "CRITICAL",
+     "Title": "openssl: OpenSSL: Heap buffer overflow on 32-bit systems from large X.509 certificate processing"
+    },
+    {
+     "VulnerabilityID": "CVE-2024-12797",
+     "PkgName": "libssl3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.3-r0",
+     "Severity": "HIGH",
+     "Title": "openssl: RFC7250 handshakes with unauthenticated servers don't abort as expected"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-15467",
+     "PkgName": "libssl3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.6-r0",
+     "Severity": "HIGH",
+     "Title": "openssl: OpenSSL: Remote code execution or Denial of Service via oversized Initialization Vector in CMS parsing"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-69421",
+     "PkgName": "libssl3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.6-r0",
+     "Severity": "HIGH",
+     "Title": "openssl: OpenSSL: Denial of Service via malformed PKCS#12 file processing"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-28387",
+     "PkgName": "libssl3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.7-r0",
+     "Severity": "HIGH",
+     "Title": "openssl: OpenSSL: Arbitrary code execution due to use-after-free in DANE TLSA authentication"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-28388",
+     "PkgName": "libssl3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.7-r0",
+     "Severity": "HIGH",
+     "Title": "openssl: OpenSSL: Denial of Service due to NULL pointer dereference in delta CRL processing"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-28389",
+     "PkgName": "libssl3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.7-r0",
+     "Severity": "HIGH",
+     "Title": "openssl: OpenSSL: Denial of Service vulnerability in CMS processing"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-28390",
+     "PkgName": "libssl3",
+     "InstalledVersion": "3.3.2-r1",
+     "FixedVersion": "3.3.7-r0",
+     "Severity": "HIGH",
+     "Title": "openssl: OpenSSL: Denial of Service due to NULL pointer dereference in CMS EnvelopedData processing"
+    },
+    {
+     "VulnerabilityID": "CVE-2024-56171",
+     "PkgName": "libxml2",
+     "InstalledVersion": "2.12.7-r0",
+     "FixedVersion": "2.12.7-r1",
+     "Severity": "CRITICAL",
+     "Title": "libxml2: Use-After-Free in libxml2"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-24928",
+     "PkgName": "libxml2",
+     "InstalledVersion": "2.12.7-r0",
+     "FixedVersion": "2.12.7-r1",
+     "Severity": "HIGH",
+     "Title": "libxml2: Stack-based buffer overflow in xmlSnprintfElements of libxml2"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-27113",
+     "PkgName": "libxml2",
+     "InstalledVersion": "2.12.7-r0",
+     "FixedVersion": "2.12.7-r2",
+     "Severity": "HIGH",
+     "Title": "libxml2: NULL Pointer Dereference in libxml2 xmlPatMatch"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-32414",
+     "PkgName": "libxml2",
+     "InstalledVersion": "2.12.7-r0",
+     "FixedVersion": "2.12.10-r0",
+     "Severity": "HIGH",
+     "Title": "libxml2: Out-of-Bounds Read in libxml2"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-32415",
+     "PkgName": "libxml2",
+     "InstalledVersion": "2.12.7-r0",
+     "FixedVersion": "2.12.10-r0",
+     "Severity": "HIGH",
+     "Title": "libxml2: Out-of-bounds Read in xmlSchemaIDCFillNodeTables"
+    },
+    {
+     "VulnerabilityID": "CVE-2024-55549",
+     "PkgName": "libxslt",
+     "InstalledVersion": "1.1.39-r1",
+     "FixedVersion": "1.1.39-r2",
+     "Severity": "HIGH",
+     "Title": "libxslt: Use-After-Free in libxslt (xsltGetInheritedNsList)"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-24855",
+     "PkgName": "libxslt",
+     "InstalledVersion": "1.1.39-r1",
+     "FixedVersion": "1.1.39-r2",
+     "Severity": "HIGH",
+     "Title": "libxslt: Use-After-Free in libxslt numbers.c"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-26519",
+     "PkgName": "musl",
+     "InstalledVersion": "1.2.5-r0",
+     "FixedVersion": "1.2.5-r1",
+     "Severity": "HIGH",
+     "Title": "musl libc 0.9.13 through 1.2.5 before 1.2.6 has an out-of-bounds write ..."
+    },
+    {
+     "VulnerabilityID": "CVE-2026-40200",
+     "PkgName": "musl",
+     "InstalledVersion": "1.2.5-r0",
+     "FixedVersion": "1.2.5-r3",
+     "Severity": "HIGH",
+     "Title": "musl: musl libc: Arbitrary code execution and denial of service via stack-based memory corruption in qsort"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-26519",
+     "PkgName": "musl-utils",
+     "InstalledVersion": "1.2.5-r0",
+     "FixedVersion": "1.2.5-r1",
+     "Severity": "HIGH",
+     "Title": "musl libc 0.9.13 through 1.2.5 before 1.2.6 has an out-of-bounds write ..."
+    },
+    {
+     "VulnerabilityID": "CVE-2026-40200",
+     "PkgName": "musl-utils",
+     "InstalledVersion": "1.2.5-r0",
+     "FixedVersion": "1.2.5-r3",
+     "Severity": "HIGH",
+     "Title": "musl: musl libc: Arbitrary code execution and denial of service via stack-based memory corruption in qsort"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-31115",
+     "PkgName": "xz-libs",
+     "InstalledVersion": "5.6.2-r0",
+     "FixedVersion": "5.6.2-r1",
+     "Severity": "HIGH",
+     "Title": "xz: XZ has a heap-use-after-free bug in threaded .xz decoder"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-22184",
+     "PkgName": "zlib",
+     "InstalledVersion": "1.3.1-r1",
+     "FixedVersion": "1.3.2-r0",
+     "Severity": "HIGH",
+     "Title": "zlib: zlib: Arbitrary code execution via buffer overflow in untgz utility"
+    }
+   ]
+  },
+  {
+   "Target": "usr/local/bin/gosu",
+   "Class": "lang-pkgs",
+   "Vulnerabilities": [
+    {
+     "VulnerabilityID": "CVE-2023-24538",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.19.8, 1.20.3",
+     "Severity": "CRITICAL",
+     "Title": "golang: html/template: backticks not treated as string delimiters"
+    },
+    {
+     "VulnerabilityID": "CVE-2023-24540",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.19.9, 1.20.4",
+     "Severity": "CRITICAL",
+     "Title": "golang: html/template: improper handling of JavaScript whitespace"
+    },
+    {
+     "VulnerabilityID": "CVE-2024-24790",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.21.11, 1.22.4",
+     "Severity": "CRITICAL",
+     "Title": "golang: net/netip: Unexpected behavior from Is methods for IPv4-mapped IPv6 addresses"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-68121",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.24.13, 1.25.7, 1.26.0-rc.3",
+     "Severity": "CRITICAL",
+     "Title": "crypto/tls: crypto/tls: Incorrect certificate validation during TLS session resumption"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-27664",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.18.6, 1.19.1",
+     "Severity": "HIGH",
+     "Title": "golang: net/http: handle server errors after sending GOAWAY"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-28131",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.17.12, 1.18.4",
+     "Severity": "HIGH",
+     "Title": "golang: encoding/xml: stack exhaustion in Decoder.Skip"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-2879",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.18.7, 1.19.2",
+     "Severity": "HIGH",
+     "Title": "golang: archive/tar: github.com/vbatts/tar-split: unbounded memory consumption when reading headers"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-2880",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.18.7, 1.19.2",
+     "Severity": "HIGH",
+     "Title": "golang: net/http/httputil: ReverseProxy should not forward unparseable query parameters"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-29804",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.17.11, 1.18.3",
+     "Severity": "HIGH",
+     "Title": "ELSA-2022-17957: ol8addon security update (IMPORTANT)"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-30580",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.17.11, 1.18.3",
+     "Severity": "HIGH",
+     "Title": "golang: os/exec: Code injection in Cmd.Start"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-30630",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.17.12, 1.18.4",
+     "Severity": "HIGH",
+     "Title": "golang: io/fs: stack exhaustion in Glob"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-30631",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.17.12, 1.18.4",
+     "Severity": "HIGH",
+     "Title": "golang: compress/gzip: stack exhaustion in Reader.Read"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-30632",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.17.12, 1.18.4",
+     "Severity": "HIGH",
+     "Title": "golang: path/filepath: stack exhaustion in Glob"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-30633",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.17.12, 1.18.4",
+     "Severity": "HIGH",
+     "Title": "golang: encoding/xml: stack exhaustion in Unmarshal"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-30634",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.17.11, 1.18.3",
+     "Severity": "HIGH",
+     "Title": "ELSA-2022-17957: ol8addon security update (IMPORTANT)"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-30635",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.17.12, 1.18.4",
+     "Severity": "HIGH",
+     "Title": "golang: encoding/gob: stack exhaustion in Decoder.Decode"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-32189",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.17.13, 1.18.5",
+     "Severity": "HIGH",
+     "Title": "golang: math/big: decoding big.Float and big.Rat types can panic if the encoded message is too short, potentially allowing a denial of service"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-41715",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.18.7, 1.19.2",
+     "Severity": "HIGH",
+     "Title": "golang: regexp/syntax: limit memory used by parsing regexps"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-41716",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.18.8, 1.19.3",
+     "Severity": "HIGH",
+     "Title": "Due to unsanitized NUL values, attackers may be able to maliciously se ..."
+    },
+    {
+     "VulnerabilityID": "CVE-2022-41720",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.18.9, 1.19.4",
+     "Severity": "HIGH",
+     "Title": "golang: os, net/http: avoid escapes from os.DirFS and http.Dir on Windows"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-41722",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.19.6, 1.20.1",
+     "Severity": "HIGH",
+     "Title": "golang: path/filepath: path-filepath filepath.Clean path traversal"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-41723",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.19.6, 1.20.1",
+     "Severity": "HIGH",
+     "Title": "golang.org/x/net/http2: avoid quadratic complexity in HPACK decoding"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-41724",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.19.6, 1.20.1",
+     "Severity": "HIGH",
+     "Title": "golang: crypto/tls: large handshake records may cause panics"
+    },
+    {
+     "VulnerabilityID": "CVE-2022-41725",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.19.6, 1.20.1",
+     "Severity": "HIGH",
+     "Title": "golang: net/http, mime/multipart: denial of service from excessive resource consumption"
+    },
+    {
+     "VulnerabilityID": "CVE-2023-24534",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.19.8, 1.20.3",
+     "Severity": "HIGH",
+     "Title": "golang: net/http, net/textproto: denial of service from excessive memory allocation"
+    },
+    {
+     "VulnerabilityID": "CVE-2023-24536",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.19.8, 1.20.3",
+     "Severity": "HIGH",
+     "Title": "golang: net/http, net/textproto, mime/multipart: denial of service from excessive resource consumption"
+    },
+    {
+     "VulnerabilityID": "CVE-2023-24537",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.19.8, 1.20.3",
+     "Severity": "HIGH",
+     "Title": "golang: go/parser: Infinite loop in parsing"
+    },
+    {
+     "VulnerabilityID": "CVE-2023-24539",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.19.9, 1.20.4",
+     "Severity": "HIGH",
+     "Title": "golang: html/template: improper sanitization of CSS values"
+    },
+    {
+     "VulnerabilityID": "CVE-2023-29400",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.19.9, 1.20.4",
+     "Severity": "HIGH",
+     "Title": "golang: html/template: improper handling of empty HTML attributes"
+    },
+    {
+     "VulnerabilityID": "CVE-2023-29403",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.19.10, 1.20.5",
+     "Severity": "HIGH",
+     "Title": "golang: runtime: unexpected behavior of setuid/setgid binaries"
+    },
+    {
+     "VulnerabilityID": "CVE-2023-39325",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.20.10, 1.21.3",
+     "Severity": "HIGH",
+     "Title": "golang: net/http, x/net/http2: rapid stream resets can cause excessive work (CVE-2023-44487)"
+    },
+    {
+     "VulnerabilityID": "CVE-2023-45283",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.20.11, 1.21.4, 1.20.12, 1.21.5",
+     "Severity": "HIGH",
+     "Title": "The filepath package does not recognize paths with a \\??\\ prefix as sp ..."
+    },
+    {
+     "VulnerabilityID": "CVE-2023-45287",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.20.0",
+     "Severity": "HIGH",
+     "Title": "golang: crypto/tls: Timing Side Channel attack in RSA based TLS key exchanges."
+    },
+    {
+     "VulnerabilityID": "CVE-2023-45288",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.21.9, 1.22.2",
+     "Severity": "HIGH",
+     "Title": "golang: net/http, x/net/http2: unlimited number of CONTINUATION frames causes DoS"
+    },
+    {
+     "VulnerabilityID": "CVE-2024-34156",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.22.7, 1.23.1",
+     "Severity": "HIGH",
+     "Title": "encoding/gob: golang: Calling Decoder.Decode on a message which contains deeply nested structures can cause a panic due to stack exhaustion"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-61726",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.24.12, 1.25.6",
+     "Severity": "HIGH",
+     "Title": "golang: net/url: Memory exhaustion in query parameter parsing in net/url"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-61729",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.24.11, 1.25.5",
+     "Severity": "HIGH",
+     "Title": "crypto/x509: golang: Denial of Service due to excessive resource consumption via crafted certificate"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-25679",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.8, 1.26.1",
+     "Severity": "HIGH",
+     "Title": "net/url: Incorrect parsing of IPv6 host literals in net/url"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-27145",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.11, 1.26.4",
+     "Severity": "HIGH",
+     "Title": "crypto/x509: golang: golang crypto/x509: Denial of Service via excessive processing of DNS SAN entries"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-32280",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.9, 1.26.2",
+     "Severity": "HIGH",
+     "Title": "crypto/x509: crypto/tls: golang: Go: Denial of Service vulnerability in certificate chain building"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-32281",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.9, 1.26.2",
+     "Severity": "HIGH",
+     "Title": "crypto/x509: golang: Go crypto/x509: Denial of Service via inefficient certificate chain validation"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-32283",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.9, 1.26.2",
+     "Severity": "HIGH",
+     "Title": "crypto/tls: golang: Go crypto/tls: Denial of Service via multiple TLS 1.3 key update messages"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-33811",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.10, 1.26.3",
+     "Severity": "HIGH",
+     "Title": "net: golang: Go net package: Denial of Service via long CNAME response in LookupCNAME"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-33814",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.10, 1.26.3",
+     "Severity": "HIGH",
+     "Title": "net/http/internal/http2: golang: golang.org/x/net: Go HTTP/2: Denial of Service via malformed SETTINGS_MAX_FRAME_SIZE frame"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-33818",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.13, 1.26.6, 1.27.0-rc.3",
+     "Severity": "HIGH",
+     "Title": "encoding/asn1: golang: Go encoding/asn1: Denial of Service via excessive recursion in Unmarshal"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-39820",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.10, 1.26.3",
+     "Severity": "HIGH",
+     "Title": "net/mail: golang: Go net/mail: Denial of Service via crafted email inputs"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-39821",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.13, 1.26.6, 1.27.0-rc.3",
+     "Severity": "HIGH",
+     "Title": "golang.org/x/net/idna: golang: net/http: golang.org/x/net/idna: Privilege escalation via incorrect Punycode label processing"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-39822",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.12, 1.26.5, 1.27.0-rc.2",
+     "Severity": "HIGH",
+     "Title": "golang: Go os.Root: Symlink following vulnerability allows directory traversal"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-39836",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.10, 1.26.3",
+     "Severity": "HIGH",
+     "Title": "net: golang: Go net package: Denial of Service via NUL byte in Dial and LookupPort on Windows"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-42499",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.10, 1.26.3",
+     "Severity": "HIGH",
+     "Title": "net/mail: golang: net/mail: Denial of Service via pathological email address parsing"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-42504",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.11, 1.26.4",
+     "Severity": "HIGH",
+     "Title": "mime: golang: Golang MIME: Denial of Service via maliciously-crafted MIME header"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-56853",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.13, 1.26.6, 1.27.0-rc.3",
+     "Severity": "HIGH",
+     "Title": "net/http: golang: Go net/http: Unencrypted HTTP/2 connections vulnerable to Denial of Service"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-56858",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.13, 1.26.6, 1.27.0-rc.3",
+     "Severity": "HIGH",
+     "Title": "html/template: golang: Go html/template: Cross-Site Scripting via pathological input"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-56859",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.13, 1.26.6, 1.27.0-rc.3",
+     "Severity": "HIGH",
+     "Title": "encoding/xml: golang: Go: Denial of Service via XML decoding recursion depth issue"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-56860",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.13, 1.26.6, 1.27.0-rc.3",
+     "Severity": "HIGH",
+     "Title": "net/url: golang: golang net/url: Denial of Service from quadratic complexity in path resolution"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-56862",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.25.13, 1.26.6, 1.27.0-rc.3",
+     "Severity": "HIGH",
+     "Title": "crypto/tls: golang: Golang crypto/tls: Denial of Service via indefinite KeyUpdate messages"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-78667",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.26.9, 1.27.2",
+     "Severity": "HIGH",
+     "Title": "net/http: golang: golang: Denial of Service via crafted HTTP Range headers"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-78669",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.26.9, 1.27.2",
+     "Severity": "HIGH",
+     "Title": "net/http: net/http/internal/http2: golang.org/x/net/http2: net/http: Denial of Service via excessive HTTP/2 SETTINGS frames"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-97031",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.18.2",
+     "FixedVersion": "1.26.9, 1.27.2",
+     "Severity": "HIGH",
+     "Title": "crypto/tls: golang: crypto/tls: Denial of Service via multiple ECH outer extension references"
+    }
+   ]
+  }
+ ]
+}

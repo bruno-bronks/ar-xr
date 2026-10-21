@@ -1,0 +1,16 @@
+{
+ "ArtifactName": "eclipse-mosquitto:2.0.22",
+ "OS": {
+  "Family": "alpine",
+  "Name": "3.23.6"
+ },
+ "Scanner": "trivy 0.58.1 (banco do dia 2026-10-20/21), severidade HIGH,CRITICAL",
+ "Nota": "Relatorio reduzido: metadados/config da imagem removidos (variaveis de ambiente publicas, como GPG_KEY, disparavam o gitleaks).",
+ "Results": [
+  {
+   "Target": "eclipse-mosquitto:2.0.22 (alpine 3.23.6)",
+   "Class": "os-pkgs",
+   "Vulnerabilities": []
+  }
+ ]
+}

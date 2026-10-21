@@ -11,7 +11,7 @@
 | REQ-ENG-003 | `tests/unit/api/test_health.py` | `services/api/app/health.py` | CONFIRMED (EXTRACTED) | 1 |
 | REQ-ENG-003 | `tests/contract/test_openapi_contract.py` | `services/api/app/health.py` | CONFIRMED (EXTRACTED) | 3 |
 | REQ-ENG-003 | `tests/integration/test_compose_smoke.py` | `services/api/app/health.py` | NOT CONFIRMED (black-box) | - |
-| REQ-ENG-003 | `tests/integration/test_stack_resilience.py` | `services/api/app/health.py` | NOT CONFIRMED (black-box) | - |
+| REQ-ENG-003 | `tests/integration/test_stack_resilience.py` | `services/api/app/health.py` | CONFIRMED (INFERRED) | 3 |
 | REQ-ENG-004 | `tests/unit/api/test_correlation.py` | `services/api/app/middleware.py` | CONFIRMED (EXTRACTED) | 1 |
 | REQ-ENG-004 | `tests/unit/api/test_correlation.py` | `packages/common/src/spatial_common/logging_json.py` | CONFIRMED (INFERRED) | 1 |
 | REQ-ENG-004 | `tests/integration/test_compose_smoke.py` | `services/api/app/middleware.py` | NOT CONFIRMED (black-box) | - |
@@ -41,7 +41,7 @@
 | REQ-MNT-001 | `tests/unit/api/test_equipment_api.py` | `packages/storage/src/spatial_storage/postgres.py` | CONFIRMED (INFERRED) | 1 |
 | REQ-MNT-001 | `tests/unit/api/test_equipment_api.py` | `services/api/app/routes.py` | CONFIRMED (INFERRED) | 2 |
 | REQ-MNT-001 | `tests/integration/test_stack_flow.py` | `packages/domain/src/spatial_domain/markers.py` | NOT CONFIRMED (black-box) | - |
-| REQ-MNT-001 | `tests/integration/test_stack_flow.py` | `packages/storage/src/spatial_storage/postgres.py` | NOT CONFIRMED (black-box) | - |
+| REQ-MNT-001 | `tests/integration/test_stack_flow.py` | `packages/storage/src/spatial_storage/postgres.py` | CONFIRMED (INFERRED) | 4 |
 | REQ-MNT-001 | `tests/integration/test_stack_flow.py` | `services/api/app/routes.py` | NOT CONFIRMED (black-box) | - |
 | REQ-MNT-002 | `tests/unit/domain/test_status.py` | `packages/domain/src/spatial_domain/status.py` | CONFIRMED (EXTRACTED) | 1 |
 | REQ-MNT-002 | `tests/unit/domain/test_status.py` | `services/api/app/twin.py` | CONFIRMED (EXTRACTED) | 2 |
@@ -58,17 +58,17 @@
 | REQ-MNT-003 | `tests/unit/storage/test_repository_contract.py` | `packages/domain/src/spatial_domain/telemetry.py` | CONFIRMED (INFERRED) | 1 |
 | REQ-MNT-003 | `tests/unit/storage/test_repository_contract.py` | `packages/storage/src/spatial_storage/postgres.py` | CONFIRMED (INFERRED) | 1 |
 | REQ-MNT-003 | `tests/unit/storage/test_repository_contract.py` | `services/telemetry-worker/worker/handler.py` | CONFIRMED (INFERRED) | 2 |
-| REQ-MNT-003 | `tests/integration/test_stack_resilience.py` | `packages/domain/src/spatial_domain/telemetry.py` | NOT CONFIRMED (black-box) | - |
-| REQ-MNT-003 | `tests/integration/test_stack_resilience.py` | `packages/storage/src/spatial_storage/postgres.py` | NOT CONFIRMED (black-box) | - |
+| REQ-MNT-003 | `tests/integration/test_stack_resilience.py` | `packages/domain/src/spatial_domain/telemetry.py` | CONFIRMED (EXTRACTED) | 4 |
+| REQ-MNT-003 | `tests/integration/test_stack_resilience.py` | `packages/storage/src/spatial_storage/postgres.py` | CONFIRMED (INFERRED) | 3 |
 | REQ-MNT-003 | `tests/integration/test_stack_resilience.py` | `services/telemetry-worker/worker/handler.py` | NOT CONFIRMED (black-box) | - |
 | REQ-MNT-004 | `tests/unit/domain/test_telemetry.py` | `packages/domain/src/spatial_domain/telemetry.py` | CONFIRMED (EXTRACTED) | 1 |
 | REQ-MNT-004 | `tests/unit/domain/test_telemetry.py` | `services/telemetry-worker/worker/handler.py` | CONFIRMED (EXTRACTED) | 2 |
 | REQ-MNT-004 | `tests/unit/worker/test_handler.py` | `packages/domain/src/spatial_domain/telemetry.py` | CONFIRMED (INFERRED) | 2 |
 | REQ-MNT-004 | `tests/unit/worker/test_handler.py` | `services/telemetry-worker/worker/handler.py` | CONFIRMED (INFERRED) | 1 |
-| REQ-MNT-004 | `tests/integration/test_stack_resilience.py` | `packages/domain/src/spatial_domain/telemetry.py` | NOT CONFIRMED (black-box) | - |
+| REQ-MNT-004 | `tests/integration/test_stack_resilience.py` | `packages/domain/src/spatial_domain/telemetry.py` | CONFIRMED (EXTRACTED) | 4 |
 | REQ-MNT-004 | `tests/integration/test_stack_resilience.py` | `services/telemetry-worker/worker/handler.py` | NOT CONFIRMED (black-box) | - |
-| REQ-MNT-005 | `tests/unit/worker/test_consumer.py` | `services/telemetry-worker/worker/consumer.py` | CONFIRMED (EXTRACTED) | 1 |
-| REQ-MNT-005 | `tests/unit/worker/test_consumer.py` | `services/telemetry-worker/worker/main.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-MNT-005 | `tests/unit/worker/test_consumer.py` | `services/telemetry-worker/worker/consumer.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-MNT-005 | `tests/unit/worker/test_consumer.py` | `services/telemetry-worker/worker/main.py` | CONFIRMED (INFERRED) | 2 |
 | REQ-MNT-005 | `tests/integration/test_stack_resilience.py` | `services/telemetry-worker/worker/consumer.py` | NOT CONFIRMED (black-box) | - |
 | REQ-MNT-005 | `tests/integration/test_stack_resilience.py` | `services/telemetry-worker/worker/main.py` | NOT CONFIRMED (black-box) | - |
 | REQ-MNT-006 | `tests/unit/api/test_equipment_api.py` | `services/api/app/routes.py` | CONFIRMED (INFERRED) | 2 |
@@ -128,7 +128,7 @@
 | REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/Dtos.cs` | CONFIRMED (EXTRACTED) | 2 |
 | REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | CONFIRMED (INFERRED) | 1 |
 | REQ-AR-003 | `tests/csharp/Spatial.Ar.Core.Tests/SessionDriverTests.cs` | `clients/ar-unity/Assets/Scripts/SpatialArApp.cs` | CONFIRMED (EXTRACTED) | 2 |
-| REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | CONFIRMED (INFERRED) | 4 |
+| REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/OverlayViewModel.cs` | NOT CONFIRMED | - |
 | REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/Dtos.cs` | CONFIRMED (INFERRED) | 4 |
 | REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Packages/com.spatial.ar.core/Runtime/SpatialApiClient.cs` | NOT CONFIRMED | - |
 | REQ-AR-003 | `tests/contract/test_ar_fixtures.py` | `clients/ar-unity/Assets/Scripts/SpatialArApp.cs` | CONFIRMED (INFERRED) | 4 |
@@ -256,6 +256,41 @@
 | REQ-AI-006 | `tests/integration/test_assistant_stack.py` | `services/api/app/ratelimit.py` | NOT CONFIRMED (black-box) | - |
 | REQ-AI-007 | `tests/unit/assistant/test_evaluation.py` | `packages/assistant/src/spatial_assistant/evaluation.py` | CONFIRMED (EXTRACTED) | 1 |
 | REQ-AI-007 | `tests/unit/assistant/test_evaluation.py` | `scripts/eval_assistant.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-CV-001 | `tests/unit/ml/test_scene_dataset.py` | `ml/spatial_cv/scene.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-CV-001 | `tests/unit/ml/test_scene_dataset.py` | `ml/spatial_cv/dataset.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-CV-001 | `tests/unit/ml/test_scene_dataset.py` | `ml/spatial_cv/truth.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-CV-001 | `tests/unit/ml/test_scene_dataset.py` | `ml/gen_dataset.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-CV-002 | `tests/unit/ml/test_compare.py` | `ml/train.py` | NOT CONFIRMED | - |
+| REQ-CV-002 | `tests/unit/ml/test_compare.py` | `ml/evaluate.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-CV-002 | `tests/unit/ml/test_compare.py` | `ml/fetch_weights.py` | NOT CONFIRMED | - |
+| REQ-CV-002 | `tests/unit/ml/test_compare.py` | `ml/spatial_cv/compare.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-CV-002 | `tests/unit/ml/test_compare.py` | `ml/spatial_cv/weights.py` | NOT CONFIRMED | - |
+| REQ-CV-002 | `tests/unit/ml/test_weights.py` | `ml/train.py` | NOT CONFIRMED | - |
+| REQ-CV-002 | `tests/unit/ml/test_weights.py` | `ml/evaluate.py` | NOT CONFIRMED | - |
+| REQ-CV-002 | `tests/unit/ml/test_weights.py` | `ml/fetch_weights.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-CV-002 | `tests/unit/ml/test_weights.py` | `ml/spatial_cv/compare.py` | NOT CONFIRMED | - |
+| REQ-CV-002 | `tests/unit/ml/test_weights.py` | `ml/spatial_cv/weights.py` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-CV-003 | `tests/unit/ml/test_metrics_baselines.py` | `ml/spatial_cv/metrics.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-CV-003 | `tests/unit/ml/test_metrics_baselines.py` | `ml/spatial_cv/baselines.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-CV-003 | `tests/unit/ml/test_metrics_baselines.py` | `ml/spatial_cv/compare.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-CV-003 | `tests/unit/ml/test_metrics_baselines.py` | `ml/evaluate.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-CV-003 | `tests/unit/ml/test_compare.py` | `ml/spatial_cv/metrics.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-CV-003 | `tests/unit/ml/test_compare.py` | `ml/spatial_cv/baselines.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-CV-003 | `tests/unit/ml/test_compare.py` | `ml/spatial_cv/compare.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-CV-003 | `tests/unit/ml/test_compare.py` | `ml/evaluate.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-CV-004 | `tests/unit/ml/test_isolation.py` | `ml/spatial_cv/truth.py` | NOT CONFIRMED | - |
+| REQ-CV-004 | `tests/unit/ml/test_isolation.py` | `ml/spatial_cv/compare.py` | NOT CONFIRMED | - |
+| REQ-IOT-002 | `tests/unit/simulator/test_device_emulator.py` | `services/equipment-simulator/simulator/device_emulator.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-IOT-002 | `tests/integration/test_device_emulator_stack.py` | `services/equipment-simulator/simulator/device_emulator.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-IOT-003 | `tests/integration/test_broker_auth.py` | `scripts/gen_broker_users.py` | NOT CONFIRMED (black-box) | - |
+| REQ-IOT-003 | `tests/integration/test_broker_auth.py` | `packages/common/src/spatial_common/mosquitto_passwd.py` | NOT CONFIRMED (black-box) | - |
+| REQ-IOT-003 | `tests/integration/test_broker_auth.py` | `packages/common/src/spatial_common/mqtt_auth.py` | NOT CONFIRMED (black-box) | - |
+| REQ-IOT-003 | `tests/unit/common/test_mqtt_auth.py` | `scripts/gen_broker_users.py` | NOT CONFIRMED | - |
+| REQ-IOT-003 | `tests/unit/common/test_mqtt_auth.py` | `packages/common/src/spatial_common/mosquitto_passwd.py` | NOT CONFIRMED | - |
+| REQ-IOT-003 | `tests/unit/common/test_mqtt_auth.py` | `packages/common/src/spatial_common/mqtt_auth.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-IOT-003 | `tests/unit/common/test_mosquitto_passwd.py` | `scripts/gen_broker_users.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-IOT-003 | `tests/unit/common/test_mosquitto_passwd.py` | `packages/common/src/spatial_common/mosquitto_passwd.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-IOT-003 | `tests/unit/common/test_mosquitto_passwd.py` | `packages/common/src/spatial_common/mqtt_auth.py` | NOT CONFIRMED | - |
 | REQ-HACC-001 | `tests/unit/api/test_hacc_api.py` | `packages/hacc/src/spatial_hacc/simulated.py` | CONFIRMED (INFERRED) | 1 |
 | REQ-HACC-001 | `tests/unit/api/test_hacc_api.py` | `services/api/app/hacc_routes.py` | CONFIRMED (INFERRED) | 2 |
 | REQ-HACC-001 | `tests/unit/api/test_hacc_api.py` | `services/api/app/main.py` | CONFIRMED (INFERRED) | 2 |
@@ -294,13 +329,69 @@
 | REQ-HACC-005 | `tests/contract/test_openapi_contract.py` | `services/api/app/hacc_routes.py` | CONFIRMED (INFERRED) | 2 |
 | REQ-HACC-005 | `tests/integration/test_hacc_stack.py` | `packages/domain/src/spatial_domain/beds.py` | NOT CONFIRMED (black-box) | - |
 | REQ-HACC-005 | `tests/integration/test_hacc_stack.py` | `services/api/app/hacc_routes.py` | NOT CONFIRMED (black-box) | - |
+| REQ-OPS-001 | `tests/unit/ops/test_deploy.py` | `packages/ops/src/spatial_ops/deploy.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-001 | `tests/unit/ops/test_deploy.py` | `packages/ops/src/spatial_ops/state.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-001 | `tests/unit/ops/test_deploy.py` | `packages/ops/src/spatial_ops/runner.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-001 | `tests/unit/ops/test_deploy.py` | `packages/ops/src/spatial_ops/wiring.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-OPS-001 | `tests/unit/ops/test_deploy.py` | `scripts/deploy.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-OPS-001 | `tests/integration/test_ops_e2e.py` | `packages/ops/src/spatial_ops/deploy.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-OPS-001 | `tests/integration/test_ops_e2e.py` | `packages/ops/src/spatial_ops/state.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-OPS-001 | `tests/integration/test_ops_e2e.py` | `packages/ops/src/spatial_ops/runner.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-001 | `tests/integration/test_ops_e2e.py` | `packages/ops/src/spatial_ops/wiring.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-OPS-001 | `tests/integration/test_ops_e2e.py` | `scripts/deploy.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-OPS-001 | `tests/unit/ops/test_provisioning.py` | `packages/ops/src/spatial_ops/deploy.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-OPS-001 | `tests/unit/ops/test_provisioning.py` | `packages/ops/src/spatial_ops/state.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-OPS-001 | `tests/unit/ops/test_provisioning.py` | `packages/ops/src/spatial_ops/runner.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-OPS-001 | `tests/unit/ops/test_provisioning.py` | `packages/ops/src/spatial_ops/wiring.py` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-OPS-001 | `tests/unit/ops/test_provisioning.py` | `scripts/deploy.py` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-OPS-002 | `tests/unit/ops/test_deploy.py` | `packages/ops/src/spatial_ops/deploy.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-002 | `tests/unit/ops/test_deploy.py` | `packages/ops/src/spatial_ops/state.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-002 | `tests/unit/ops/test_deploy.py` | `scripts/deploy.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-OPS-002 | `tests/integration/test_ops_e2e.py` | `packages/ops/src/spatial_ops/deploy.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-OPS-002 | `tests/integration/test_ops_e2e.py` | `packages/ops/src/spatial_ops/state.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-OPS-002 | `tests/integration/test_ops_e2e.py` | `scripts/deploy.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-OPS-003 | `tests/unit/ops/test_gitops.py` | `packages/ops/src/spatial_ops/gitops.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-003 | `tests/unit/ops/test_gitops.py` | `scripts/gitops_reconcile.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-OPS-003 | `tests/integration/test_ops_e2e.py` | `packages/ops/src/spatial_ops/gitops.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-003 | `tests/integration/test_ops_e2e.py` | `scripts/gitops_reconcile.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-OPS-003 | `tests/unit/ops/test_provisioning.py` | `packages/ops/src/spatial_ops/gitops.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-OPS-003 | `tests/unit/ops/test_provisioning.py` | `scripts/gitops_reconcile.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-OPS-004 | `tests/unit/ops/test_backup.py` | `packages/ops/src/spatial_ops/backup.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-004 | `tests/unit/ops/test_backup.py` | `scripts/backup.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-OPS-004 | `tests/integration/test_ops_e2e.py` | `packages/ops/src/spatial_ops/backup.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-004 | `tests/integration/test_ops_e2e.py` | `scripts/backup.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-OPS-005 | `tests/unit/common/test_metrics.py` | `packages/common/src/spatial_common/metrics.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-005 | `tests/unit/common/test_metrics.py` | `services/api/app/metrics.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-OPS-005 | `tests/unit/common/test_metrics.py` | `services/telemetry-worker/worker/metrics.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-OPS-005 | `tests/unit/common/test_metrics.py` | `scripts/check_prometheus.py` | NOT CONFIRMED | - |
+| REQ-OPS-005 | `tests/unit/api/test_metrics_endpoint.py` | `packages/common/src/spatial_common/metrics.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-OPS-005 | `tests/unit/api/test_metrics_endpoint.py` | `services/api/app/metrics.py` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-OPS-005 | `tests/unit/api/test_metrics_endpoint.py` | `services/telemetry-worker/worker/metrics.py` | CONFIRMED (EXTRACTED) | 3 |
+| REQ-OPS-005 | `tests/unit/api/test_metrics_endpoint.py` | `scripts/check_prometheus.py` | NOT CONFIRMED | - |
+| REQ-OPS-005 | `tests/unit/api/test_config.py` | `packages/common/src/spatial_common/metrics.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-OPS-005 | `tests/unit/api/test_config.py` | `services/api/app/metrics.py` | CONFIRMED (INFERRED) | 3 |
+| REQ-OPS-005 | `tests/unit/api/test_config.py` | `services/telemetry-worker/worker/metrics.py` | CONFIRMED (INFERRED) | 4 |
+| REQ-OPS-005 | `tests/unit/api/test_config.py` | `scripts/check_prometheus.py` | NOT CONFIRMED | - |
+| REQ-OPS-005 | `tests/unit/worker/test_metrics.py` | `packages/common/src/spatial_common/metrics.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-005 | `tests/unit/worker/test_metrics.py` | `services/api/app/metrics.py` | CONFIRMED (INFERRED) | 2 |
+| REQ-OPS-005 | `tests/unit/worker/test_metrics.py` | `services/telemetry-worker/worker/metrics.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-005 | `tests/unit/worker/test_metrics.py` | `scripts/check_prometheus.py` | NOT CONFIRMED | - |
+| REQ-OPS-005 | `tests/unit/ops/test_rules_contract.py` | `packages/common/src/spatial_common/metrics.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-005 | `tests/unit/ops/test_rules_contract.py` | `services/api/app/metrics.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-OPS-005 | `tests/unit/ops/test_rules_contract.py` | `services/telemetry-worker/worker/metrics.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-OPS-005 | `tests/unit/ops/test_rules_contract.py` | `scripts/check_prometheus.py` | NOT CONFIRMED | - |
+| REQ-OPS-006 | `tests/unit/ops/test_loadtest.py` | `packages/ops/src/spatial_ops/loadtest.py` | CONFIRMED (INFERRED) | 1 |
+| REQ-OPS-006 | `tests/unit/ops/test_loadtest.py` | `scripts/load_test.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-OPS-008 | `tests/unit/ops/test_cost.py` | `packages/ops/src/spatial_ops/cost.py` | CONFIRMED (EXTRACTED) | 1 |
+| REQ-OPS-008 | `tests/unit/ops/test_cost.py` | `scripts/cost_model.py` | CONFIRMED (EXTRACTED) | 2 |
+| REQ-OPS-009 | `tests/unit/ops/test_provisioning.py` | `scripts/verify_host.py` | NOT CONFIRMED | - |
 
 ## Resumo
 
-- CONFIRMED (EXTRACTED): **89**
-- CONFIRMED (INFERRED): **145**
-- NOT CONFIRMED (black-box): **44**
-- NOT CONFIRMED: **10**
+- CONFIRMED (EXTRACTED): **124**
+- CONFIRMED (INFERRED): **185**
+- NOT CONFIRMED (black-box): **42**
+- NOT CONFIRMED: **28**
 - NOT IN GRAPH: **0**
 
 - `NOT CONFIRMED (black-box)`: teste de integracao/E2E/performance; exercita o codigo por HTTP/MQTT/Docker,

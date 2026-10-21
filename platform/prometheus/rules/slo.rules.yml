@@ -1,0 +1,132 @@
+# SLOs e alertas por taxa de consumo do orcamento de erro (burn rate, multi-janela) - SPEC-012 / REQ-OPS-005/006.
+# Metas (docs/ops/slo.md): disponibilidade 99,5 % (orcamento 0,5 %); latencia: 95 % das requisicoes < 500 ms
+# (orcamento 5 %); frescor: 95 % das leituras aceitas em ate 5 s do observed_at. Limiares: queima rapida 14,4x (janelas 1 h e 5 min) => page; lenta 6x (6 h e 30 min) => ticket.
+# `/metrics` e excluido para o proprio scrape nao inflar os numeros. Testes: platform/prometheus/tests/slo.test.yml.
+groups:
+  - name: slo-recording
+    rules:
+      # --- proporcao de erros 5xx (indisponibilidade percebida pelo cliente; 4xx e culpa do cliente) ---
+      - record: sli:http_error_ratio:rate5m
+        expr: |
+          (sum(rate(http_requests_total{job="api",route!="/metrics",status_class="5xx"}[5m])) or vector(0))
+          / sum(rate(http_requests_total{job="api",route!="/metrics"}[5m]))
+      - record: sli:http_error_ratio:rate30m
+        expr: |
+          (sum(rate(http_requests_total{job="api",route!="/metrics",status_class="5xx"}[30m])) or vector(0))
+          / sum(rate(http_requests_total{job="api",route!="/metrics"}[30m]))
+      - record: sli:http_error_ratio:rate1h
+        expr: |
+          (sum(rate(http_requests_total{job="api",route!="/metrics",status_class="5xx"}[1h])) or vector(0))
+          / sum(rate(http_requests_total{job="api",route!="/metrics"}[1h]))
+      - record: sli:http_error_ratio:rate6h
+        expr: |
+          (sum(rate(http_requests_total{job="api",route!="/metrics",status_class="5xx"}[6h])) or vector(0))
+          / sum(rate(http_requests_total{job="api",route!="/metrics"}[6h]))
+
+      # --- proporcao de requisicoes LENTAS (> 500 ms) ---
+      - record: sli:http_slow_ratio:rate30m
+        expr: |
+          1 - (
+            sum(rate(http_request_duration_seconds_bucket{job="api",route!="/metrics",le="0.5"}[30m]))
+            / sum(rate(http_request_duration_seconds_count{job="api",route!="/metrics"}[30m]))
+          )
+      - record: sli:http_slow_ratio:rate6h
+        expr: |
+          1 - (
+            sum(rate(http_request_duration_seconds_bucket{job="api",route!="/metrics",le="0.5"}[6h]))
+            / sum(rate(http_request_duration_seconds_count{job="api",route!="/metrics"}[6h]))
+          )
+
+      # --- frescor da ingestao: proporcao de leituras aceitas que demoraram > 5 s do observed_at ate o banco ---
+      - record: sli:ingest_lag_slow_ratio:rate30m
+        expr: |
+          1 - (
+            sum(rate(worker_ingest_lag_seconds_bucket{job="worker",le="5.0"}[30m]))
+            / sum(rate(worker_ingest_lag_seconds_count{job="worker"}[30m]))
+          )
+      - record: sli:ingest_lag_slow_ratio:rate6h
+        expr: |
+          1 - (
+            sum(rate(worker_ingest_lag_seconds_bucket{job="worker",le="5.0"}[6h]))
+            / sum(rate(worker_ingest_lag_seconds_count{job="worker"}[6h]))
+          )
+
+      # --- proporcao de mensagens rejeitadas no pipeline de telemetria ---
+      - record: sli:pipeline_rejected_ratio:rate10m
+        expr: |
+          (sum(rate(worker_messages_total{job="worker",disposition="rejected"}[10m])) or vector(0))
+          / sum(rate(worker_messages_total{job="worker"}[10m]))
+
+  - name: slo-alerts
+    rules:
+      - alert: ApiAvailabilityFastBurn
+        expr: sli:http_error_ratio:rate1h > (14.4 * 0.005) and sli:http_error_ratio:rate5m > (14.4 * 0.005)
+        for: 2m
+        labels: { severity: page, slo: availability }
+        annotations:
+          summary: "API consumindo o orcamento de erro 14,4x mais rapido que o sustentavel"
+          runbook: docs/runbooks/observability.md#apiavailabilityfastburn
+
+      - alert: ApiAvailabilitySlowBurn
+        expr: sli:http_error_ratio:rate6h > (6 * 0.005) and sli:http_error_ratio:rate30m > (6 * 0.005)
+        for: 15m
+        labels: { severity: ticket, slo: availability }
+        annotations:
+          summary: "API consumindo o orcamento de erro 6x mais rapido que o sustentavel"
+          runbook: docs/runbooks/observability.md#apiavailabilityslowburn
+
+      - alert: ApiLatencySlowBurn
+        expr: sli:http_slow_ratio:rate6h > (6 * 0.05) and sli:http_slow_ratio:rate30m > (6 * 0.05)
+        for: 15m
+        labels: { severity: ticket, slo: latency }
+        annotations:
+          summary: "Mais de 30 % das requisicoes acima de 500 ms (meta: no maximo 5 %)"
+          runbook: docs/runbooks/observability.md#apilatencyslowburn
+
+      - alert: PipelineLagSlowBurn
+        expr: sli:ingest_lag_slow_ratio:rate6h > (6 * 0.05) and sli:ingest_lag_slow_ratio:rate30m > (6 * 0.05)
+        for: 15m
+        labels: { severity: ticket, slo: freshness }
+        annotations:
+          summary: "Mais de 30 % das leituras demoram mais de 5 s para chegar ao banco (meta: no maximo 5 %)"
+          runbook: docs/runbooks/observability.md#pipelinelagslowburn
+
+      - alert: PipelineStale
+        expr: worker_last_message_timestamp_seconds > 0 and (time() - worker_last_message_timestamp_seconds) > 120
+        for: 2m
+        labels: { severity: page, slo: freshness }
+        annotations:
+          summary: "Nenhuma telemetria processada ha mais de 2 minutos"
+          runbook: docs/runbooks/observability.md#pipelinestale
+
+      - alert: WorkerBrokerDisconnected
+        expr: worker_mqtt_connected == 0
+        for: 2m
+        labels: { severity: page, slo: freshness }
+        annotations:
+          summary: "Worker sem conexao com o broker MQTT"
+          runbook: docs/runbooks/observability.md#workerbrokerdisconnected
+
+      - alert: DependencyDown
+        expr: dependency_up == 0
+        for: 1m
+        labels: { severity: page, slo: availability }
+        annotations:
+          summary: "Dependencia da API indisponivel (banco ou broker)"
+          runbook: docs/runbooks/observability.md#dependencydown
+
+      - alert: PipelineRejectionSpike
+        expr: sli:pipeline_rejected_ratio:rate10m > 0.2
+        for: 10m
+        labels: { severity: ticket, slo: quality }
+        annotations:
+          summary: "Mais de 20 % das mensagens de telemetria estao sendo rejeitadas"
+          runbook: docs/runbooks/observability.md#pipelinerejectionspike
+
+      - alert: MetricsTargetDown
+        expr: up == 0
+        for: 2m
+        labels: { severity: page, slo: observability }
+        annotations:
+          summary: "Alvo de metricas inacessivel (sem metricas nao ha alertas confiaveis)"
+          runbook: docs/runbooks/observability.md#metricstargetdown

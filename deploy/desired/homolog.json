@@ -1,0 +1,1 @@
+{"tag": "v0.6.0", "backup": true, "note": "Estado desejado da homologacao: tag construida pelo workflow de release (v*) ou localmente com scripts/deploy.py build."}

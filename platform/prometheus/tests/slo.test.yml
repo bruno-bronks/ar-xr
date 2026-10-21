@@ -1,0 +1,209 @@
+# Testes das regras de SLO: `promtool test rules` (REQ-OPS-005). Rodar: scripts/check_prometheus.py
+# Cada serie usa passo de 1 minuto; os tempos de avaliacao sao relativos ao inicio da serie.
+rule_files:
+  - ../rules/slo.rules.yml
+
+evaluation_interval: 1m
+
+tests:
+  # 1) A proporcao de erros calculada bate com a conta feita a mao: 20 erros para cada 60 sucessos (20/80).
+  - interval: 1m
+    input_series:
+      - series: 'http_requests_total{job="api",route="/api/v1/equipment",method="GET",status_class="2xx"}'
+        values: "0+60x180"
+      - series: 'http_requests_total{job="api",route="/api/v1/equipment",method="GET",status_class="5xx"}'
+        values: "0+20x180"
+      # o proprio scrape de /metrics NAO conta: mesmo falhando, nao muda o resultado
+      - series: 'http_requests_total{job="api",route="/metrics",method="GET",status_class="5xx"}'
+        values: "0+500x180"
+    promql_expr_test:
+      - expr: sli:http_error_ratio:rate5m
+        eval_time: 90m
+        exp_samples:
+          - labels: "sli:http_error_ratio:rate5m"
+            value: 0.25
+
+  # 2) Erros sustentados (14 % das requisicoes) => queima rapida e lenta disparam, com severidades certas.
+  - interval: 1m
+    input_series:
+      - series: 'http_requests_total{job="api",route="/api/v1/equipment",method="GET",status_class="2xx"}'
+        values: "0+60x180"
+      - series: 'http_requests_total{job="api",route="/api/v1/equipment",method="GET",status_class="5xx"}'
+        values: "0+10x180"
+    alert_rule_test:
+      - eval_time: 120m
+        alertname: ApiAvailabilityFastBurn
+        exp_alerts:
+          - exp_labels: { severity: page, slo: availability }
+            exp_annotations:
+              summary: "API consumindo o orcamento de erro 14,4x mais rapido que o sustentavel"
+              runbook: docs/runbooks/observability.md#apiavailabilityfastburn
+      - eval_time: 150m
+        alertname: ApiAvailabilitySlowBurn
+        exp_alerts:
+          - exp_labels: { severity: ticket, slo: availability }
+            exp_annotations:
+              summary: "API consumindo o orcamento de erro 6x mais rapido que o sustentavel"
+              runbook: docs/runbooks/observability.md#apiavailabilityslowburn
+
+  # 3) Ruido baixo (0,1 % de erros, bem dentro do orcamento de 0,5 %) NAO alerta.
+  - interval: 1m
+    input_series:
+      - series: 'http_requests_total{job="api",route="/api/v1/equipment",method="GET",status_class="2xx"}'
+        values: "0+999x180"
+      - series: 'http_requests_total{job="api",route="/api/v1/equipment",method="GET",status_class="5xx"}'
+        values: "0+1x180"
+    alert_rule_test:
+      - eval_time: 170m
+        alertname: ApiAvailabilityFastBurn
+        exp_alerts: []
+      - eval_time: 170m
+        alertname: ApiAvailabilitySlowBurn
+        exp_alerts: []
+
+  # 4) Um pico curto (2 minutos de 100 % de erro) nao paga a janela de 1 h: nao paginar por soluco.
+  - interval: 1m
+    input_series:
+      - series: 'http_requests_total{job="api",route="/api/v1/equipment",method="GET",status_class="2xx"}'
+        values: "0+60x180"
+      - series: 'http_requests_total{job="api",route="/api/v1/equipment",method="GET",status_class="5xx"}'
+        values: "0x84 60 120 120x95"
+    alert_rule_test:
+      - eval_time: 90m
+        alertname: ApiAvailabilityFastBurn
+        exp_alerts: []
+
+  # 5) Latencia: 40 % das requisicoes acima de 500 ms por horas => queima lenta de latencia.
+  - interval: 1m
+    input_series:
+      - series: 'http_request_duration_seconds_bucket{job="api",route="/api/v1/equipment",le="0.5"}'
+        values: "0+60x400"
+      - series: 'http_request_duration_seconds_bucket{job="api",route="/api/v1/equipment",le="+Inf"}'
+        values: "0+100x400"
+      - series: 'http_request_duration_seconds_count{job="api",route="/api/v1/equipment"}'
+        values: "0+100x400"
+    alert_rule_test:
+      - eval_time: 380m
+        alertname: ApiLatencySlowBurn
+        exp_alerts:
+          - exp_labels: { severity: ticket, slo: latency }
+            exp_annotations:
+              summary: "Mais de 30 % das requisicoes acima de 500 ms (meta: no maximo 5 %)"
+              runbook: docs/runbooks/observability.md#apilatencyslowburn
+
+  # 5b) Frescor: 40 % das leituras levando mais de 5 s por horas => queima lenta do SLO de frescor;
+  #     90 % dentro de 5 s (orcamento folgado) nao alerta.
+  - interval: 1m
+    input_series:
+      - series: 'worker_ingest_lag_seconds_bucket{job="worker",le="5.0"}'
+        values: "0+60x400"
+      - series: 'worker_ingest_lag_seconds_bucket{job="worker",le="+Inf"}'
+        values: "0+100x400"
+      - series: 'worker_ingest_lag_seconds_count{job="worker"}'
+        values: "0+100x400"
+    alert_rule_test:
+      - eval_time: 380m
+        alertname: PipelineLagSlowBurn
+        exp_alerts:
+          - exp_labels: { severity: ticket, slo: freshness }
+            exp_annotations:
+              summary: "Mais de 30 % das leituras demoram mais de 5 s para chegar ao banco (meta: no maximo 5 %)"
+              runbook: docs/runbooks/observability.md#pipelinelagslowburn
+  - interval: 1m
+    input_series:
+      - series: 'worker_ingest_lag_seconds_bucket{job="worker",le="5.0"}'
+        values: "0+98x400"
+      - series: 'worker_ingest_lag_seconds_count{job="worker"}'
+        values: "0+100x400"
+    alert_rule_test:
+      - eval_time: 380m
+        alertname: PipelineLagSlowBurn
+        exp_alerts: []
+
+  # 6) Frescor do pipeline: mensagens recentes => silencio; parou de chegar => alerta; nunca recebeu => sem alerta falso.
+  - interval: 1m
+    input_series:
+      - series: 'worker_last_message_timestamp_seconds{job="worker"}'
+        values: "60+60x10 660x30" # atualiza ate 11 min e para
+      - series: 'worker_last_message_timestamp_seconds{job="worker",instance="novo"}'
+        values: "0x40" # 0 = ainda nao recebeu nada
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: PipelineStale
+        exp_alerts: []
+      - eval_time: 30m
+        alertname: PipelineStale
+        exp_alerts:
+          - exp_labels: { severity: page, slo: freshness, job: worker }
+            exp_annotations:
+              summary: "Nenhuma telemetria processada ha mais de 2 minutos"
+              runbook: docs/runbooks/observability.md#pipelinestale
+
+  # 7) Dependencia fora do ar por mais de 1 minuto alerta, com o nome da dependencia.
+  - interval: 1m
+    input_series:
+      - series: 'dependency_up{job="api",dependency="database"}'
+        values: "1x10 0x20"
+      - series: 'dependency_up{job="api",dependency="broker"}'
+        values: "1x30"
+    alert_rule_test:
+      - eval_time: 9m
+        alertname: DependencyDown
+        exp_alerts: []
+      - eval_time: 20m
+        alertname: DependencyDown
+        exp_alerts:
+          - exp_labels: { severity: page, slo: availability, job: api, dependency: database }
+            exp_annotations:
+              summary: "Dependencia da API indisponivel (banco ou broker)"
+              runbook: docs/runbooks/observability.md#dependencydown
+
+  # 8) Worker sem broker e alvo de metricas fora do ar.
+  - interval: 1m
+    input_series:
+      - series: 'worker_mqtt_connected{job="worker"}'
+        values: "1x5 0x20"
+      - series: 'up{job="worker",instance="worker:9100"}'
+        values: "1x5 0x20"
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: WorkerBrokerDisconnected
+        exp_alerts:
+          - exp_labels: { severity: page, slo: freshness, job: worker }
+            exp_annotations:
+              summary: "Worker sem conexao com o broker MQTT"
+              runbook: docs/runbooks/observability.md#workerbrokerdisconnected
+      - eval_time: 20m
+        alertname: MetricsTargetDown
+        exp_alerts:
+          - exp_labels: { severity: page, slo: observability, job: worker, instance: "worker:9100" }
+            exp_annotations:
+              summary: "Alvo de metricas inacessivel (sem metricas nao ha alertas confiaveis)"
+              runbook: docs/runbooks/observability.md#metricstargetdown
+
+  # 9) Pico de rejeicoes (40 % das mensagens) sustentado alerta; rejeicao baixa (2 %) nao.
+  - interval: 1m
+    input_series:
+      - series: 'worker_messages_total{job="worker",disposition="accepted",reason=""}'
+        values: "0+60x60"
+      - series: 'worker_messages_total{job="worker",disposition="rejected",reason="SCHEMA_VIOLATION"}'
+        values: "0+40x60"
+    alert_rule_test:
+      - eval_time: 50m
+        alertname: PipelineRejectionSpike
+        exp_alerts:
+          - exp_labels: { severity: ticket, slo: quality }
+            exp_annotations:
+              summary: "Mais de 20 % das mensagens de telemetria estao sendo rejeitadas"
+              runbook: docs/runbooks/observability.md#pipelinerejectionspike
+
+  - interval: 1m
+    input_series:
+      - series: 'worker_messages_total{job="worker",disposition="accepted",reason=""}'
+        values: "0+98x60"
+      - series: 'worker_messages_total{job="worker",disposition="rejected",reason="SCHEMA_VIOLATION"}'
+        values: "0+2x60"
+    alert_rule_test:
+      - eval_time: 50m
+        alertname: PipelineRejectionSpike
+        exp_alerts: []

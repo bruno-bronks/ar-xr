@@ -1,0 +1,222 @@
+{
+ "ArtifactName": "postgres:16.15-alpine",
+ "OS": {
+  "Family": "alpine",
+  "Name": "3.24.2"
+ },
+ "Scanner": "trivy 0.58.1 (banco do dia 2026-10-20/21), severidade HIGH,CRITICAL",
+ "Nota": "Relatorio reduzido: metadados/config da imagem removidos (variaveis de ambiente publicas, como GPG_KEY, disparavam o gitleaks).",
+ "Results": [
+  {
+   "Target": "postgres:16.15-alpine (alpine 3.24.2)",
+   "Class": "os-pkgs",
+   "Vulnerabilities": []
+  },
+  {
+   "Target": "usr/local/bin/gosu",
+   "Class": "lang-pkgs",
+   "Vulnerabilities": [
+    {
+     "VulnerabilityID": "CVE-2025-68121",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.24.13, 1.25.7, 1.26.0-rc.3",
+     "Severity": "CRITICAL",
+     "Title": "crypto/tls: crypto/tls: Incorrect certificate validation during TLS session resumption"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-61726",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.24.12, 1.25.6",
+     "Severity": "HIGH",
+     "Title": "golang: net/url: Memory exhaustion in query parameter parsing in net/url"
+    },
+    {
+     "VulnerabilityID": "CVE-2025-61729",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.24.11, 1.25.5",
+     "Severity": "HIGH",
+     "Title": "crypto/x509: golang: Denial of Service due to excessive resource consumption via crafted certificate"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-25679",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.8, 1.26.1",
+     "Severity": "HIGH",
+     "Title": "net/url: Incorrect parsing of IPv6 host literals in net/url"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-27145",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.11, 1.26.4",
+     "Severity": "HIGH",
+     "Title": "crypto/x509: golang: golang crypto/x509: Denial of Service via excessive processing of DNS SAN entries"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-32280",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.9, 1.26.2",
+     "Severity": "HIGH",
+     "Title": "crypto/x509: crypto/tls: golang: Go: Denial of Service vulnerability in certificate chain building"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-32281",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.9, 1.26.2",
+     "Severity": "HIGH",
+     "Title": "crypto/x509: golang: Go crypto/x509: Denial of Service via inefficient certificate chain validation"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-32283",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.9, 1.26.2",
+     "Severity": "HIGH",
+     "Title": "crypto/tls: golang: Go crypto/tls: Denial of Service via multiple TLS 1.3 key update messages"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-33811",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.10, 1.26.3",
+     "Severity": "HIGH",
+     "Title": "net: golang: Go net package: Denial of Service via long CNAME response in LookupCNAME"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-33814",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.10, 1.26.3",
+     "Severity": "HIGH",
+     "Title": "net/http/internal/http2: golang: golang.org/x/net: Go HTTP/2: Denial of Service via malformed SETTINGS_MAX_FRAME_SIZE frame"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-33818",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.13, 1.26.6, 1.27.0-rc.3",
+     "Severity": "HIGH",
+     "Title": "encoding/asn1: golang: Go encoding/asn1: Denial of Service via excessive recursion in Unmarshal"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-39820",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.10, 1.26.3",
+     "Severity": "HIGH",
+     "Title": "net/mail: golang: Go net/mail: Denial of Service via crafted email inputs"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-39821",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.13, 1.26.6, 1.27.0-rc.3",
+     "Severity": "HIGH",
+     "Title": "golang.org/x/net/idna: golang: net/http: golang.org/x/net/idna: Privilege escalation via incorrect Punycode label processing"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-39822",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.12, 1.26.5, 1.27.0-rc.2",
+     "Severity": "HIGH",
+     "Title": "golang: Go os.Root: Symlink following vulnerability allows directory traversal"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-39836",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.10, 1.26.3",
+     "Severity": "HIGH",
+     "Title": "net: golang: Go net package: Denial of Service via NUL byte in Dial and LookupPort on Windows"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-42499",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.10, 1.26.3",
+     "Severity": "HIGH",
+     "Title": "net/mail: golang: net/mail: Denial of Service via pathological email address parsing"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-42504",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.11, 1.26.4",
+     "Severity": "HIGH",
+     "Title": "mime: golang: Golang MIME: Denial of Service via maliciously-crafted MIME header"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-56853",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.13, 1.26.6, 1.27.0-rc.3",
+     "Severity": "HIGH",
+     "Title": "net/http: golang: Go net/http: Unencrypted HTTP/2 connections vulnerable to Denial of Service"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-56858",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.13, 1.26.6, 1.27.0-rc.3",
+     "Severity": "HIGH",
+     "Title": "html/template: golang: Go html/template: Cross-Site Scripting via pathological input"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-56859",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.13, 1.26.6, 1.27.0-rc.3",
+     "Severity": "HIGH",
+     "Title": "encoding/xml: golang: Go: Denial of Service via XML decoding recursion depth issue"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-56860",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.13, 1.26.6, 1.27.0-rc.3",
+     "Severity": "HIGH",
+     "Title": "net/url: golang: golang net/url: Denial of Service from quadratic complexity in path resolution"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-56862",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.25.13, 1.26.6, 1.27.0-rc.3",
+     "Severity": "HIGH",
+     "Title": "crypto/tls: golang: Golang crypto/tls: Denial of Service via indefinite KeyUpdate messages"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-78667",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.26.9, 1.27.2",
+     "Severity": "HIGH",
+     "Title": "net/http: golang: golang: Denial of Service via crafted HTTP Range headers"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-78669",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.26.9, 1.27.2",
+     "Severity": "HIGH",
+     "Title": "net/http: net/http/internal/http2: golang.org/x/net/http2: net/http: Denial of Service via excessive HTTP/2 SETTINGS frames"
+    },
+    {
+     "VulnerabilityID": "CVE-2026-97031",
+     "PkgName": "stdlib",
+     "InstalledVersion": "v1.24.6",
+     "FixedVersion": "1.26.9, 1.27.2",
+     "Severity": "HIGH",
+     "Title": "crypto/tls: golang: crypto/tls: Denial of Service via multiple ECH outer extension references"
+    }
+   ]
+  }
+ ]
+}

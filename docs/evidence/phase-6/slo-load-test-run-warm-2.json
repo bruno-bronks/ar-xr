@@ -1,0 +1,88 @@
+{
+  "total": 2400,
+  "duration_s": 60.0,
+  "achieved_rps": 40.0,
+  "status_class": {
+    "2xx": 2278,
+    "4xx": 122
+  },
+  "availability": 1.0,
+  "latency_ms": {
+    "p50": 24.322799989022315,
+    "p95": 49.00969995651394,
+    "p99": 57.18580004759133,
+    "max": 73.34389997413382
+  },
+  "per_route": {
+    "/api/v1/equipment": {
+      "count": 878,
+      "p50_ms": 27.623799978755414,
+      "p95_ms": 52.59679997107014,
+      "max_ms": 73.34389997413382
+    },
+    "/api/v1/equipment/{equipment_id}/telemetry/latest": {
+      "count": 516,
+      "p50_ms": 13.91359994886443,
+      "p95_ms": 36.88160004094243,
+      "max_ms": 46.57589999260381
+    },
+    "/api/v1/equipment/{equipment_id}/twin": {
+      "count": 759,
+      "p50_ms": 18.261599994730204,
+      "p95_ms": 40.71919998386875,
+      "max_ms": 55.70349999470636
+    },
+    "/health/ready": {
+      "count": 247,
+      "p50_ms": 31.351900019217283,
+      "p95_ms": 53.48770000273362,
+      "max_ms": 72.52970000263304
+    }
+  },
+  "slo": {
+    "availability": {
+      "target": 0.995,
+      "value": 1.0,
+      "met": true
+    },
+    "latency": {
+      "threshold_s": 0.5,
+      "target": 0.95,
+      "fraction_fast": 1.0,
+      "met": true
+    },
+    "all_met": true
+  },
+  "profile": {
+    "rps": 40.0,
+    "workers": 4,
+    "duration_s": 60.0,
+    "seed": 20261020,
+    "mix": [
+      {
+        "route": "/api/v1/equipment",
+        "weight": 3.0
+      },
+      {
+        "route": "/api/v1/equipment/{equipment_id}/twin",
+        "weight": 3.0
+      },
+      {
+        "route": "/api/v1/equipment/{equipment_id}/telemetry/latest",
+        "weight": 2.0
+      },
+      {
+        "route": "/health/ready",
+        "weight": 1.0
+      },
+      {
+        "route": "/api/v1/equipment",
+        "weight": 0.5
+      }
+    ]
+  },
+  "server_crosscheck": {
+    "consistent": true,
+    "mismatches": {}
+  }
+}

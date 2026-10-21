@@ -1,0 +1,34 @@
+{
+ "ArtifactName": "eclipse-mosquitto:2.0.18",
+ "OS": {
+  "Family": "alpine",
+  "Name": "3.18.9",
+  "EOSL": true
+ },
+ "Scanner": "trivy 0.58.1 (banco do dia 2026-10-20/21), severidade HIGH,CRITICAL",
+ "Nota": "Relatorio reduzido: metadados/config da imagem removidos (variaveis de ambiente publicas, como GPG_KEY, disparavam o gitleaks).",
+ "Results": [
+  {
+   "Target": "eclipse-mosquitto:2.0.18 (alpine 3.18.9)",
+   "Class": "os-pkgs",
+   "Vulnerabilities": [
+    {
+     "VulnerabilityID": "CVE-2025-26519",
+     "PkgName": "musl",
+     "InstalledVersion": "1.2.4-r2",
+     "FixedVersion": "1.2.4-r3",
+     "Severity": "HIGH",
+     "Title": "musl libc 0.9.13 through 1.2.5 before 1.2.6 has an out-of-bounds write ..."
+    },
+    {
+     "VulnerabilityID": "CVE-2025-26519",
+     "PkgName": "musl-utils",
+     "InstalledVersion": "1.2.4-r2",
+     "FixedVersion": "1.2.4-r3",
+     "Severity": "HIGH",
+     "Title": "musl libc 0.9.13 through 1.2.5 before 1.2.6 has an out-of-bounds write ..."
+    }
+   ]
+  }
+ ]
+}

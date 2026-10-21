@@ -13,12 +13,14 @@ from paho.mqtt.enums import CallbackAPIVersion
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from spatial_common.logging_json import configure_logging
+from spatial_common.metrics import Registry
 from spatial_common.mqtt_auth import apply_credentials
 from spatial_storage.postgres import PostgresRepository
 from sqlalchemy import create_engine
 
 from worker.consumer import Consumer, next_backoff
-from worker.handler import MessageHandler, Stats
+from worker.handler import MessageHandler
+from worker.metrics import InstrumentedStats, MetricsServer, watch_consumer
 
 logger = logging.getLogger("worker.main")
 
@@ -35,10 +37,15 @@ class WorkerSettings(BaseSettings):
     heartbeat_file: str = "/tmp/worker-heartbeat"  # noqa: S108
     log_level: str = "INFO"
     stats_interval_seconds: float = 30.0
+    metrics_port: int = Field(default=9100, ge=0, le=65535)  # 0 desliga; porta so na rede interna
 
 
 def _heartbeat_loop(
-    consumer: Consumer, stats: Stats, path: Path, stats_interval: float, stop: threading.Event
+    consumer: Consumer,
+    stats: InstrumentedStats,
+    path: Path,
+    stats_interval: float,
+    stop: threading.Event,
 ) -> None:
     last_stats = time.monotonic()
     while not stop.wait(5.0):
@@ -54,10 +61,19 @@ def main() -> None:
     configure_logging(settings.log_level)
 
     engine = create_engine(settings.database_url.get_secret_value(), pool_pre_ping=True)
-    stats = Stats()
+    registry = Registry()
+    stats = InstrumentedStats(registry)
     consumer = Consumer(
         MessageHandler(PostgresRepository(engine), lambda: datetime.now(UTC), stats)
     )
+
+    watch_consumer(registry, consumer)
+    metrics_server = (
+        MetricsServer(registry, settings.metrics_port) if settings.metrics_port else None
+    )
+    if metrics_server is not None:
+        metrics_server.start()
+        logger.info("metrics endpoint listening", extra={"port": metrics_server.port})
 
     client = mqtt.Client(
         CallbackAPIVersion.VERSION2,
@@ -111,6 +127,8 @@ def main() -> None:
             break
         backoff = next_backoff(backoff, failed=failed)
         stop.wait(backoff)
+    if metrics_server is not None:
+        metrics_server.stop()
     logger.info("worker stopped", extra={"counts": dict(stats.counts)})
 
 
