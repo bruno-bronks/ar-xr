@@ -28,6 +28,7 @@ const PLANT = {
 };
 
 const els = {
+  viewer3d: document.getElementById("viewer3d"),
   plant: document.getElementById("plant"),
   plantCanvas: document.getElementById("plant-canvas"),
   plantUnplaced: document.getElementById("plant-unplaced"),
@@ -75,6 +76,27 @@ const OUTCOME = {
 const CONFIDENCE = { high: "alta", medium: "média", low: "baixa" };
 
 let selectedId = null; // equipamento escolhido na planta (REQ-UX-003)
+let viewer = null; // vista 3D (REQ-UX-004); null se o WebGL nao existir
+let lastDetails = [];
+const QUALITY_PARAM = new URLSearchParams(window.location.search).get("q3d");
+
+function mountViewer(quality) {
+  if (viewer) viewer.destroy();
+  viewer = window.SpatialViewer
+    ? window.SpatialViewer.mount(els.viewer3d, {
+        quality,
+        zones: PLANT.zones,
+        spots: PLANT.spots,
+        statusMeta: STATUS,
+        onSelect: (id) => selectEquipment(id, { fromViewer: true }),
+        onQuality: (q) => mountViewer(q),
+      })
+    : null;
+  if (viewer) {
+    viewer.update(lastDetails);
+    if (selectedId) viewer.select(selectedId, { focus: false });
+  }
+}
 let lastOk = null;
 let generation = 0; // incrementa a cada troca de organizacao: respostas antigas sao descartadas
 let inFlightGeneration = null;
@@ -353,8 +375,9 @@ function initPlant() {
   }
 }
 
-function selectEquipment(id) {
+function selectEquipment(id, { fromViewer = false } = {}) {
   selectedId = id;
+  if (viewer && !fromViewer) viewer.select(id);
   for (const card of els.cards.children) card.removeAttribute("data-selected");
   for (const spot of els.plantCanvas.querySelectorAll(".spot")) spot.removeAttribute("data-selected");
   const spot = els.plantCanvas.querySelector('.spot[data-id="' + CSS.escape(id) + '"]');
@@ -426,6 +449,7 @@ function renderAlerts(items) {
 
 function markStale(isStale) {
   els.plant.setAttribute("data-stale", String(isStale));
+  if (viewer) viewer.setStale(isStale);
   for (const card of els.cards.children) card.setAttribute("data-stale", String(isStale));
   els.freshness.setAttribute("data-stale", String(isStale));
 }
@@ -451,6 +475,11 @@ async function refresh() {
     els.cards.replaceChildren(...details.map((d) => renderCard(d.equipment, d.twin)));
     if (refocus) els.cards.querySelector('[data-selected="true"]')?.focus({ preventScroll: true });
     renderPlant(details);
+    lastDetails = details;
+    if (viewer) {
+      viewer.update(details);
+      viewer.setStale(false);
+    }
     renderAlerts(details.flatMap((d) => d.alerts.map((alert) => ({ equipment: d.equipment, alert }))));
     els.error.hidden = true;
     lastOk = Date.now();
@@ -481,6 +510,8 @@ els.org.addEventListener("change", () => {
   inFlightGeneration = null;
   els.cards.replaceChildren();
   resetPlant();
+  lastDetails = [];
+  if (viewer) viewer.clear();
   renderAlerts([]);
   els.error.hidden = true;
   resetAssistant();
@@ -492,6 +523,7 @@ els.org.addEventListener("change", () => {
 els.askForm.addEventListener("submit", ask);
 
 initPlant();
+mountViewer(QUALITY_PARAM);
 refresh();
 setInterval(refresh, POLL_MS);
 setInterval(updateFreshness, 1000);

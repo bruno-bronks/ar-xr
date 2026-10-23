@@ -1,0 +1,17 @@
+{
+  "bundle": "viewer3d.js",
+  "sha256": "a0adc2ca2aec49d7d37ae691d56b65a0b020c10d7661071f6a153a67e3fb55a7",
+  "bytes": 675317,
+  "three": {
+    "version": "0.186.1",
+    "license": "MIT"
+  },
+  "esbuild": "0.28.2",
+  "sources": {
+    "hall.js": "eb498df8c35d6f56d967845b61a8d83ed3a9db0475c03f09e8d4d6f14ab44d0a",
+    "index.js": "4e7fe46ea8e17d7735e0598ba6b7be05433fe0f8a732a5ca87f75dea0d5ec7fa",
+    "machines.js": "b888ee2cd190243efc0f7d10ba070dd1d572b74269d81b0c2e861f7a6613843d",
+    "materials.js": "1ee95714077f6c8e2a812d3337c58de58ab23e4fd854b045e27a2c0128c44a3d",
+    "viewer.js": "05ede3a440bc6f4f38aa3c53cbe930b6bfa24f5b0f2754f2f1c997f3bf3ef510"
+  }
+}

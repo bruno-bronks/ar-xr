@@ -144,3 +144,19 @@ jobs:
         run: python scripts/check_prometheus.py
       - name: systemd units and cloud-init user-data
         run: python scripts/verify_host.py
+
+  viewer-bundle:
+    # REQ-UX-004 / D-052: o bundle 3D commitado precisa ser reproduzivel a partir da fonte e do lockfile.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Rebuild the 3D bundle from source
+        working-directory: clients/viewer3d
+        run: |
+          npm ci --ignore-scripts
+          npm run build
+      - name: Committed bundle equals the rebuilt one
+        run: git diff --exit-code -- clients/web-fallback/vendor

@@ -46,6 +46,16 @@
     <ul id="plant-legend" class="legend" aria-label="Legenda dos estados"></ul>
   </section>
 
+  <section aria-labelledby="viewer3d-title" class="viewer3d-section">
+    <h2 id="viewer3d-title">Vista 3D dos equipamentos</h2>
+    <p class="muted">
+      Modelo 3D de <strong>demonstração</strong>: máquinas ilustrativas do tipo cadastrado, em posições ilustrativas e
+      fora de escala (não é CAD nem o local real). O estado vem das regras e aparece no sinalizador luminoso, no anel
+      do piso e no rótulo (texto). Arraste para girar, role para aproximar, clique numa máquina para focar.
+    </p>
+    <div id="viewer3d" class="viewer3d" data-testid="viewer3d" data-ready="false" data-stale="false"></div>
+  </section>
+
   <section aria-labelledby="assistant-title" class="assistant">
     <h2 id="assistant-title">Assistente (apenas informativo)</h2>
     <p class="muted">
@@ -89,6 +99,7 @@
     comandos para máquinas. Ausência de dados é exibida como <em>Offline</em> ou <em>Desconhecido</em>, nunca como normal.
   </footer>
 
+  <script src="vendor/viewer3d.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
