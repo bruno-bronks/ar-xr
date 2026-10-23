@@ -356,6 +356,12 @@ def test_no_external_requests_and_no_csp_violations(browser: Browser) -> None:
     try:
         assert BASE_URL is not None
         page.goto(f"{BASE_URL}/panel/?q3d=baixa", wait_until="commit", timeout=SLOW)
+        expect(page.get_by_test_id("viewer3d")).to_have_attribute(
+            "data-ready", "true", timeout=SLOW
+        )
+        page.locator(".v3d-stage").scroll_into_view_if_needed(
+            timeout=SLOW
+        )  # a vista pausa fora da tela
         expect(page.get_by_test_id("label3d-EQ-001")).to_be_visible(timeout=SLOW)
     finally:
         context.close()
