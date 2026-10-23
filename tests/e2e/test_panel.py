@@ -1,4 +1,4 @@
-"""SPEC-007 · REQ-UX-001: painel web 2D no navegador REAL (Playwright + Microsoft Edge instalado).
+"""SPEC-007 · REQ-UX-001, REQ-UX-003: painel web 2D (cartoes + planta) no navegador REAL (Playwright + Microsoft Edge instalado).
 
 Roda contra a pilha Compose no ar (BASE_URL). O simulador e parado para controlar os dados.
 Evidencias (screenshots) sao gravadas em docs/evidence/phase-1/.
@@ -431,6 +431,137 @@ def test_hacc_plan_has_no_csp_violations_and_fits_a_360px_phone(browser: Browser
     overflow = page.evaluate(
         "document.documentElement.scrollWidth - document.documentElement.clientWidth"
     )
+    context.close()
+
+    assert overflow <= 0
+    assert [m for m in messages if "Content Security Policy" in m] == []
+
+
+# --- REQ-UX-003: planta 2D dos equipamentos ---------------------------------------------------------
+
+
+def test_floor_plan_places_each_equipment_with_status_text_icon_and_color_attribute(
+    page: Page,
+) -> None:
+    """REQ-UX-003: marcador por equipamento, estado em texto + icone + data-status (nunca so cor)."""
+    plant = page.get_by_test_id("plant")
+    critical = page.get_by_test_id("plant-EQ-001")
+    expect(critical).to_have_attribute("data-status", "CRITICAL", timeout=10_000)
+    expect(critical).to_contain_text("Crítico")
+    expect(critical).to_contain_text("Compressor de ar 01")
+    normal = page.get_by_test_id("plant-EQ-002")
+    expect(normal).to_have_attribute("data-status", "NORMAL")
+    expect(normal).to_contain_text("Normal")
+    expect(page.locator("[data-testid^='plant-EQ-']")).to_have_count(3)
+    expect(plant).to_have_attribute("data-stale", "false")
+    _shot(page, "panel-floorplan.png")
+
+
+def test_floor_plan_marks_silent_equipment_offline_never_normal(page: Page) -> None:
+    marker = page.get_by_test_id("plant-EQ-003")
+
+    expect(marker).to_have_attribute("data-status", "OFFLINE", timeout=60_000)
+    expect(marker).to_contain_text("Offline")
+    expect(marker).not_to_contain_text("Normal")
+
+
+def test_clicking_or_pressing_enter_on_a_marker_goes_to_its_card(page: Page) -> None:
+    expect(page.get_by_test_id("plant-EQ-002")).to_be_visible(timeout=10_000)
+
+    page.get_by_test_id("plant-EQ-002").click()
+    card = page.get_by_test_id("card-EQ-002")
+    expect(card).to_have_attribute("data-selected", "true")
+    expect(card).to_be_focused()
+
+    page.get_by_test_id("plant-EQ-001").focus()
+    page.keyboard.press("Enter")
+    expect(page.get_by_test_id("card-EQ-001")).to_have_attribute("data-selected", "true")
+    expect(page.get_by_test_id("card-EQ-002")).not_to_have_attribute("data-selected", "true")
+
+
+def test_markers_are_keyboard_reachable_buttons_with_an_accessible_name(page: Page) -> None:
+    marker = page.get_by_test_id("plant-EQ-001")
+    expect(marker).to_be_visible(timeout=10_000)
+
+    assert (
+        marker.evaluate("node => node.tagName") == "BUTTON"
+    )  # botao nativo: foco e Enter/Espaco de graca
+    marker.focus()
+    expect(marker).to_be_focused()
+    label = marker.get_attribute("aria-label") or ""
+    assert "Compressor de ar 01" in label
+    assert "Crítico" in label
+
+
+def test_floor_plan_follows_the_selected_organization_and_clears_on_switch(page: Page) -> None:
+    expect(page.get_by_test_id("plant-EQ-001")).to_be_visible(timeout=10_000)
+
+    page.select_option("#org", "demo-operator-b")
+
+    expect(page.get_by_test_id("plant-EQ-B01")).to_be_visible(timeout=10_000)
+    expect(page.get_by_test_id("plant-EQ-001")).to_have_count(0)
+    expect(page.get_by_test_id("plant")).not_to_contain_text("Compressor")
+
+
+def test_equipment_without_a_position_is_listed_aside_not_dropped(page: Page) -> None:
+    with db_engine().begin() as conn:
+        conn.execute(
+            text(
+                "INSERT INTO equipment (id, org_id, name, type, location, marker_id, "
+                "offline_after_seconds) VALUES ('EQ-ZZ9', 'org-a', 'Sem posicao', 'Teste', "
+                "'Galpao Z', 'QR-EQ-ZZ9', 30)"
+            )
+        )
+    try:
+        page.reload()
+        unplaced = page.get_by_test_id("plant-unplaced")
+        expect(unplaced).to_contain_text("EQ-ZZ9", timeout=10_000)
+        expect(page.get_by_test_id("plant-EQ-ZZ9")).to_have_count(0)  # nao inventa posicao
+    finally:
+        with db_engine().begin() as conn:
+            conn.execute(text("DELETE FROM equipment WHERE id = 'EQ-ZZ9'"))
+
+
+def test_floor_plan_renders_hostile_names_as_text_and_never_executes(page: Page) -> None:
+    hostile = "<img src=x onerror=window.__xss2=1>"
+    with db_engine().begin() as conn:
+        conn.execute(text("UPDATE equipment SET name = :n WHERE id = 'EQ-002'"), {"n": hostile})
+    try:
+        page.reload()
+        marker = page.get_by_test_id("plant-EQ-002")
+        expect(marker).to_contain_text(hostile, timeout=10_000)
+
+        assert page.locator("[data-testid='plant'] img").count() == 0
+        assert page.evaluate("window.__xss2 === undefined")
+    finally:
+        with db_engine().begin() as conn:
+            conn.execute(
+                text("UPDATE equipment SET name = 'Bomba centrifuga 02' WHERE id = 'EQ-002'")
+            )
+
+
+def test_floor_plan_stays_but_is_marked_stale_when_the_api_fails(page: Page) -> None:
+    expect(page.get_by_test_id("plant-EQ-001")).to_be_visible(timeout=10_000)
+
+    page.route("**/api/v1/**", lambda route: route.abort())
+
+    expect(page.get_by_test_id("plant")).to_have_attribute("data-stale", "true", timeout=10_000)
+    expect(page.get_by_test_id("plant-EQ-001")).to_be_visible()  # nao apaga o ultimo estado
+
+
+def test_floor_plan_fits_a_360px_phone_without_csp_violations(browser: Browser) -> None:
+    assert BASE_URL is not None
+    context = browser.new_context(viewport={"width": 360, "height": 740})
+    page = context.new_page()
+    messages: list[str] = []
+    page.on("console", lambda m: messages.append(m.text))
+    page.goto(BASE_URL + "/panel/")
+    expect(page.get_by_test_id("plant-EQ-001")).to_be_visible(timeout=10_000)
+
+    overflow = page.evaluate(
+        "document.documentElement.scrollWidth - document.documentElement.clientWidth"
+    )
+    _shot(page, "panel-floorplan-360.png")
     context.close()
 
     assert overflow <= 0

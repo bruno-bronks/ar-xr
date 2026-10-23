@@ -55,6 +55,10 @@ Pilha completa simulador → Mosquitto → worker → PostgreSQL → API (Bearer
 - **CI:** novo job `ops-validate` e workflow `.github/workflows/release.yml` (tag `v*`, Trivy antes do push) — **escritos, não executados** em runner.
 - **Imagem do VPS:** o VPS ainda roda `postgres:16.4-alpine` (achado F-01); atualizar exige redeploy autorizado por você.
 
+## Planta 2D dos equipamentos (branch `feature/panel-floorplan`; pedido do usuário em 2026-10-22)
+- O painel mostrava só cartões; o usuário pediu a vista espacial 2D. [REQ-UX-003](../requirements/requirements.md) e D-051: planta SVG/HTML com dois galpões e um marcador por equipamento (ícone + texto + cor), clique/Enter leva ao cartão, atualização em lugar (foco do teclado), sem posição listado à parte, stale/troca de organização/texto seguro/360 px. Implementação em `clients/web-fallback/app.js`, `clients/web-fallback/index.html` e `clients/web-fallback/style.css`; 10 testes E2E novos em `tests/e2e/test_panel.py` (30/30 passam no Edge contra a pilha real); evidências `docs/evidence/phase-1/panel-floorplan.png` e `docs/evidence/phase-1/panel-floorplan-360.png`.
+- **Limite:** posições **ilustrativas** na configuração do painel (não vêm da API/banco), fora de escala; **não é 3D** (3D/AR = cliente Unity, não validado em aparelho). Não commitada/implantada até o usuário pedir.
+
 ## O que NÃO foi feito / não está verificado
 - **AR em aparelho físico: NADA validado** (REQ-AR-007 `planned`). Sem Android/ARCore, sem Unity instalado, sem câmera. Não há vídeo, latência QR→overlay, FPS nem estabilidade.
 - **Cola Unity nunca compilada:** erros de compilação na 1ª abertura são esperados. Em especial não verificadas: `XRCpuImage.Convert`, `ARAnchorManager.TryAddAnchorAsync`/`result.status.IsSuccess()` (API do AR Foundation 6), asmdefs e referências. `QrScanner.cs` não é tocado por nenhum teste.
