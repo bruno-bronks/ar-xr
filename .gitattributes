@@ -7,3 +7,4 @@ Dockerfile text eol=lf
 *.dll binary
 *.cs text eol=lf
 *.json text eol=lf
+clients/web-fallback/vendor/viewer3d.js -text

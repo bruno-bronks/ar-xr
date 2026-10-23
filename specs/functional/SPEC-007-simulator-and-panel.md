@@ -33,6 +33,15 @@ O painel ganhou uma **vista espacial 2D**: uma planta com dois galpões (A e B) 
 - Troca de organização limpa a planta; falha da API mantém o último estado marcado como desatualizado (`data-stale`); todo texto da API entra como texto (nunca HTML); funciona em 360 px sem rolagem horizontal e sem violar a CSP.
 - **Limite:** não é um gêmeo 3D nem uma planta real do local. A vista 3D e o AR continuam sendo o cliente Unity (Fase 2), não validado em aparelho.
 
+## Vista 3D (REQ-UX-004, D-052, [ADR-0008](../../docs/adr/0008-web-3d-viewer.md))
+Seção "Vista 3D dos equipamentos" no painel: cena WebGL de um **galpão** com um **modelo 3D por equipamento**, escolhido pelo **tipo** cadastrado (`compressor` → compressor de ar com reservatório, `bomba` → bomba centrífuga, `motor` → motor trifásico; outro tipo → unidade genérica). **Procedural** e **ilustrativo**: não é CAD nem o local real; posições vêm da configuração da planta 2D (D-051).
+- **Estado** (do twin, nunca calculado no cliente): sinalizador luminoso (verde/âmbar/vermelho; vermelho pulsa em `CRITICAL`), anel colorido no piso e **rótulo DOM** com ícone, nome, estado em **texto** e as leituras (temperatura, vibração). `OFFLINE`/`UNKNOWN`: sinalizador apagado, anel cinza/roxo e texto explícito — nunca "normal".
+- **Interação:** arrastar gira, roda aproxima, clique/Enter no rótulo, botões de foco ou clique na máquina move a câmera (animada) e seleciona o cartão; "Visão geral" e duplo clique voltam; clicar num marcador da planta 2D também foca o 3D. Rótulos e botões são nativos (teclado/leitor de tela).
+- **Qualidade:** "Alta" (MSAA 4×, oclusão ambiente GTAO, bloom, sombras 2048, pixel ratio ≤ 2), "Média" (sem AO) e "Baixa" (renderização direta); padrão por heurística, ajustável no painel (`?q3d=alta|media|baixa` força). Renderiza **sob demanda** e pausa fora da tela. `prefers-reduced-motion`: sem pulso e câmera sem animação.
+- **Robustez:** troca de organização limpa a cena; falha da API mantém a última cena marcada como desatualizada (`data-stale`); sem WebGL 2 (ou contexto perdido) mostra mensagem e o resto do painel segue; texto da API só via `textContent`; sem requisições externas; CSP respeitada.
+- **Supply chain:** `clients/viewer3d` (fonte + `package-lock.json`) → `clients/web-fallback/vendor/viewer3d.js` com manifesto SHA-256; a CI refaz o build e compara.
+- **Limites:** validado com WebGL **por software** (SwiftShader) no Edge/Chrome headless; **não** medido em GPU real nem em celular; modelos ilustrativos; não é o cliente AR (Unity, Fase 2).
+
 ## Critérios de aceitação
 - Unidade: `tests/unit/simulator/test_scenarios.py` (determinismo, cenários, duplicatas).
 - E2E (Playwright com Microsoft Edge instalado): `tests/e2e/test_panel.py` — inclui a planta 2D (REQ-UX-003); o painel mostra alerta para EQ-002, `OFFLINE` para EQ-003 no estado de dropout, e erro visível com token inválido.

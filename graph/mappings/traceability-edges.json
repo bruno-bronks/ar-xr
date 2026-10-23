@@ -1,7 +1,7 @@
 {
   "generated_from": "docs/requirements/traceability.csv",
   "note": "Arestas VERIFICADAS (a matriz e testada por tests/unit/repo/test_traceability.py).",
-  "edge_count": 571,
+  "edge_count": 586,
   "edges": [
     {
       "source": ".github/workflows/ci.yml",
@@ -2804,6 +2804,41 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "REQ-UX-004",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0008-web-3d-viewer.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-004",
+      "relation": "SERVES",
+      "target": "OUT-MNT-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-004",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-007-simulator-and-panel.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-004",
+      "relation": "TESTED_BY",
+      "target": "tests/e2e/test_panel_3d.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-004",
+      "relation": "TESTED_BY",
+      "target": "tests/unit/repo/test_viewer_bundle.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "clients/ar-unity/Assets/Scripts/QrScanner.cs",
       "relation": "IMPLEMENTS",
       "target": "REQ-AR-001",
@@ -2923,6 +2958,48 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "clients/viewer3d/build.mjs",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/viewer3d/src/hall.js",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/viewer3d/src/index.js",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/viewer3d/src/machines.js",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/viewer3d/src/materials.js",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/viewer3d/src/viewer.js",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "clients/web-fallback/app.js",
       "relation": "IMPLEMENTS",
       "target": "REQ-HACC-006",
@@ -2951,6 +3028,13 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "clients/web-fallback/app.js",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "clients/web-fallback/index.html",
       "relation": "IMPLEMENTS",
       "target": "REQ-HACC-006",
@@ -2979,6 +3063,13 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "clients/web-fallback/index.html",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "clients/web-fallback/style.css",
       "relation": "IMPLEMENTS",
       "target": "REQ-HACC-006",
@@ -3003,6 +3094,20 @@
       "source": "clients/web-fallback/style.css",
       "relation": "IMPLEMENTS",
       "target": "REQ-UX-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/web-fallback/style.css",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-004",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/web-fallback/vendor/viewer3d.js",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-004",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },

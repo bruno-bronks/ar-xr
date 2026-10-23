@@ -33,3 +33,5 @@ deploy/envs/*.env
 
 # evidencia da Fase 6 (SBOM CycloneDX versionado)
 !docs/evidence/phase-6/sbom/
+
+clients/viewer3d/node_modules/

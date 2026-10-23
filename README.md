@@ -9,6 +9,7 @@ Plataforma de IA espacial com duas verticais: **AR Maintenance AI** (primeiro MV
 > **Fase 4 (HACC Spatial, dados SIMULADOS):** `GET /api/v1/hacc/wards` e `/wards/{id}/beds` (escopo `hacc:read`, segregação por organização, somente leitura) e planta 2D de leitos no painel. O contrato do HACC é **assumido**: nenhuma integração com o HACC real foi feita. Runbook: [docs/runbooks/hacc-spatial.md](docs/runbooks/hacc-spatial.md).
 > **Fase 5 (visão e IoT):** PoC de visão **offline** em `ml/` com dataset **sintético** (YOLOv8n treinado do zero; comparação com QR e com o simulador, IC 95 %), emulador de dispositivo (software), broker MQTT endurecido **opt-in** (auth + ACL, **sem TLS**) e plano elétrico/segurança do ESP32 **NÃO aprovado**. **Não há hardware nem firmware.** Runbooks: [vision-poc](docs/runbooks/vision-poc.md), [iot-broker-and-emulator](docs/runbooks/iot-broker-and-emulator.md).
 > **Fase 6 (cloud e escala) — implementada e testada LOCALMENTE:** deploy por tag com rollback automático (testado com release defeituosa), GitOps pull, backup + ensaio de restauração, métricas/SLOs/alertas (Prometheus), varredura de segurança com triagem, modelo de custos e modelos de cloud-init/systemd. **Nenhum serviço de nuvem foi contratado e o VPS não foi alterado.** Ver [SPEC-012](specs/functional/SPEC-012-cloud-and-operations.md), [SLO](docs/ops/slo.md), [DR](docs/ops/disaster-recovery.md), [segurança](docs/ops/security-review.md), [custos](docs/cloud/cost-estimate.md).
+> **Painel:** além dos cartões e da planta 2D, há uma **vista 3D no navegador** (modelos procedurais ilustrativos; WebGL 2; sem CDN) — [runbook](docs/runbooks/viewer-3d.md). Não é o cliente AR.
 > **Não existe ainda:** IoT real (hardware/firmware/TLS), implantação em provedor de nuvem, pentest. Resultados da visão (sintéticos): [docs/evidence/phase-5](docs/evidence/phase-5/README.md). A AR (Fase 2) não foi validada em aparelho e não foi estendida aos leitos.
 > Autenticação é **demo** (tokens fictícios; a API recusa iniciar assim em produção). Detalhes, evidências e limitações: [docs/agent/CURRENT_STATE.md](docs/agent/CURRENT_STATE.md).
 
@@ -83,6 +84,7 @@ Sem `TEST_DATABASE_URL`/`BASE_URL` os testes que precisam de PostgreSQL/pilha ap
 | `deploy/` · `platform/prometheus/` | Ambientes, estado desejado, cloud-init, units systemd; config e regras de SLO |
 | `services/api/` · `telemetry-worker/` · `equipment-simulator/` | Os três deployables |
 | `clients/web-fallback/` | Painel web 2D (HTML/JS/CSS estáticos) |
+| `clients/viewer3d/` | Fonte e build da vista 3D do painel (three.js empacotado em `clients/web-fallback/vendor/`) |
 | `clients/ar-unity/` | Cliente AR (Fase 2): núcleo C# testado + cola Unity **não compilada** — ver o README da pasta |
 | `tests/csharp/` | xUnit do núcleo C# (rodam na **CI**; o proxy do dev bloqueia NuGet) e fixtures geradas pela API real |
 | `graph/` | Índice auxiliar (Graphify): arestas verificadas e cruzamento |
