@@ -33,6 +33,19 @@
     <p id="no-alerts" class="muted">Nenhum alerta ativo no momento.</p>
   </section>
 
+  <section aria-labelledby="plant-title" class="plant-section">
+    <h2 id="plant-title">Planta 2D dos equipamentos</h2>
+    <p class="muted">
+      Planta de <strong>demonstração</strong>: posições ilustrativas, fora de escala. O estado vem das regras e é
+      mostrado por cor, ícone e texto. Clique (ou Enter) em um equipamento para ir ao seu cartão.
+    </p>
+    <div id="plant" class="plant" data-testid="plant" data-stale="false">
+      <div id="plant-canvas" class="plant-canvas" role="group" aria-label="Planta 2D dos equipamentos"></div>
+      <p id="plant-unplaced" class="muted" data-testid="plant-unplaced" hidden></p>
+    </div>
+    <ul id="plant-legend" class="legend" aria-label="Legenda dos estados"></ul>
+  </section>
+
   <section aria-labelledby="assistant-title" class="assistant">
     <h2 id="assistant-title">Assistente (apenas informativo)</h2>
     <p class="muted">

@@ -12,7 +12,26 @@ const STATUS = {
 };
 const SEVERITY = { CRITICAL: "Crítico", WARNING: "Atenção", OFFLINE: "Offline" };
 
+// Planta 2D (REQ-UX-003, D-051): posicoes ILUSTRATIVAS por id de equipamento, em percentual da planta.
+// Nao esta em escala nem representa o galpao real; equipamento sem posicao aparece em "sem posicao".
+const PLANT = {
+  zones: [
+    { label: "Galpão A", x: 2, y: 4, w: 62, h: 92 },
+    { label: "Galpão B", x: 67, y: 4, w: 31, h: 92 },
+  ],
+  spots: {
+    "EQ-001": { x: 20, y: 38 },
+    "EQ-002": { x: 46, y: 66 },
+    "EQ-003": { x: 82, y: 50 },
+    "EQ-B01": { x: 82, y: 50 },
+  },
+};
+
 const els = {
+  plant: document.getElementById("plant"),
+  plantCanvas: document.getElementById("plant-canvas"),
+  plantUnplaced: document.getElementById("plant-unplaced"),
+  plantLegend: document.getElementById("plant-legend"),
   org: document.getElementById("org"),
   cards: document.getElementById("cards"),
   alerts: document.getElementById("alerts"),
@@ -55,6 +74,7 @@ const OUTCOME = {
 };
 const CONFIDENCE = { high: "alta", medium: "média", low: "baixa" };
 
+let selectedId = null; // equipamento escolhido na planta (REQ-UX-003)
 let lastOk = null;
 let generation = 0; // incrementa a cada troca de organizacao: respostas antigas sao descartadas
 let inFlightGeneration = null;
@@ -288,7 +308,9 @@ function renderCard(equipment, twin) {
     "data-testid": "card-" + equipment.id,
     "data-status": twin.status,
     "data-stale": "false",
+    tabindex: "-1", // focavel por programa: a planta leva o foco para o cartao
   });
+  if (equipment.id === selectedId) card.setAttribute("data-selected", "true");
   card.appendChild(el("h3", {}, equipment.name));
   card.appendChild(el("p", { class: "meta" }, equipment.id + " · " + equipment.type + " · " + equipment.location));
 
@@ -316,6 +338,77 @@ function renderCard(equipment, twin) {
   return card;
 }
 
+function initPlant() {
+  for (const zone of PLANT.zones) {
+    const box = el("div", { class: "zone", "aria-hidden": "true" });
+    box.style.left = zone.x + "%";
+    box.style.top = zone.y + "%";
+    box.style.width = zone.w + "%";
+    box.style.height = zone.h + "%";
+    box.appendChild(el("span", { class: "zone-label" }, zone.label));
+    els.plantCanvas.appendChild(box);
+  }
+  for (const key of ["NORMAL", "WARNING", "CRITICAL", "OFFLINE", "UNKNOWN"]) {
+    els.plantLegend.appendChild(el("li", {}, STATUS[key].icon + " " + STATUS[key].label));
+  }
+}
+
+function selectEquipment(id) {
+  selectedId = id;
+  for (const card of els.cards.children) card.removeAttribute("data-selected");
+  for (const spot of els.plantCanvas.querySelectorAll(".spot")) spot.removeAttribute("data-selected");
+  const spot = els.plantCanvas.querySelector('.spot[data-id="' + CSS.escape(id) + '"]');
+  if (spot) spot.setAttribute("data-selected", "true");
+  const card = els.cards.querySelector('[data-testid="card-' + CSS.escape(id) + '"]');
+  if (card) {
+    card.setAttribute("data-selected", "true");
+    card.focus();
+    card.scrollIntoView({ block: "nearest" });
+  }
+}
+
+function makeSpot(equipment) {
+  const spot = el("button", { type: "button", class: "spot", "data-id": equipment.id, "data-testid": "plant-" + equipment.id });
+  spot.appendChild(el("span", { class: "spot-dot", "aria-hidden": "true" }));
+  spot.appendChild(el("span", { class: "spot-name" }));
+  spot.appendChild(el("span", { class: "spot-status" }));
+  const where = PLANT.spots[equipment.id];
+  spot.style.left = where.x + "%";
+  spot.style.top = where.y + "%";
+  spot.addEventListener("click", () => selectEquipment(equipment.id));
+  return spot;
+}
+
+// Atualiza os marcadores EM LUGAR (por id): re-criar a cada 2 s tiraria o foco do teclado.
+function renderPlant(details) {
+  const placed = details.filter((d) => PLANT.spots[d.equipment.id]);
+  const unplaced = details.filter((d) => !PLANT.spots[d.equipment.id]);
+  const existing = new Map([...els.plantCanvas.querySelectorAll(".spot")].map((node) => [node.getAttribute("data-id"), node]));
+  const keep = new Set(placed.map((d) => d.equipment.id));
+  for (const [id, node] of existing) if (!keep.has(id)) node.remove();
+  for (const { equipment, twin } of placed) {
+    const meta = STATUS[twin.status] || STATUS.UNKNOWN;
+    const spot = existing.get(equipment.id) || els.plantCanvas.appendChild(makeSpot(equipment));
+    spot.setAttribute("data-status", twin.status);
+    spot.setAttribute("aria-label", equipment.name + ", " + meta.label);
+    spot.title = equipment.id + " · " + equipment.name + " · " + meta.label;
+    spot.children[0].textContent = meta.icon;
+    spot.children[1].textContent = equipment.name;
+    spot.children[2].textContent = meta.label;
+  }
+  if (unplaced.length > 0) {
+    els.plantUnplaced.textContent =
+      "Sem posição na planta: " + unplaced.map((d) => d.equipment.id + " (" + d.equipment.name + ")").join(", ") + ".";
+  }
+  els.plantUnplaced.hidden = unplaced.length === 0;
+}
+
+function resetPlant() {
+  for (const node of els.plantCanvas.querySelectorAll(".spot")) node.remove();
+  els.plantUnplaced.hidden = true;
+  selectedId = null;
+}
+
 function renderAlerts(items) {
   els.alerts.replaceChildren();
   for (const { equipment, alert } of items) {
@@ -332,6 +425,7 @@ function renderAlerts(items) {
 }
 
 function markStale(isStale) {
+  els.plant.setAttribute("data-stale", String(isStale));
   for (const card of els.cards.children) card.setAttribute("data-stale", String(isStale));
   els.freshness.setAttribute("data-stale", String(isStale));
 }
@@ -353,7 +447,10 @@ async function refresh() {
     );
     if (mine !== generation) return; // a organizacao mudou enquanto esperavamos: descarta
     syncAssistantEquipment(equipmentList);
+    const refocus = selectedId !== null && document.activeElement === els.cards.querySelector('[data-selected="true"]');
     els.cards.replaceChildren(...details.map((d) => renderCard(d.equipment, d.twin)));
+    if (refocus) els.cards.querySelector('[data-selected="true"]')?.focus({ preventScroll: true });
+    renderPlant(details);
     renderAlerts(details.flatMap((d) => d.alerts.map((alert) => ({ equipment: d.equipment, alert }))));
     els.error.hidden = true;
     lastOk = Date.now();
@@ -383,6 +480,7 @@ els.org.addEventListener("change", () => {
   generation += 1;
   inFlightGeneration = null;
   els.cards.replaceChildren();
+  resetPlant();
   renderAlerts([]);
   els.error.hidden = true;
   resetAssistant();
@@ -393,6 +491,7 @@ els.org.addEventListener("change", () => {
 
 els.askForm.addEventListener("submit", ask);
 
+initPlant();
 refresh();
 setInterval(refresh, POLL_MS);
 setInterval(updateFreshness, 1000);

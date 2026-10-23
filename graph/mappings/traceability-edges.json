@@ -1,7 +1,7 @@
 {
   "generated_from": "docs/requirements/traceability.csv",
   "note": "Arestas VERIFICADAS (a matriz e testada por tests/unit/repo/test_traceability.py).",
-  "edge_count": 564,
+  "edge_count": 571,
   "edges": [
     {
       "source": ".github/workflows/ci.yml",
@@ -2776,6 +2776,34 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "REQ-UX-003",
+      "relation": "DECIDED_BY",
+      "target": "docs/adr/0002-shared-storage-package-and-demo-auth.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-003",
+      "relation": "SERVES",
+      "target": "OUT-MNT-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-003",
+      "relation": "SPECIFIED_BY",
+      "target": "specs/functional/SPEC-007-simulator-and-panel.md",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "REQ-UX-003",
+      "relation": "TESTED_BY",
+      "target": "tests/e2e/test_panel.py",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "clients/ar-unity/Assets/Scripts/QrScanner.cs",
       "relation": "IMPLEMENTS",
       "target": "REQ-AR-001",
@@ -2916,6 +2944,13 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "clients/web-fallback/app.js",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "clients/web-fallback/index.html",
       "relation": "IMPLEMENTS",
       "target": "REQ-HACC-006",
@@ -2937,6 +2972,13 @@
       "origin": "traceability.csv"
     },
     {
+      "source": "clients/web-fallback/index.html",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-003",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
       "source": "clients/web-fallback/style.css",
       "relation": "IMPLEMENTS",
       "target": "REQ-HACC-006",
@@ -2954,6 +2996,13 @@
       "source": "clients/web-fallback/style.css",
       "relation": "IMPLEMENTS",
       "target": "REQ-UX-002",
+      "status": "VERIFIED",
+      "origin": "traceability.csv"
+    },
+    {
+      "source": "clients/web-fallback/style.css",
+      "relation": "IMPLEMENTS",
+      "target": "REQ-UX-003",
       "status": "VERIFIED",
       "origin": "traceability.csv"
     },

@@ -215,3 +215,62 @@ footer { margin-top: 24px; max-width: 70ch; }
 .bed .bed-meta { color: var(--muted); font-size: 0.8rem; margin: 4px 0 0; }
 .bed .badge[data-status="ATTENTION"] { background: var(--warning-bg); color: var(--warning); }
 .bed .badge[data-status="ALERT"] { background: var(--critical-bg); color: var(--critical); }
+
+/* Planta 2D dos equipamentos (REQ-UX-003). Posicoes via CSSOM (permitido pela CSP); nada de estilo inline no HTML. */
+.plant-section { margin: 16px 0; }
+.plant { margin-top: 8px; }
+.plant[data-stale="true"] { opacity: 0.6; }
+.plant-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 100 / 40;
+  min-height: 220px;
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.zone {
+  position: absolute;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+}
+.zone-label { position: absolute; top: 2px; left: 6px; font-size: 0.75rem; color: var(--muted); }
+.spot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  max-width: 150px;
+  padding: 2px 4px;
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--text);
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.spot:focus-visible, .spot[data-selected="true"] { border-color: var(--text); background: var(--surface); }
+.spot-dot {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 3px solid var(--border);
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 1rem;
+}
+.spot-name, .spot-status { max-width: 142px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.spot-status { font-weight: 600; }
+.spot[data-status="NORMAL"] .spot-dot { color: var(--normal); background: var(--normal-bg); border-color: var(--normal); }
+.spot[data-status="WARNING"] .spot-dot { color: var(--warning); background: var(--warning-bg); border-color: var(--warning); }
+.spot[data-status="CRITICAL"] .spot-dot { color: var(--critical); background: var(--critical-bg); border-color: var(--critical); }
+.spot[data-status="OFFLINE"] .spot-dot { color: var(--offline); background: var(--offline-bg); border-color: var(--offline); }
+.spot[data-status="UNKNOWN"] .spot-dot { color: var(--unknown); background: var(--unknown-bg); border-color: var(--unknown); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 8px 0 0; padding: 0; list-style: none; font-size: 0.85rem; color: var(--muted); }
+.card[data-selected="true"], .card:focus { outline: 3px solid var(--text); }

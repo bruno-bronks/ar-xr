@@ -25,7 +25,15 @@ Regras de apresentação (REQ-UX-001):
 - Acessível: contraste, `aria-live` para alertas, funciona em 360 px de largura.
 - Valores vindos da API são inseridos como **texto** (sem `innerHTML`) ⇒ sem XSS.
 
+## Planta 2D dos equipamentos (REQ-UX-003, D-051)
+O painel ganhou uma **vista espacial 2D**: uma planta com dois galpões (A e B) e um marcador por equipamento. É uma planta de **demonstração**: as posições são **ilustrativas**, fixas na configuração do painel (`PLANT` em `app.js`, por id), **fora de escala** e **não** vêm da API nem do banco (sem migração, sem mudança de contrato). Posições reais dependem de um cadastro de ativos/marcadores espaciais que ainda não existe.
+- **Marcador** = botão nativo (foco e Enter/Espaço grátis) com **ícone + nome + estado em texto**, mais `data-status` para a cor; o estado é o do twin (`NORMAL`/`WARNING`/`CRITICAL`/`OFFLINE`/`UNKNOWN`), nunca só cor; dado ausente é Offline/Desconhecido.
+- **Clique/Enter** leva ao cartão do equipamento (foco + `data-selected`); os marcadores são atualizados **em lugar** (por id) para o foco do teclado não se perder a cada ciclo de 2 s.
+- Equipamento **sem posição** é listado em "Sem posição na planta" (nunca descartado nem posicionado por chute).
+- Troca de organização limpa a planta; falha da API mantém o último estado marcado como desatualizado (`data-stale`); todo texto da API entra como texto (nunca HTML); funciona em 360 px sem rolagem horizontal e sem violar a CSP.
+- **Limite:** não é um gêmeo 3D nem uma planta real do local. A vista 3D e o AR continuam sendo o cliente Unity (Fase 2), não validado em aparelho.
+
 ## Critérios de aceitação
 - Unidade: `tests/unit/simulator/test_scenarios.py` (determinismo, cenários, duplicatas).
-- E2E (Playwright com Microsoft Edge instalado): `tests/e2e/test_panel.py` — o painel mostra alerta para EQ-002, `OFFLINE` para EQ-003 no estado de dropout, e erro visível com token inválido.
+- E2E (Playwright com Microsoft Edge instalado): `tests/e2e/test_panel.py` — inclui a planta 2D (REQ-UX-003); o painel mostra alerta para EQ-002, `OFFLINE` para EQ-003 no estado de dropout, e erro visível com token inválido.
 - Integração de pilha: `tests/integration/test_stack_flow.py` — simulador → broker → worker → banco → API mostra estado atualizado.
