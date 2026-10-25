@@ -1,4 +1,4 @@
-"""REQ-UX-004 / D-052: o bundle 3D versionado e rastreavel (hash, versao pinada, sem CDN, sem eval)."""
+"""REQ-UX-004, REQ-UX-005 / D-052: o bundle 3D versionado e rastreavel (hash, versao pinada, sem CDN, sem eval)."""
 
 import hashlib
 import json

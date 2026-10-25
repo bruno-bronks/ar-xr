@@ -34,3 +34,6 @@ Limite: SwiftShader valida geometria, cor e comportamento, **não** o desempenho
 | Cena lenta/travando | qualidade Alta sem GPU | seletor → Média/Baixa |
 | Rótulos sobrepostos | máquinas próximas na visão geral | clique numa máquina para focar |
 | `npm run build` muda o hash sem eu ter mudado nada | versão do esbuild/three diferente da pinada | `npm ci` (não `npm install`) |
+
+## Vista 3D das alas (UTI e enfermaria) — REQ-UX-005
+Seção "Vista 3D das alas", **só aparece** para quem tem o escopo `hacc:read` (use "Enfermagem A (demo · leitos)" no seletor). A ala mostrada é a escolhida em "Ala" (UTI com 4 leitos, enfermaria com 6). A sala é **ilustrativa, sem pessoas e sem dados clínicos**; o monitor do leito fica em espera. Estado operacional por regra no sinalizador de parede, no anel do piso e no rótulo em texto (saída do leito, bomba de infusão, chamada, limpeza, sem dados). Os controles são os mesmos da vista de equipamentos (arrastar, rolar, clicar no leito/rótulo, "Visão geral", qualidade). Fonte em `clients/viewer3d/src/ward.js`; testes em `tests/e2e/test_panel_ward3d.py` (capturas em `docs/evidence/phase-4/panel-3d-*.png`). Limite: dados simulados, contrato do HACC assumido, WebGL por software nos testes.

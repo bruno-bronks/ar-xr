@@ -89,6 +89,17 @@
     <div id="hacc-plan" class="plan" data-testid="hacc-plan" data-stale="false" hidden></div>
   </section>
 
+  <section id="ward3d-section" aria-labelledby="ward3d-title" class="viewer3d-section" hidden>
+    <h2 id="ward3d-title">Vista 3D das alas (UTI e enfermaria · dados <strong>simulados</strong>)</h2>
+    <p class="muted">
+      Sala hospitalar <strong>ilustrativa</strong> (não é a planta real), <strong>sem pessoas e sem dados clínicos</strong>.
+      Cada leito mostra o estado <strong>operacional</strong> por regra (alarme de saída, bomba de infusão, chamada,
+      limpeza, sem dados) no sinalizador de parede, no anel do piso e no rótulo em texto. A ala é a escolhida em
+      “Ala”, acima. Exige o escopo <code>hacc:read</code>.
+    </p>
+    <div id="ward3d" class="viewer3d" data-testid="ward3d" data-ready="false" data-stale="false"></div>
+  </section>
+
   <main>
     <h2 class="sr-only">Equipamentos</h2>
     <div id="cards" class="grid"></div>
