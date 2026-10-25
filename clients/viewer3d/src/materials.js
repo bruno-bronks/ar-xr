@@ -273,3 +273,62 @@ export const glass = () =>
     opacity: 0.22,
     clearcoat: 1,
   });
+
+// ---- texturas da sala hospitalar --------------------------------------------------------------------
+// Piso vinilico claro: salpicado fino + juntas de manta (faixas de 2 m) e relevo suave.
+export function vinylFloor() {
+  const size = 1024;
+  const color = canvas(size, size);
+  const bump = canvas(size, size);
+  const cc = color.getContext("2d");
+  const bc = bump.getContext("2d");
+  const rand = rng(777);
+  cc.fillStyle = "#b9c4c7";
+  cc.fillRect(0, 0, size, size);
+  bc.fillStyle = "#808080";
+  bc.fillRect(0, 0, size, size);
+  for (let i = 0; i < 22000; i += 1) {
+    const x = rand() * size;
+    const y = rand() * size;
+    const v = rand() < 0.5 ? 255 : 70;
+    cc.fillStyle = `rgba(${v},${v},${v},${0.04 + rand() * 0.07})`;
+    cc.fillRect(x, y, 2 + rand() * 2, 2 + rand() * 2);
+    bc.fillStyle = `rgba(${v},${v},${v},${0.05 + rand() * 0.08})`;
+    bc.fillRect(x, y, 2, 2);
+  }
+  cc.strokeStyle = "rgba(60,72,78,0.45)";
+  cc.lineWidth = 3;
+  bc.strokeStyle = "rgba(0,0,0,0.6)";
+  bc.lineWidth = 3;
+  for (const p of [0, size / 2]) {
+    for (const ctx of [cc, bc]) {
+      ctx.beginPath();
+      ctx.moveTo(p, 0);
+      ctx.lineTo(p, size);
+      ctx.stroke();
+    }
+  }
+  const repeat = [3, 3];
+  return { map: asTexture(color, { repeat }), bumpMap: asTexture(bump, { srgb: false, repeat }) };
+}
+
+// Tela de monitor em ESPERA: so identificacao do leito e "DEMO". Nenhum sinal vital (nao ha dado clinico).
+export function monitorScreen(label) {
+  const node = canvas(512, 320);
+  const ctx = node.getContext("2d");
+  ctx.fillStyle = "#07121a";
+  ctx.fillRect(0, 0, 512, 320);
+  ctx.strokeStyle = "#1c4a5e";
+  ctx.lineWidth = 4;
+  ctx.strokeRect(6, 6, 500, 308);
+  ctx.fillStyle = "#7fd4ee";
+  ctx.font = "700 54px system-ui, sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(String(label).slice(0, 14), 256, 120);
+  ctx.fillStyle = "#4b8ea3";
+  ctx.font = "600 30px system-ui, sans-serif";
+  ctx.fillText("MONITOR · DEMO", 256, 196);
+  ctx.fillText("sem dados clínicos", 256, 240);
+  return asTexture(node);
+}

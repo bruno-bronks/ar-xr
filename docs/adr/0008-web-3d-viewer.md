@@ -22,6 +22,9 @@ O painel era 2D (cartões e uma planta esquemática). O usuário pediu 3D no nav
 - (−) Testes de renderização rodam com WebGL por software (SwiftShader): validam geometria, cor e comportamento, **não** o desempenho em GPUs reais nem em celulares.
 - (−) Mais uma peça para manter: atualizar o three.js exige rebuild, revisão do manifesto e nova rodada de testes.
 
+## Adendo (2026-10-24): vista 3D das alas
+A mesma base serve a uma segunda cena, a **sala hospitalar** (UTI/enfermaria, D-053): `WardViewer` estende `Viewer` e troca só a cena, os modelos e o mapeamento de estado; câmera, qualidade, rótulos DOM, degradação e o bundle são os mesmos. Decisões: (1) **sem pessoas e sem sinais vitais** — o monitor do leito fica em espera e mostra só o rótulo, para a cena nunca sugerir interpretação clínica nem expor dado de pessoa; (2) a cena só monta (e só cria o segundo contexto WebGL) para quem tem `hacc:read`; (3) seção separada da vista de equipamentos, com testids próprios (`ward3d-*`, `label-ward3d-*`).
+
 ## Alternativas rejeitadas
 - **CDN (unpkg/jsDelivr):** viola a CSP e a cadeia de suprimentos controlada.
 - **`importmap` inline com módulos soltos:** `script-src 'self'` bloqueia script inline.

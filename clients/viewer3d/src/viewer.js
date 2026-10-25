@@ -43,6 +43,8 @@ function pickQuality(requested) {
   return small ? "media" : "alta";
 }
 
+export { OVERVIEW, STATUS_COLOR, LENS_FOR, LENS_COLOR };
+
 export class Viewer {
   constructor(container, options) {
     this.container = container;
@@ -57,6 +59,10 @@ export class Viewer {
     this.disposed = false;
     this.clock = new THREE.Clock();
     this.anim = null;
+    this.testPrefix = options.testPrefix || "viewer3d";
+    this.labelPrefix = options.labelPrefix || "label3d";
+    this.overview = { position: OVERVIEW.position.clone(), target: OVERVIEW.target.clone() };
+    this.bounds = { x: 11, z: 6 };
     this.build();
   }
 
@@ -67,7 +73,7 @@ export class Viewer {
     this.stage = el("div", { class: "v3d-stage" });
     this.canvas = el("canvas", { class: "v3d-canvas", "aria-hidden": "true" });
     this.stage.appendChild(this.canvas);
-    this.note = el("p", { class: "v3d-note muted", "data-testid": "viewer3d-note" });
+    this.note = el("p", { class: "v3d-note muted", "data-testid": this.testPrefix + "-note" });
     this.toolbar = el("div", { class: "v3d-toolbar", role: "toolbar", "aria-label": "Controles da vista 3D" });
     container.append(this.stage, this.toolbar, this.note);
 
@@ -93,9 +99,9 @@ export class Viewer {
     this.scene.environmentIntensity = 0.42;
 
     this.camera = new THREE.PerspectiveCamera(36, 16 / 9, 0.1, 140);
-    this.camera.position.copy(OVERVIEW.position);
+    this.camera.position.copy(this.overview.position);
 
-    this.hall = buildHall(this.scene, { zones: this.options.zones, mapW: MAP.w, mapD: MAP.d });
+    this.hall = this.buildScene();
     this.world = new THREE.Group();
     this.scene.add(this.world);
 
@@ -110,11 +116,11 @@ export class Viewer {
     this.controls.maxDistance = 30;
     this.controls.minPolarAngle = 0.2;
     this.controls.maxPolarAngle = 1.46;
-    this.controls.target.copy(OVERVIEW.target);
+    this.controls.target.copy(this.overview.target);
     this.controls.addEventListener("change", () => {
       const t = this.controls.target;
-      t.x = THREE.MathUtils.clamp(t.x, -11, 11);
-      t.z = THREE.MathUtils.clamp(t.z, -6, 6);
+      t.x = THREE.MathUtils.clamp(t.x, -this.bounds.x, this.bounds.x);
+      t.z = THREE.MathUtils.clamp(t.z, -this.bounds.z, this.bounds.z);
       t.y = THREE.MathUtils.clamp(t.y, 0, 3);
       this.dirty = true;
     });
@@ -133,6 +139,10 @@ export class Viewer {
     this.container.setAttribute("data-camera-target", "overview");
     this.loop = this.loop.bind(this);
     this.raf = requestAnimationFrame(this.loop);
+  }
+
+  buildScene() {
+    return buildHall(this.scene, { zones: this.options.zones, mapW: MAP.w, mapD: MAP.d });
   }
 
   buildComposer() {
@@ -164,13 +174,13 @@ export class Viewer {
 
   buildToolbar() {
     this.toolbar.replaceChildren();
-    const reset = el("button", { type: "button", class: "v3d-btn", "data-testid": "viewer3d-reset" }, "Visão geral");
+    const reset = el("button", { type: "button", class: "v3d-btn", "data-testid": this.testPrefix + "-reset" }, "Visão geral");
     reset.addEventListener("click", () => this.reset());
     this.toolbar.appendChild(reset);
-    this.focusButtons = el("span", { class: "v3d-focus", "data-testid": "viewer3d-focus" });
+    this.focusButtons = el("span", { class: "v3d-focus", "data-testid": this.testPrefix + "-focus" });
     this.toolbar.appendChild(this.focusButtons);
     const label = el("label", { class: "v3d-quality" }, "Qualidade ");
-    const select = el("select", { "data-testid": "viewer3d-quality", "aria-label": "Qualidade gráfica" });
+    const select = el("select", { "data-testid": this.testPrefix + "-quality", "aria-label": "Qualidade gráfica" });
     for (const q of QUALITIES) {
       const option = el("option", { value: q }, { alta: "Alta", media: "Média", baixa: "Baixa" }[q]);
       if (q === this.quality) option.selected = true;
@@ -266,7 +276,10 @@ export class Viewer {
     for (const machine of this.machines.values()) machine.labelEl.removeAttribute("data-selected");
     this.container.setAttribute("data-camera-target", "overview");
     const wide = this.camera.aspect < 1.3;
-    this.flyTo(wide ? new THREE.Vector3(0, 11, 20) : OVERVIEW.position.clone(), OVERVIEW.target.clone());
+    this.flyTo(
+      wide ? this.overview.position.clone().multiplyScalar(1.45) : this.overview.position.clone(),
+      this.overview.target.clone(),
+    );
   }
 
   flyTo(position, target) {
@@ -313,7 +326,7 @@ export class Viewer {
     });
     model.group.position.set((spot.x / 100 - 0.5) * MAP.w, 0, (spot.y / 100 - 0.5) * MAP.d);
     this.world.add(model.group);
-    const labelEl = el("button", { type: "button", class: "v3d-label", "data-testid": "label3d-" + equipment.id });
+    const labelEl = el("button", { type: "button", class: "v3d-label", "data-testid": this.labelPrefix + "-" + equipment.id });
     labelEl.append(el("span", { class: "l-title" }), el("span", { class: "l-status" }), el("span", { class: "l-read" }));
     labelEl.addEventListener("click", () => this.pick(equipment.id));
     const labelObject = new CSS2DObject(labelEl);
@@ -379,7 +392,7 @@ export class Viewer {
     this.focusKey = wanted;
     this.focusButtons.replaceChildren(
       ...details.map(({ equipment }) => {
-        const button = el("button", { type: "button", class: "v3d-btn", "data-id": equipment.id, "data-testid": "viewer3d-focus-" + equipment.id }, equipment.name);
+        const button = el("button", { type: "button", class: "v3d-btn", "data-id": equipment.id, "data-testid": this.testPrefix + "-focus-" + equipment.id }, equipment.name);
         button.addEventListener("click", () => this.pick(equipment.id));
         return button;
       }),

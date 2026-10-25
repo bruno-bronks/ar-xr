@@ -28,6 +28,8 @@ const PLANT = {
 };
 
 const els = {
+  ward3dSection: document.getElementById("ward3d-section"),
+  ward3d: document.getElementById("ward3d"),
   viewer3d: document.getElementById("viewer3d"),
   plant: document.getElementById("plant"),
   plantCanvas: document.getElementById("plant-canvas"),
@@ -79,6 +81,44 @@ let selectedId = null; // equipamento escolhido na planta (REQ-UX-003)
 let viewer = null; // vista 3D (REQ-UX-004); null se o WebGL nao existir
 let lastDetails = [];
 const QUALITY_PARAM = new URLSearchParams(window.location.search).get("q3d");
+
+let wardViewer = null; // vista 3D das alas (REQ-UX-005): so existe para quem tem hacc:read
+let lastWardData = null;
+
+function mountWardViewer(quality) {
+  if (wardViewer) wardViewer.destroy();
+  wardViewer = window.SpatialViewer
+    ? window.SpatialViewer.mountWard(els.ward3d, {
+        quality: quality || QUALITY_PARAM,
+        statusMeta: BED_STATUS,
+        ruleLabels: BED_RULE,
+        onSelect: (id) => {
+          for (const card of els.haccPlan.children) card.removeAttribute("data-selected");
+          const card = els.haccPlan.querySelector('[data-testid="bed-' + CSS.escape(id) + '"]');
+          if (card) card.setAttribute("data-selected", "true");
+        },
+        onQuality: (q) => mountWardViewer(q),
+      })
+    : null;
+  if (wardViewer && lastWardData) wardViewer.update(lastWardData);
+}
+
+function updateWardViewer(data) {
+  lastWardData = data;
+  els.ward3dSection.hidden = false;
+  if (!wardViewer) mountWardViewer(QUALITY_PARAM);
+  else {
+    wardViewer.update(data);
+    wardViewer.setStale(false);
+  }
+}
+
+function dropWardViewer() {
+  lastWardData = null;
+  els.ward3dSection.hidden = true;
+  if (wardViewer) wardViewer.destroy();
+  wardViewer = null;
+}
 
 function mountViewer(quality) {
   if (viewer) viewer.destroy();
@@ -142,6 +182,7 @@ function resetHacc() {
   els.haccPlan.replaceChildren();
   els.haccPlan.hidden = true;
   els.haccPlan.setAttribute("data-stale", "false");
+  dropWardViewer();
 }
 
 function showHaccMessage(text) {
@@ -196,12 +237,14 @@ async function refreshHacc(mine, token) {
     els.haccControls.hidden = wards.length === 0;
     if (wards.length === 0) {
       els.haccPlan.hidden = true;
+      dropWardViewer();
       showHaccMessage("Nenhuma ala disponível para esta organização.");
       return;
     }
     const data = await haccApi("/api/v1/hacc/wards/" + encodeURIComponent(els.haccWard.value) + "/beds", token);
     if (mine !== generation) return;
     renderPlan(data);
+    updateWardViewer(data);
     els.haccMsg.hidden = true;
   } catch (error) {
     if (mine !== generation) return;
@@ -211,9 +254,11 @@ async function refreshHacc(mine, token) {
     } else if (error instanceof HaccError && error.status === 503) {
       showHaccMessage("Fonte HACC indisponível; a planta exibida pode estar desatualizada.");
       els.haccPlan.setAttribute("data-stale", "true");
+      if (wardViewer) wardViewer.setStale(true);
     } else {
       showHaccMessage("Falha ao atualizar os leitos: " + error.message + ". Os dados exibidos podem estar desatualizados.");
       els.haccPlan.setAttribute("data-stale", "true");
+      if (wardViewer) wardViewer.setStale(true);
     }
   } finally {
     haccInFlight = false;
