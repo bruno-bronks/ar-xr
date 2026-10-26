@@ -10,7 +10,7 @@ import { LENS_COLOR, Viewer } from "./viewer.js";
 const CELL_W = 3.6; // metros por coluna da grade da ala
 const CELL_D = 4.4; // metros por linha
 const WALL_H = 3.1;
-const BED_STATUS_COLOR = { NORMAL: 0x1fa85a, ATTENTION: 0xe0a21a, ALERT: 0xe5383b, OFFLINE: 0x6b7785, UNKNOWN: 0x8c6fe0 };
+const BED_STATUS_COLOR = { NORMAL: 0x1fa85a, ATTENTION: 0xe0a21a, ALERT: 0xe5383b, BLOCKED: 0xc4622d, OFFLINE: 0x6b7785, UNKNOWN: 0x8c6fe0 };
 const BED_LENS = { NORMAL: "green", ATTENTION: "amber", ALERT: "red" };
 
 function put(geometry, material, { cast = true, receive = true } = {}) {
@@ -243,6 +243,7 @@ export class WardViewer extends Viewer {
     this.renderFocusButtons(data.beds.map((b) => ({ equipment: { id: b.bed_id, name: b.label } })));
     this.container.setAttribute("data-machines", String(this.machines.size));
     this.container.setAttribute("data-ward", ward.ward_id);
+    this.container.setAttribute("data-dense", String(data.beds.length > 8)); // rotulos compactos em alas grandes
     if (changed) this.dirty = true;
   }
 
@@ -299,6 +300,13 @@ export class WardViewer extends Viewer {
     ring.rotation.x = -Math.PI / 2;
     ring.position.set(0, 0.014, -0.15);
     group.add(ring);
+    // leito BLOQUEADO: barreira listrada aos pes da cama (alem do anel e do texto, nunca so cor)
+    const barrier = new THREE.Group();
+    const stripes = new THREE.MeshStandardMaterial({ map: M.hazardStripes(), roughness: 0.6, metalness: 0.1 });
+    barrier.add(at(put(new THREE.BoxGeometry(1.5, 0.28, 0.06), stripes), 0, 0.62, 1.55));
+    for (const sx of [-0.7, 0.7]) barrier.add(at(cyl(0.03, 0.03, 0.62, M.steel(), 12), sx, 0.31, 1.55));
+    barrier.visible = false;
+    group.add(barrier);
     group.traverse((node) => {
       node.userData.machineId = bed.bed_id;
     });
@@ -316,7 +324,7 @@ export class WardViewer extends Viewer {
     const labelObject = new CSS2DObject(labelEl);
     labelObject.position.set(0, 2.55, -1.1);
     group.add(labelObject);
-    const machine = { id: bed.bed_id, group, lamp, ring, radius: 2.0, topY: 2.1, labelEl, labelObject, leds: built.leds, bedLed: built.bedLed, pumpLed: built.pumpLed, status: "UNKNOWN" };
+    const machine = { id: bed.bed_id, group, lamp, ring, radius: 2.0, topY: 2.1, labelEl, labelObject, barrier, leds: built.leds, bedLed: built.bedLed, pumpLed: built.pumpLed, status: "UNKNOWN" };
     this.machines.set(bed.bed_id, machine);
     return machine;
   }
@@ -335,6 +343,7 @@ export class WardViewer extends Viewer {
     machine.ring.material.color.setHex(color);
     machine.ring.material.emissive.setHex(color);
     machine.ring.material.emissiveIntensity = known === "OFFLINE" || known === "UNKNOWN" ? 0.35 : 1.1;
+    machine.barrier.visible = known === "BLOCKED";
     machine.pulse = known === "ALERT";
     const rules = new Set(bed.alerts.map((a) => a.rule));
     for (const [rule, material] of Object.entries(machine.leds)) material.emissiveIntensity = rules.has(rule) ? 3 : 0;

@@ -26,3 +26,6 @@ A Fase 4 pede um adapter **somente leitura** para endpoints existentes do HACC, 
 - **Ler o repositório/banco do HACC para descobrir o esquema:** é integração real com sistema existente; exige sua autorização e foge da regra de independência.
 - **Replicar dados do HACC no nosso banco:** cria um segundo repositório de dados potencialmente sensíveis; desnecessário na demonstração.
 - **Confiar no HACC para filtrar por organização:** a segregação não pode depender de sistema externo.
+
+## Adendo (2026-10-26): integração real com o HACC
+O HACC real (0.4) difere do contrato assumido: sem alas/posições/alarmes de leito, sem tenant, **sem autenticação**, e com nome/idade/sexo em várias rotas. Decisão (D-054): em vez de descartar campos no nosso adaptador, o **HACC expõe uma rota de integração mínima** (só `bed_id`, `sector`, `status`, `occupied`; Bearer; desligada sem token) e consumimos **só ela** com a nova `HaccIntegrationSource`; a minimização acontece na origem e o nosso modelo continua rejeitando qualquer campo extra. Ala/grade/posição ficam num perfil nosso; `unavailable` vira o estado `BLOCKED`. Alternativa rejeitada: consumir `GET /beds/` descartando `patient_id` (o dado de pessoa ainda trafegaria).

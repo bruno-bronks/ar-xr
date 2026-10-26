@@ -12,7 +12,7 @@ def _env(monkeypatch: pytest.MonkeyPatch, **values: str) -> None:
     for key in (
         "DATABASE_URL", "MQTT_HOST", "MQTT_PORT", "ENVIRONMENT", "LOG_LEVEL",
         "ASSISTANT_PROVIDER", "ANTHROPIC_API_KEY", "ASSISTANT_MODEL", "ASSISTANT_RATE_LIMIT",
-        "HACC_SOURCE", "HACC_BASE_URL", "HACC_ALLOWED_HOSTS", "METRICS_TOKEN",
+        "HACC_SOURCE", "HACC_BASE_URL", "HACC_ALLOWED_HOSTS", "METRICS_TOKEN", "HACC_API_TOKEN", "HACC_TENANT_ID",
     ):  # fmt: skip
         monkeypatch.delenv(key, raising=False)
     for key, value in values.items():
@@ -171,3 +171,43 @@ def test_metrics_token_must_be_long_and_is_never_printed(monkeypatch: pytest.Mon
     settings = Settings()
     assert settings.metrics_token is not None
     assert "a-sufficiently-long-token-1" not in repr(settings)
+
+
+# --- SPEC-010 · REQ-HACC-007 (D-054): fonte HACC de integracao ---------------------------------------
+
+HACC_ENV = {
+    "HACC_SOURCE": "hacc",
+    "HACC_BASE_URL": "http://127.0.0.1:28000",
+    "HACC_ALLOWED_HOSTS": "127.0.0.1",
+    "HACC_API_TOKEN": "a-sufficiently-long-token-1",
+}
+
+
+def _env_hacc(monkeypatch: pytest.MonkeyPatch, **values: str) -> None:
+    _env(monkeypatch, DATABASE_URL=URL)
+    for key in ("HACC_API_TOKEN", "HACC_TENANT_ID"):
+        monkeypatch.delenv(key, raising=False)
+    for key, value in {**HACC_ENV, **values}.items():
+        monkeypatch.setenv(key, value)
+
+
+def test_hacc_integration_source_needs_url_hosts_and_a_long_token(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _env_hacc(monkeypatch)
+    settings = Settings()
+
+    assert settings.hacc_source == "hacc"
+    assert settings.hacc_tenant_id == "org-a"
+    assert settings.hacc_api_token is not None
+    assert "a-sufficiently-long-token-1" not in repr(settings)
+
+    for missing in ("HACC_BASE_URL", "HACC_ALLOWED_HOSTS", "HACC_API_TOKEN"):
+        _env_hacc(monkeypatch)
+        monkeypatch.delenv(missing)
+        with pytest.raises(ValidationError):
+            Settings()
+
+    _env_hacc(monkeypatch, HACC_API_TOKEN="short")
+    with pytest.raises(ValidationError):
+        Settings()

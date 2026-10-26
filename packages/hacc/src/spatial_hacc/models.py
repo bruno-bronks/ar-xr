@@ -42,6 +42,7 @@ class BedRecord(_Strict):
     occupied: bool
     flags: FlagsRecord
     observed_at: datetime | None
+    blocked: bool = False  # indisponivel no HACC (D-054)
 
     @field_validator("observed_at")
     @classmethod

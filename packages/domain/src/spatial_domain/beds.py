@@ -16,6 +16,7 @@ class BedStatus(StrEnum):
     NORMAL = "NORMAL"
     ATTENTION = "ATTENTION"
     ALERT = "ALERT"
+    BLOCKED = "BLOCKED"  # indisponivel (HACC): estado operacional, nao alarme (D-054)
     OFFLINE = "OFFLINE"
     UNKNOWN = "UNKNOWN"
 
@@ -38,6 +39,7 @@ class BedReading:
     occupied: bool
     flags: BedFlags
     observed_at: datetime | None  # None = nenhuma leitura recebida
+    blocked: bool = False  # leito indisponivel para admissao (D-054)
 
     def __post_init__(self) -> None:
         if self.observed_at is not None:
@@ -80,7 +82,7 @@ def evaluate_bed(
     reading: BedReading, now: datetime, offline_after: timedelta = OFFLINE_AFTER
 ) -> BedStatus:
     """sem leitura -> UNKNOWN; leitura velha -> OFFLINE (precedencia); alarme -> ALERT;
-    chamada/limpeza -> ATTENTION; senao NORMAL. Limite estrito (`>`), como D-001."""
+    chamada/limpeza -> ATTENTION; indisponivel -> BLOCKED; senao NORMAL. Limite estrito (`>`), como D-001."""
     _check(now, offline_after)
     if reading.observed_at is None:
         return BedStatus.UNKNOWN
@@ -91,6 +93,8 @@ def evaluate_bed(
         return BedStatus.ALERT
     if "ATTENTION" in severities:
         return BedStatus.ATTENTION
+    if reading.blocked:
+        return BedStatus.BLOCKED
     return BedStatus.NORMAL
 
 
@@ -112,9 +116,12 @@ _SEVERITY_ORDER = {
     BedStatus.UNKNOWN: 2,
     BedStatus.ATTENTION: 1,
     BedStatus.NORMAL: 0,
+    BedStatus.BLOCKED: 0,
 }
 
 
 def worst_status(statuses: Iterable[BedStatus]) -> BedStatus:
-    """Pior estado de um conjunto. Vazio => UNKNOWN (ala sem leitos nunca e 'normal')."""
-    return max(statuses, key=_SEVERITY_ORDER.__getitem__, default=BedStatus.UNKNOWN)
+    """Pior estado de um conjunto. Vazio => UNKNOWN (ala sem leitos nunca e 'normal'). Um leito
+    BLOQUEADO nao e problema da ala: conta como NORMAL (D-054)."""
+    seen = [BedStatus.NORMAL if s is BedStatus.BLOCKED else s for s in statuses]
+    return max(seen, key=_SEVERITY_ORDER.__getitem__, default=BedStatus.UNKNOWN)

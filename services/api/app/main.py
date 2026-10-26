@@ -16,6 +16,7 @@ from spatial_assistant.service import AssistantService
 from spatial_common.logging_json import configure_logging
 from spatial_common.metrics import Registry
 from spatial_hacc.http import HttpHaccSource
+from spatial_hacc.integration import HaccIntegrationSource
 from spatial_hacc.simulated import SimulatedHaccSource
 from spatial_hacc.source import HaccSource
 from spatial_storage.postgres import PostgresRepository
@@ -81,10 +82,23 @@ def build_assistant(settings: Settings | None) -> AssistantService:
 
 
 def build_hacc(settings: Settings | None, clock: Callable[[], datetime]) -> HaccSource:
-    """Fonte HACC: SIMULADA por padrao (D-025); HTTP somente leitura so se configurada."""
+    """Fonte HACC: SIMULADA por padrao (D-025); HTTP somente leitura / integracao so se configuradas."""
     if settings is not None and settings.hacc_source == "http" and settings.hacc_base_url:
         hosts = [h.strip() for h in settings.hacc_allowed_hosts.split(",") if h.strip()]
         return HttpHaccSource(settings.hacc_base_url, allowed_hosts=hosts)
+    if (
+        settings is not None
+        and settings.hacc_source == "hacc"
+        and settings.hacc_base_url
+        and settings.hacc_api_token
+    ):
+        hosts = [h.strip() for h in settings.hacc_allowed_hosts.split(",") if h.strip()]
+        return HaccIntegrationSource(
+            settings.hacc_base_url,
+            token=settings.hacc_api_token.get_secret_value(),
+            allowed_hosts=hosts,
+            tenant_id=settings.hacc_tenant_id,
+        )
     return SimulatedHaccSource(clock)
 
 

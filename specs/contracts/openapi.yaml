@@ -304,7 +304,7 @@ components:
         detail: { type: string }
     BedStatus:
       type: string
-      enum: [NORMAL, ATTENTION, ALERT, OFFLINE, UNKNOWN]
+      enum: [NORMAL, ATTENTION, ALERT, BLOCKED, OFFLINE, UNKNOWN]
     HaccAlert:
       type: object
       required: [severity, rule]

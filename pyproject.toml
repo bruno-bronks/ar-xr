@@ -38,7 +38,7 @@ markers = [
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-extend-exclude = [".venv"]
+extend-exclude = [".venv", "docs/integration/hacc-patch"]  # codigo do HACC (estilo dele), nao nosso
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "S", "C4", "PT", "RUF"]

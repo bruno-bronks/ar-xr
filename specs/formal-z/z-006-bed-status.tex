@@ -14,7 +14,7 @@
 
 \begin{zed}
   FLAG ::= on | off \\
-  BEDSTATUS ::= normal | attention | alert | offline | unknown
+  BEDSTATUS ::= normal | attention | alert | blocked | offline | unknown
 \end{zed}
 
 \begin{schema}{EvaluateBed}
@@ -25,6 +25,7 @@
   ivAlarm : FLAG \\
   callButton : FLAG \\
   cleaningDue : FLAG \\
+  isBlocked : FLAG \\
   status! : BEDSTATUS
 \where
   hasReading = off \iff status! = unknown \\
@@ -34,7 +35,9 @@
   (hasReading = on \land fresh = on \land \lnot (ivAlarm = on \lor (bedExit = on \land occupied = on))
     \land (callButton = on \lor cleaningDue = on)) \iff status! = attention \\
   (hasReading = on \land fresh = on \land \lnot (ivAlarm = on \lor (bedExit = on \land occupied = on))
-    \land callButton = off \land cleaningDue = off) \iff status! = normal
+    \land callButton = off \land cleaningDue = off \land isBlocked = on) \iff status! = blocked \\
+  (hasReading = on \land fresh = on \land \lnot (ivAlarm = on \lor (bedExit = on \land occupied = on))
+    \land callButton = off \land cleaningDue = off \land isBlocked = off) \iff status! = normal
 \end{schema}
 
 \begin{schema}{BedAccess}
@@ -64,7 +67,15 @@ B3: \emph{normal} implica ausência de qualquer alarme ou pendência efetiva.
 
 \begin{zed}
   \vdash? \forall EvaluateBed @ status! = normal \implies
-    (callButton = off \land cleaningDue = off \land ivAlarm = off)
+    (callButton = off \land cleaningDue = off \land ivAlarm = off \land isBlocked = off)
+\end{zed}
+
+B3b: um leito bloqueado nunca é \emph{normal}, mas também não é alarme: perde para alarme, pendência,
+leitura velha ou ausente (D-054).
+
+\begin{zed}
+  \vdash? \forall EvaluateBed @ status! = blocked \implies
+    (hasReading = on \land fresh = on \land callButton = off \land cleaningDue = off \land ivAlarm = off)
 \end{zed}
 
 B4: acesso a um leito só existe dentro da organização do usuário.

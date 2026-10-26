@@ -1,0 +1,47 @@
+openapi: 3.1.0
+info:
+  title: HACC - rota de integracao somente leitura (consumida pelo AR_XR)
+  version: 1.0.0
+  description: >
+    Contrato da rota `GET /integration/v1/beds` que o HACC expoe para sistemas externos (SPEC-010, REQ-HACC-007,
+    D-054). OBSERVADO/IMPLEMENTADO: a rota existe na COPIA isolada do HACC usada nos testes e o patch esta em
+    docs/integration/hacc-patch/ para o dono do HACC aplicar. Aplicada no HACC do usuario em 2026-10-26 a pedido dele (token e reinicio do backend pendentes).
+    Minimizacao NA ORIGEM: nunca devolve paciente (id, nome, idade, sexo, prioridade) nem payload de evento.
+x-implementation: "implemented: docs/integration/hacc-patch/backend/app/api/integration.py (aplicado no HACC do usuario; ativa so com HACC_INTEGRATION_TOKEN)"
+paths:
+  /integration/v1/beds:
+    get:
+      summary: Instantaneo dos leitos (somente os campos permitidos)
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Instantaneo. `Cache-Control: no-store`.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Snapshot" }
+        "401":
+          description: Token ausente/errado (`WWW-Authenticate: Bearer`).
+        "404":
+          description: Integracao desligada (HACC_INTEGRATION_TOKEN ausente ou com menos de 16 caracteres).
+components:
+  securitySchemes:
+    bearerAuth: { type: http, scheme: bearer }
+  schemas:
+    Snapshot:
+      type: object
+      additionalProperties: false
+      required: [generated_at, beds]
+      properties:
+        generated_at: { type: string, format: date-time, description: "Instante do instantaneo (UTC, com fuso)." }
+        beds:
+          type: array
+          items: { $ref: "#/components/schemas/Bed" }
+    Bed:
+      type: object
+      additionalProperties: false
+      required: [bed_id, sector, status, occupied]
+      properties:
+        bed_id: { type: string, pattern: "^[A-Za-z0-9._:-]{1,64}$" }
+        sector: { type: string, description: "Emergency | Ward | ICU no HACC 0.4." }
+        status: { type: string, enum: [available, occupied, unavailable] }
+        occupied: { type: boolean, description: "true se ha paciente associado (mesmo com o leito indisponivel). So o booleano; nunca o id." }

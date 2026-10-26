@@ -59,6 +59,7 @@ const BED_STATUS = {
   NORMAL: { icon: "✓", label: "Normal" },
   ATTENTION: { icon: "!", label: "Atenção" },
   ALERT: { icon: "✕", label: "Alerta" },
+  BLOCKED: { icon: "⊘", label: "Bloqueado" },
   OFFLINE: { icon: "⏻", label: "Offline" },
   UNKNOWN: { icon: "?", label: "Desconhecido" },
 };
