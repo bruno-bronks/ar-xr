@@ -211,3 +211,11 @@ def test_hacc_integration_source_needs_url_hosts_and_a_long_token(
     _env_hacc(monkeypatch, HACC_API_TOKEN="short")
     with pytest.raises(ValidationError):
         Settings()
+
+
+def test_plain_http_for_the_hacc_source_is_off_by_default(monkeypatch: pytest.MonkeyPatch) -> None:
+    _env_hacc(monkeypatch)
+    assert Settings().hacc_allow_plain_http is False
+
+    _env_hacc(monkeypatch, HACC_ALLOW_PLAIN_HTTP="true")
+    assert Settings().hacc_allow_plain_http is True

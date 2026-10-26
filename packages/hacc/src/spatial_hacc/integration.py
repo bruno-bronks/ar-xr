@@ -85,6 +85,7 @@ class HaccIntegrationSource:
         token: str,
         allowed_hosts: Sequence[str],
         tenant_id: str,
+        allow_plain_http: bool = False,  # D-055: so para rede privada (ex.: rede interna do Docker)
         profile: Mapping[str, SectorProfile] = DEFAULT_PROFILE,
         timeout_s: float = 5.0,
         max_bytes: int = MAX_BYTES,
@@ -93,7 +94,7 @@ class HaccIntegrationSource:
     ) -> None:
         if len(token.strip()) < MIN_TOKEN_LENGTH:
             raise ValueError("HACC integration token must have at least 16 characters")
-        self._base = _validate_base_url(base_url, allowed_hosts)
+        self._base = _validate_base_url(base_url, allowed_hosts, allow_plain_http=allow_plain_http)
         self._token = token
         self._tenant = tenant_id
         self._profile = dict(profile)

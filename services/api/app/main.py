@@ -98,6 +98,7 @@ def build_hacc(settings: Settings | None, clock: Callable[[], datetime]) -> Hacc
             token=settings.hacc_api_token.get_secret_value(),
             allowed_hosts=hosts,
             tenant_id=settings.hacc_tenant_id,
+            allow_plain_http=settings.hacc_allow_plain_http,
         )
     return SimulatedHaccSource(clock)
 

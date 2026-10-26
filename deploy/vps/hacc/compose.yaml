@@ -1,0 +1,110 @@
+# COPIA ISOLADA do HACC na VPS, para testar a integracao com o AR_XR online (D-055). Dados do SIMULADOR.
+# Nao e o projeto do usuario: imagens construidas da copia (credenciais ficticias de dev no codigo), banco e
+# volumes proprios. Segredos (HACC_DB_PASSWORD, HACC_INTEGRATION_TOKEN) ficam em /opt/hacc-copy/.env (0600),
+# gerados NO servidor, nunca no Git. Backend so em 127.0.0.1:28000; para a API do AR_XR ele aparece como
+# `hacc-backend` na rede `spatial-ai_default` (http dentro da rede privada, com HACC_ALLOW_PLAIN_HTTP=true).
+name: hacc-copy
+
+x-logging: &logging
+  driver: json-file
+  options: { max-size: "10m", max-file: "3" }
+
+services:
+  postgres:
+    image: postgres:16.15-alpine
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      POSTGRES_DB: hacc
+      POSTGRES_USER: hacc
+      POSTGRES_PASSWORD: ${HACC_DB_PASSWORD:?defina HACC_DB_PASSWORD}
+    volumes:
+      - hacc-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hacc -d hacc"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    deploy:
+      resources:
+        limits: { cpus: "0.5", memory: 256M }
+    networks: [hacc]
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0.22
+    restart: unless-stopped
+    logging: *logging
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    deploy:
+      resources:
+        limits: { cpus: "0.25", memory: 64M }
+    networks: [hacc]
+
+  backend:
+    image: hacc-copy-backend:latest
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      DATABASE_URL: postgresql+psycopg://hacc:${HACC_DB_PASSWORD}@postgres:5432/hacc
+      MQTT_HOST: mosquitto
+      MQTT_PORT: "1883"
+      APP_ENV: production
+      HACC_INTEGRATION_TOKEN: ${HACC_INTEGRATION_TOKEN:?defina HACC_INTEGRATION_TOKEN}
+    ports:
+      - "127.0.0.1:28000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).status == 200 else 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+    depends_on:
+      postgres: { condition: service_healthy }
+      mosquitto: { condition: service_started }
+    deploy:
+      resources:
+        limits: { cpus: "0.5", memory: 256M }
+    networks:
+      hacc: {}
+      spatial: { aliases: [hacc-backend] }
+
+  # One-shot idempotente: cria os 35 leitos ANTES do simulador (senao ele pausa ao 1o evento rejeitado).
+  init-beds:
+    image: hacc-copy-backend:latest
+    command: ["python", "-m", "app.init_beds"]
+    restart: "no"
+    environment:
+      DATABASE_URL: postgresql+psycopg://hacc:${HACC_DB_PASSWORD}@postgres:5432/hacc
+    depends_on:
+      backend: { condition: service_healthy }
+    networks: [hacc]
+
+  hospital-simulator:
+    image: hacc-copy-hospital-simulator:latest
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      MQTT_HOST: mosquitto
+      MQTT_PORT: "1883"
+      MQTT_TOPIC: hacc/hospital/events
+      SIMULATION_INTERVAL: "5"
+      SIMULATOR_STATE_FILE: /data/hospital_simulator_state.json
+    volumes:
+      - hacc-simdata:/data
+    depends_on:
+      init-beds: { condition: service_completed_successfully }
+    deploy:
+      resources:
+        limits: { cpus: "0.25", memory: 96M }
+    networks: [hacc]
+
+volumes:
+  hacc-pgdata:
+  hacc-simdata:
+
+networks:
+  hacc: {}
+  spatial:
+    external: true
+    name: spatial-ai_default

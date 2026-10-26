@@ -71,6 +71,7 @@ class _Settings:
     hacc_base_url = "http://127.0.0.1:28000"
     hacc_allowed_hosts = "127.0.0.1"
     hacc_tenant_id = "org-a"
+    hacc_allow_plain_http = False
 
     class hacc_api_token:
         @staticmethod
