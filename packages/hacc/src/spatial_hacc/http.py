@@ -32,7 +32,9 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
 _OPENER = urllib.request.build_opener(_NoRedirect)
 
 
-def _validate_base_url(base_url: str, allowed_hosts: Sequence[str]) -> str:
+def _validate_base_url(
+    base_url: str, allowed_hosts: Sequence[str], *, allow_plain_http: bool = False
+) -> str:
     parts = urlsplit(base_url)
     host = parts.hostname or ""
     if parts.scheme not in {"https", "http"} or not host:
@@ -41,7 +43,7 @@ def _validate_base_url(base_url: str, allowed_hosts: Sequence[str]) -> str:
         raise ValueError("HACC base URL must not carry credentials, query or fragment")
     if host not in allowed_hosts:
         raise ValueError("HACC host is not in the allow-list")
-    if parts.scheme == "http" and host not in _LOOPBACK:
+    if parts.scheme == "http" and host not in _LOOPBACK and not allow_plain_http:
         raise ValueError("HACC over plain http is only allowed for loopback")
     return base_url.rstrip("/")
 

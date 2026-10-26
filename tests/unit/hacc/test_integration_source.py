@@ -276,3 +276,25 @@ def test_a_hostile_ward_id_is_rejected_before_any_request(server: _Server) -> No
         _source(server).list_beds("../../etc/passwd")
 
     assert server.requests == []
+
+
+# --- D-055: http em rede PRIVADA so com opt-in explicito -------------------------------------------
+
+
+def test_plain_http_to_a_non_loopback_host_needs_the_explicit_opt_in_and_the_allow_list() -> None:
+    url = "http://hacc-backend:8000"  # nome do servico na rede interna do Docker
+    kw: dict[str, Any] = {"token": TOKEN, "tenant_id": "org-a"}
+
+    with pytest.raises(ValueError, match="HACC"):
+        HaccIntegrationSource(url, allowed_hosts=["hacc-backend"], **kw)  # padrao: recusa
+    with pytest.raises(ValueError, match="HACC"):
+        HaccIntegrationSource(url, allowed_hosts=["other"], allow_plain_http=True, **kw)  # lista
+    HaccIntegrationSource(url, allowed_hosts=["hacc-backend"], allow_plain_http=True, **kw)
+
+
+def test_the_opt_in_never_relaxes_the_scheme_or_credentials_rules() -> None:
+    kw: dict[str, Any] = {"token": TOKEN, "tenant_id": "org-a", "allow_plain_http": True}
+
+    for url in ("ftp://hacc-backend", "http://user:pw@hacc-backend:8000"):
+        with pytest.raises(ValueError, match="HACC"):
+            HaccIntegrationSource(url, allowed_hosts=["hacc-backend"], **kw)

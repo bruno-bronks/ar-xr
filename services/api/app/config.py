@@ -30,6 +30,7 @@ class Settings(BaseSettings):
     hacc_base_url: str | None = None
     hacc_allowed_hosts: str = ""  # lista separada por virgula
     hacc_api_token: SecretStr | None = None  # Bearer da rota de integracao do HACC (D-054)
+    hacc_allow_plain_http: bool = False  # D-055: http fora do loopback (so rede privada); desligado
     hacc_tenant_id: str = "org-a"  # organizacao dona dos leitos do HACC (imposta aqui, D-030)
     metrics_token: SecretStr | None = None  # /metrics so existe com token proprio (REQ-OPS-005)
 
