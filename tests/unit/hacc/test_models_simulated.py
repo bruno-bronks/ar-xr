@@ -59,6 +59,7 @@ def test_models_have_exactly_the_allow_listed_fields() -> None:
     """Qualquer campo novo (potencialmente identificavel) exige mudar este teste de proposito."""
     assert set(BedRecord.model_fields) == {
         "bed_id", "ward_id", "tenant_id", "label", "x", "y", "occupied", "flags", "observed_at",
+        "blocked",  # D-054: unico campo novo (booleano operacional, nao identifica ninguem)
     }  # fmt: skip
     assert set(WardRecord.model_fields) == {"ward_id", "tenant_id", "name", "width", "height"}
     assert set(FlagsRecord.model_fields) == {
@@ -180,7 +181,8 @@ def test_simulated_cycle_exercises_every_status_over_a_minute() -> None:
                 )
                 seen.add(evaluate_bed(reading, now))
 
-    assert seen == set(BedStatus)
+    # a fonte SIMULADA nunca bloqueia leitos: BLOCKED so vem da integracao com o HACC (D-054)
+    assert seen == set(BedStatus) - {BedStatus.BLOCKED}
 
 
 def test_simulated_dataset_has_no_personal_fields() -> None:

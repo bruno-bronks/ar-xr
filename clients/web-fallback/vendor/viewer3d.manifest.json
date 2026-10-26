@@ -1,7 +1,7 @@
 {
   "bundle": "viewer3d.js",
-  "sha256": "a6f8f3008ece4157dd88d39e21d9375f75a5e5d011c3c2d87bba4cffb902139f",
-  "bytes": 688514,
+  "sha256": "9dca5ec173e42220f2b72b3f7e36ec6eb373b82220c5bd9b8951dd96246aa125",
+  "bytes": 688836,
   "three": {
     "version": "0.186.1",
     "license": "MIT"
@@ -13,6 +13,6 @@
     "machines.js": "b888ee2cd190243efc0f7d10ba070dd1d572b74269d81b0c2e861f7a6613843d",
     "materials.js": "19dff195d5488d8f8916281f7b2000a2b68026bbbd88031e1a2ab921e2a01b9b",
     "viewer.js": "0fa0bd684814db58d014363738c28299f4c4e25a9598177b08547de9b4e5d289",
-    "ward.js": "1c95a7766dc82910990945f44c6023b88151601cfaa737d86bb9767ce46f2316"
+    "ward.js": "6d32ebdc52717fa65426eb418e16b1690e859e8c6584bedef751d28dc1be4393"
   }
 }

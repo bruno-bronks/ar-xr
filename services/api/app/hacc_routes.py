@@ -71,6 +71,7 @@ def _reading(bed: BedRecord) -> BedReading:
         bed.occupied,
         BedFlags(f.bed_exit_alarm, f.iv_pump_alarm, f.call_button, f.cleaning_due),
         bed.observed_at,
+        blocked=bed.blocked,
     )
 
 

@@ -6,10 +6,12 @@ ESTAVEL: U-03 sempre OFFLINE (mudo), A1-06 sempre UNKNOWN (sem leitura), U-02 se
 docs/evidence/phase-4/.
 """
 
+import json
 import os
 import time
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 import cv2
 import numpy as np
@@ -378,5 +380,64 @@ def test_high_quality_evidence_of_the_icu_and_the_infirmary(browser: Browser) ->
         page.locator("#ward3d .v3d-stage").screenshot(
             path=str(EVIDENCE / "panel-3d-leito.png"), timeout=SLOW
         )
+    finally:
+        context.close()
+
+
+# --- REQ-HACC-007 (D-054): leito BLOQUEADO (HACC real: `unavailable`) ----------------------------------
+
+
+def _mock_hacc_with_blocked(page: Page, count: int = 12) -> None:
+    wards = [
+        {"ward_id": "W", "name": "Ala W", "bed_count": count, "status": "NORMAL", "alert_count": 0}
+    ]
+    beds: list[dict[str, Any]] = [
+        {
+            "bed_id": f"B{i:02d}", "label": f"B{i:02d}", "x": (i - 1) % 5 + 1, "y": (i - 1) // 5 + 1,
+            "occupied": True, "status": "BLOCKED" if i == 3 else "NORMAL",
+            "observed_at": "2026-10-26T12:00:00Z", "alerts": [],
+        }
+        for i in range(1, count + 1)
+    ]  # fmt: skip
+    detail = {
+        "ward": {"ward_id": "W", "name": "Ala W", "width": 5, "height": 3},
+        "evaluated_at": "2026-10-26T12:00:00Z",
+        "status": "NORMAL",
+        "beds": beds,
+    }
+    page.route(
+        "**/api/v1/hacc/wards",
+        lambda r: r.fulfill(status=200, content_type="application/json", body=json.dumps(wards)),
+    )
+    page.route(
+        "**/api/v1/hacc/wards/W/beds",
+        lambda r: r.fulfill(status=200, content_type="application/json", body=json.dumps(detail)),
+    )
+
+
+def test_a_blocked_bed_is_shown_as_blocked_in_text_in_2d_and_3d_and_never_as_normal(
+    browser: Browser,
+) -> None:
+    context = browser.new_context(viewport={"width": 1100, "height": 800}, reduced_motion="reduce")
+    page = context.new_page()
+    _mock_hacc_with_blocked(page)
+    try:
+        assert BASE_URL is not None
+        page.goto(f"{BASE_URL}/panel/?q3d=baixa", wait_until="commit", timeout=SLOW)
+        page.select_option("#org", NURSE_A, timeout=SLOW)
+
+        card = page.get_by_test_id("bed-B03")  # planta 2D
+        expect(card).to_have_attribute("data-status", "BLOCKED", timeout=SLOW)
+        expect(card).to_contain_text("Bloqueado")
+        expect(card).not_to_contain_text("Normal")
+        expect(page.get_by_test_id("hacc-summary")).to_contain_text("Normal")  # ala nao piora
+
+        page.locator("#ward3d .v3d-stage").scroll_into_view_if_needed(timeout=SLOW)
+        label = page.get_by_test_id("label-ward3d-B03")  # vista 3D
+        expect(label).to_have_attribute("data-status", "BLOCKED", timeout=SLOW)
+        expect(label).to_contain_text("Bloqueado")
+        expect(label).not_to_contain_text("Normal")
+        expect(page.get_by_test_id("label-ward3d-B04")).to_have_attribute("data-status", "NORMAL")
+        expect(page.get_by_test_id("ward3d")).to_have_attribute("data-dense", "true")  # 12 leitos
     finally:
         context.close()

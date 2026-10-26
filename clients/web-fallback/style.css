@@ -14,6 +14,8 @@
   --offline-bg: #e6e9ed;
   --unknown: #5a3d9a;
   --unknown-bg: #ece6f8;
+  --blocked: #8a3b12;
+  --blocked-bg: #f6e3d6;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -33,6 +35,8 @@
     --offline-bg: #262f38;
     --unknown: #c3aaf5;
     --unknown-bg: #2a2140;
+    --blocked: #f0a878;
+    --blocked-bg: #3a2416;
   }
 }
 
@@ -208,6 +212,7 @@ footer { margin-top: 24px; max-width: 70ch; }
 .bed[data-status="NORMAL"] { border-top-color: var(--normal); }
 .bed[data-status="ATTENTION"] { border-top-color: var(--warning); }
 .bed[data-status="ALERT"] { border-top-color: var(--critical); }
+.bed[data-status="BLOCKED"] { border-top-color: var(--blocked); }
 .bed[data-status="OFFLINE"] { border-top-color: var(--offline); }
 .bed[data-status="UNKNOWN"] { border-top-color: var(--unknown); }
 .bed h3 { margin: 0 0 4px; font-size: 1rem; }
@@ -215,6 +220,7 @@ footer { margin-top: 24px; max-width: 70ch; }
 .bed .bed-meta { color: var(--muted); font-size: 0.8rem; margin: 4px 0 0; }
 .bed .badge[data-status="ATTENTION"] { background: var(--warning-bg); color: var(--warning); }
 .bed .badge[data-status="ALERT"] { background: var(--critical-bg); color: var(--critical); }
+.bed .badge[data-status="BLOCKED"] { background: var(--blocked-bg); color: var(--blocked); }
 
 /* Planta 2D dos equipamentos (REQ-UX-003). Posicoes via CSSOM (permitido pela CSP); nada de estilo inline no HTML. */
 .plant-section { margin: 16px 0; }
@@ -320,6 +326,9 @@ footer { margin-top: 24px; max-width: 70ch; }
 .v3d-label[data-status="CRITICAL"] { border-left-color: #ff5a5f; }
 .v3d-label[data-status="OFFLINE"] { border-left-color: #8d99a6; }
 .v3d-label[data-status="UNKNOWN"] { border-left-color: #a58af0; }
+.viewer3d[data-dense="true"] .v3d-label { max-width: 120px; padding: 3px 6px; font-size: 0.7rem; }
+.viewer3d[data-dense="true"] .v3d-label .l-read { display: none; }
+.viewer3d[data-dense="true"] .v3d-label .l-title { max-width: 104px; }
 .v3d-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; }
 .v3d-focus { display: inline-flex; flex-wrap: wrap; gap: 8px; }
 .v3d-btn { font: inherit; font-size: 0.9rem; padding: 4px 10px; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; }

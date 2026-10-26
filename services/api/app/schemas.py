@@ -111,7 +111,7 @@ class AssistantAnswerOut(_Out):
     live_state: AssistantLiveStateOut
 
 
-BedStatusLit = Literal["NORMAL", "ATTENTION", "ALERT", "OFFLINE", "UNKNOWN"]
+BedStatusLit = Literal["NORMAL", "ATTENTION", "ALERT", "BLOCKED", "OFFLINE", "UNKNOWN"]
 
 
 class HaccAlertOut(_Out):
